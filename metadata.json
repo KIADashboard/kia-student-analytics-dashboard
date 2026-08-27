@@ -1,0 +1,6 @@
+{
+  "name": "Student Analytics Dashboard",
+  "description": "Institutional Student Analytics Dashboard for academic performance tracking, student directory drill-down, demographic analysis, and batch reporting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
