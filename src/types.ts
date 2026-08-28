@@ -106,7 +106,7 @@ export interface GlobalFilterState {
   familyBackground?: string;
 }
 
-export type ActiveTab = 'analytics' | 'directory' | 'reports';
+export type ActiveTab = 'analytics' | 'directory' | 'reports' | 'settings';
 
 export type UserRole = 'admin' | 'student';
 

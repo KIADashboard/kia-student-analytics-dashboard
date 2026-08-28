@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Building2, 
   Search, 
@@ -6,14 +6,15 @@ import {
   Calendar, 
   ShieldCheck, 
   ChevronDown,
-  LogOut
+  LogOut,
+  Settings
 } from 'lucide-react';
 
 interface HeaderProps {
   activeTab: string;
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  onSelectTab: (tab: 'analytics' | 'directory' | 'reports') => void;
+  onSelectTab: (tab: 'analytics' | 'directory' | 'reports' | 'settings') => void;
   onLogout: () => void;
 }
 
@@ -24,6 +25,8 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectTab,
   onLogout
 }) => {
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+
   return (
     <header id="main-header" className="sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-slate-200/80 px-6 py-3.5 transition-all">
       <div className="flex items-center justify-between gap-4">
@@ -34,17 +37,6 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Main Campus &middot; Coimbatore</span>
           </div>
 
-          <div className="h-4 w-px bg-slate-200 hidden sm:block"></div>
-
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-            <span className="hidden md:inline">Institutional ERP</span>
-            <span className="text-slate-300 hidden md:inline">/</span>
-            <span className="text-slate-800 font-bold uppercase tracking-wider text-[11px]">
-              {activeTab === 'analytics' && 'Institutional Analytics'}
-              {activeTab === 'directory' && 'Student Directory & Records'}
-              {activeTab === 'reports' && 'Batch Report Generation'}
-            </span>
-          </div>
         </div>
 
         {/* Center: Global Quick Search */}
@@ -80,7 +72,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Active Period Badge */}
           <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 border border-slate-200 rounded-md text-xs font-medium text-slate-700">
             <Calendar className="w-3.5 h-3.5 text-slate-500" />
-            <span>Academic Year 2024–2025</span>
+            <span>Academic Year 2026–2027</span>
             <span className="w-1.5 h-1.5 rounded-full bg-slate-400 ml-0.5"></span>
           </div>
 
@@ -99,7 +91,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="h-4 w-px bg-slate-200"></div>
 
           {/* Admin User Profile */}
-          <div className="flex items-center gap-2 pl-1">
+          <div className="relative flex items-center gap-2 pl-1">
             <div className="w-7 h-7 rounded-lg bg-slate-800 text-white font-semibold text-xs flex items-center justify-center shadow-2xs">
               AO
             </div>
@@ -110,7 +102,31 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
               <div className="text-[10px] text-slate-500 font-medium">Dean of Academics</div>
             </div>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden xl:block" />
+            <button
+              type="button"
+              title="Open account menu"
+              aria-label="Open account menu"
+              aria-expanded={profileMenuOpen}
+              onClick={() => setProfileMenuOpen(value => !value)}
+              className="p-1 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition"
+            >
+              <ChevronDown className={`w-3.5 h-3.5 hidden xl:block transition-transform ${profileMenuOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {profileMenuOpen && (
+              <div className="absolute right-0 top-full mt-2 w-44 rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProfileMenuOpen(false);
+                    onSelectTab('settings');
+                  }}
+                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                >
+                  <Settings className="w-4 h-4" />
+                  Settings
+                </button>
+              </div>
+            )}
             <button
               id="admin-logout-btn"
               type="button"

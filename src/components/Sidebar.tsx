@@ -5,7 +5,6 @@ import {
   FileText, 
   GraduationCap, 
   Database,
-  CheckCircle2,
   HelpCircle
 } from 'lucide-react';
 import { ActiveTab } from '../types';
@@ -124,18 +123,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </span>
         </button>
 
-        {/* Institutional Quick Guidelines */}
-        <div className="pt-6 px-3">
-          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/70 text-xs">
-            <div className="flex items-center gap-1.5 font-semibold text-slate-800 text-[11px] mb-1">
-              <CheckCircle2 className="w-3.5 h-3.5 text-slate-600" />
-              <span>Session In Progress</span>
-            </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">
-              Odd Semester 2024–25 continuous assessments and attendance matrices verified.
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* Footer System Status */}

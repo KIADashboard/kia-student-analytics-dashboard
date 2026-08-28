@@ -5,6 +5,7 @@ import { AnalyticsView } from './components/AnalyticsView';
 import { DirectoryView } from './components/DirectoryView';
 import { ProfileView } from './components/ProfileView';
 import { ReportsView } from './components/ReportsView';
+import { SettingsView } from './components/SettingsView';
 import { Toast } from './components/Toast';
 import { LoginView } from './components/LoginView';
 import { StudentPortal } from './components/StudentPortal';
@@ -471,6 +472,8 @@ export default function App() {
                   onShowToast={showToast}
                 />
               )}
+
+              {activeTab === 'settings' && <SettingsView />}
             </>
           )}
         </main>
