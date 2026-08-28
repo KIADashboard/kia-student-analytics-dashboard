@@ -191,7 +191,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
       id: `REP-2025-${Math.floor(100 + Math.random() * 900)}`,
       title: `${reportConfig.reportType} (${reportConfig.batch})`,
       type: reportConfig.reportType,
-      academicYear: reportConfig.batch,
+      batch: reportConfig.batch,
       department: reportConfig.department,
       recordCount: matchingCount,
       generatedAt: 'Just now',
@@ -284,7 +284,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
 
             {/* Batch / Period */}
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+              <label className="flex items-center gap-1 text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 <Calendar className="w-3 h-3 text-slate-400" />
                 <span>Batch / Academic Period</span>
               </label>
@@ -304,7 +304,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
 
             {/* Department */}
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+              <label className="flex items-center gap-1 text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                 <Building className="w-3 h-3 text-slate-400" />
                 <span>Department / Stream</span>
               </label>
@@ -462,7 +462,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               <div className="space-y-1.5 text-[11px] text-slate-600">
                 <div className="flex justify-between py-1 border-b border-slate-100">
                   <span>Selected Department:</span>
-                  <span className="font-semibold text-slate-900 truncate max-w-[170px]">{reportConfig.department}</span>
+                  <span className="font-semibold text-slate-900 truncate max-w-42.5">{reportConfig.department}</span>
                 </div>
 
                 <div className="flex justify-between py-1 border-b border-slate-100">

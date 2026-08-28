@@ -5,7 +5,8 @@ import {
   Bell, 
   Calendar, 
   ShieldCheck, 
-  ChevronDown
+  ChevronDown,
+  LogOut
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -13,13 +14,15 @@ interface HeaderProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onSelectTab: (tab: 'analytics' | 'directory' | 'reports') => void;
+  onLogout: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ 
   activeTab, 
   searchQuery, 
   onSearchChange,
-  onSelectTab
+  onSelectTab,
+  onLogout
 }) => {
   return (
     <header id="main-header" className="sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-slate-200/80 px-6 py-3.5 transition-all">
@@ -108,6 +111,16 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="text-[10px] text-slate-500 font-medium">Dean of Academics</div>
             </div>
             <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden xl:block" />
+            <button
+              id="admin-logout-btn"
+              type="button"
+              title="Log out"
+              aria-label="Log out"
+              onClick={onLogout}
+              className="p-1.5 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>

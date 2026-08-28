@@ -119,7 +119,7 @@ export const AcademicSection: React.FC<AcademicSectionProps> = ({
                         {d.avg}%
                       </span>
 
-                      <div className="w-full max-w-[36px] bg-slate-100 rounded-t-md overflow-hidden flex flex-col justify-end h-full">
+                      <div className="w-full max-w-9 bg-slate-100 rounded-t-md overflow-hidden flex flex-col justify-end h-full">
                         <div
                           className="w-full bg-slate-700 hover:bg-slate-900 transition-all duration-300 rounded-t-md"
                           style={{ height: `${Math.max(barHeightPct, 15)}%` }}

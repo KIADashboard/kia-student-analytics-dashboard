@@ -194,8 +194,7 @@ export interface StudentDocument {
 
 export interface ReportConfig {
   reportType: string;
-  academicYear: string;
-  gender: string;
+  batch: string;
   district: string;
   quota: string;
   schoolType: string;
@@ -207,7 +206,7 @@ export interface GeneratedReport {
   id: string;
   title: string;
   type: string;
-  academicYear: string;
+  batch: string;
   department: string;
   recordCount: number;
   generatedAt: string;

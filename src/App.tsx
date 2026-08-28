@@ -12,7 +12,7 @@ import { MOCK_STUDENTS } from './data/mockStudents';
 import { Student, ActiveTab, GlobalFilterState, UserRole } from './types';
 import { getStudentProfile } from './studentData';
 import { InstitutionLogo } from './components/InstitutionLogo';
-import { Menu, X, GraduationCap } from 'lucide-react';
+import { Menu, X, GraduationCap, LogOut } from 'lucide-react';
 
 export default function App() {
   const [role, setRole] = useState<UserRole | null>(null);
@@ -401,7 +401,15 @@ export default function App() {
             <InstitutionLogo className="w-5 h-5 object-contain" />
             <span className="font-bold text-slate-900 text-sm">Kumaraguru Institute of Agriculture</span>
           </div>
-          <div className="w-5"></div>
+          <button
+            type="button"
+            title="Log out"
+            aria-label="Log out"
+            onClick={() => setRole(null)}
+            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Global Desktop Header */}
@@ -410,6 +418,7 @@ export default function App() {
           searchQuery={filters.searchQuery}
           onSearchChange={(q) => setFilters(prev => ({ ...prev, searchQuery: q }))}
           onSelectTab={handleTabChange}
+          onLogout={() => setRole(null)}
         />
 
         {/* Dynamic Content Viewport */}

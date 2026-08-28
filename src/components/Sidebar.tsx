@@ -41,15 +41,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <p className="text-[11px] text-slate-500 font-medium mt-1">Student Analytics Suite</p>
           </div>
         </div>
-        
-        <div className="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-          <span className="font-medium text-slate-600">Institutional Portal</span>
-          <span className="font-semibold text-slate-700">KIA</span>
-        </div>
       </div>
 
       {/* Navigation Links */}
-      <div className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
+      <div className="flex-1 px-3 py-3 space-y-1.5 overflow-y-auto">
         <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
           Core Dashboards
         </div>
