@@ -8,6 +8,7 @@ import { ReportsView } from './components/ReportsView';
 import { SettingsView } from './components/SettingsView';
 import { Toast } from './components/Toast';
 import { LoginView } from './components/LoginView';
+import { LandingPage } from './components/landing/LandingPage';
 import { StudentPortal } from './components/StudentPortal';
 import { MOCK_STUDENTS } from './data/mockStudents';
 import { Student, ActiveTab, GlobalFilterState, UserRole } from './types';
@@ -331,7 +332,11 @@ export default function App() {
   };
 
   if (!role) {
-    return <LoginView onLogin={setRole} />;
+    const showLogin = false; // TODO: Connect later through the Sign In action
+    if (showLogin) {
+      return <LoginView onLogin={setRole} />;
+    }
+    return <LandingPage />;
   }
 
   if (role === 'student') {
