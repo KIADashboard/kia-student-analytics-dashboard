@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Menu, X, ChevronRight } from 'lucide-react';
 import { InstitutionLogo } from '../InstitutionLogo';
 
-export const Navbar: React.FC = () => {
+export const Navbar: React.FC<{ onNavigateToLogin: () => void }> = ({ onNavigateToLogin }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -53,13 +53,13 @@ export const Navbar: React.FC = () => {
 
             {/* Sign In Button */}
             <div className="flex items-center ml-4">
-              <a
-                href="#signin"
+              <button
+                onClick={onNavigateToLogin}
                 className="inline-flex items-center justify-center px-6 py-2.5 rounded-full shadow-sm text-sm font-bold text-[#FFFDEE] bg-[#076653] hover:bg-[#06231D] hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#076653]"
               >
                 Sign In
                 <ChevronRight className="ml-2 -mr-1 h-4 w-4" />
-              </a>
+              </button>
             </div>
           </div>
 
@@ -97,12 +97,12 @@ export const Navbar: React.FC = () => {
             </a>
           ))}
           <div className="mt-6 px-4">
-            <a
-              href="#signin"
-              className="flex w-full items-center justify-center px-4 py-3 rounded-md shadow-sm text-base font-bold text-[#FFFDEE] bg-[#076653] hover:bg-[#06231D] transition-colors"
+            <button
+              onClick={onNavigateToLogin}
+              className="flex w-full items-center justify-center px-4 py-3 rounded-md shadow-sm text-base font-bold text-[#FFFDEE] bg-[#076653] hover:bg-[#06231D] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#076653]"
             >
               Sign In
-            </a>
+            </button>
           </div>
         </div>
       </div>

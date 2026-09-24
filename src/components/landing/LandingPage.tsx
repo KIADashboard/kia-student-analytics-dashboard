@@ -2,11 +2,11 @@ import React from 'react';
 import { Navbar } from './Navbar';
 import { HeroSection } from './HeroSection';
 
-export const LandingPage: React.FC = () => {
+export const LandingPage: React.FC<{ onNavigateToLogin: () => void }> = ({ onNavigateToLogin }) => {
   return (
     <div className="min-h-screen bg-[#FFFDEE]">
-      <Navbar />
-      <HeroSection />
+      <Navbar onNavigateToLogin={onNavigateToLogin} />
+      <HeroSection onNavigateToLogin={onNavigateToLogin} />
     </div>
   );
 };

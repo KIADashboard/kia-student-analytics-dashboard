@@ -18,6 +18,7 @@ import { Menu, X, GraduationCap, LogOut } from 'lucide-react';
 
 export default function App() {
   const [role, setRole] = useState<UserRole | null>(null);
+  const [showLogin, setShowLogin] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>('analytics');
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
@@ -332,11 +333,10 @@ export default function App() {
   };
 
   if (!role) {
-    const showLogin = false; // TODO: Connect later through the Sign In action
     if (showLogin) {
       return <LoginView onLogin={setRole} />;
     }
-    return <LandingPage />;
+    return <LandingPage onNavigateToLogin={() => setShowLogin(true)} />;
   }
 
   if (role === 'student') {
