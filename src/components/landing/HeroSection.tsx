@@ -1,86 +1,67 @@
 import React from 'react';
-import { ArrowRight, BookOpen, LineChart } from 'lucide-react';
 
-export const HeroSection: React.FC = () => {
+export const HeroSection: React.FC<{ onNavigateToLogin?: () => void }> = ({ onNavigateToLogin }) => {
   return (
-    <section className="relative w-full bg-[#FFFDEE] py-16 lg:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+    <section className="relative w-full lg:min-h-[calc(100vh-5rem)] flex flex-col lg:flex-row border-t border-[#0C342C]/10">
+      
+      {/* Left Typography & CTAs Block */}
+      <div className="w-full lg:w-5/12 bg-[#0C342C] flex flex-col justify-center px-6 sm:px-12 lg:px-20 py-20 lg:py-0 text-[#FFFDEE] relative z-10">
+        
+        <div className="flex items-center gap-6 mb-12">
+          <span className="w-12 h-px bg-[#E2FBCE]/40"></span>
+          <span className="text-[#E2FBCE] font-semibold tracking-[0.25em] text-[10px] uppercase">
+            Institutional Analytics
+          </span>
+        </div>
+        
+        <h1 className="text-5xl sm:text-6xl lg:text-[4.5rem] font-serif leading-[1.1] tracking-tight mb-8">
+          Cultivating<br />
+          <span className="italic font-light text-[#E2FBCE]">Excellence</span><br />
+          Through Data.
+        </h1>
+        
+        <p className="text-lg text-[#FFFDEE]/70 leading-relaxed max-w-md mb-14 font-light">
+          Empowering the Kumaraguru Institute of Agriculture with comprehensive historical data, academic performance metrics, and institutional insights to nurture the next generation of agricultural leaders.
+        </p>
+        
+        <div className="flex flex-col sm:flex-row items-start gap-6">
+          <button
+            onClick={onNavigateToLogin}
+            className="px-10 py-5 bg-[#FFFDEE] text-[#0C342C] border border-[#FFFDEE] text-xs font-bold tracking-[0.15em] uppercase hover:bg-transparent hover:text-[#FFFDEE] transition-colors duration-300 rounded-none w-full sm:w-auto text-center"
+          >
+            Explore Analytics
+          </button>
           
-          {/* Left Content Area (Editorial & Typography Focus) */}
-          <div className="flex-1 w-full flex flex-col justify-center z-10">
-            
-            <div className="mb-6 flex items-center gap-4">
-              <div className="w-12 h-px bg-[#076653]"></div>
-              <span className="text-[#076653] font-semibold tracking-[0.2em] text-xs uppercase">
-                KIA Academic Analytics
-              </span>
-            </div>
-            
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-[#0C342C] leading-[1.15] tracking-tight mb-8">
-              Cultivating Excellence <br className="hidden lg:block" />
-              Through Data.
-            </h1>
-            
-            <p className="text-lg text-[#06231D]/80 leading-relaxed max-w-xl mb-12 font-light">
-              Empowering the Kumaraguru Institute of Agriculture with comprehensive historical data, academic performance metrics, and institutional insights to nurture the next generation of agricultural leaders.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row items-start gap-4">
-              <a
-                href="#platform"
-                className="inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-[#FFFDEE] bg-[#0C342C] hover:bg-[#076653] transition-colors rounded-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#FFFDEE] focus:ring-[#076653]"
-              >
-                Explore Analytics
-                <ArrowRight className="ml-3 h-4 w-4" />
-              </a>
-              
-              <a
-                href="#admissions"
-                className="inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-[#0C342C] bg-transparent border border-[#0C342C] hover:bg-[#E2FBCE] transition-colors rounded-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#FFFDEE] focus:ring-[#0C342C]"
-              >
-                Admissions
-              </a>
-            </div>
-
-            <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-8 border-t border-[#0C342C]/10 pt-10">
-              <div>
-                <div className="flex items-center gap-3 text-[#076653] mb-4">
-                  <LineChart className="w-5 h-5 stroke-[1.5]" />
-                  <h3 className="font-semibold text-xs uppercase tracking-[0.15em] text-[#0C342C]">Performance</h3>
-                </div>
-                <p className="text-[#06231D]/75 text-sm leading-relaxed font-light">
-                  Monitor real-time academic metrics and progressive cohort analysis precisely.
-                </p>
-              </div>
-              <div>
-                <div className="flex items-center gap-3 text-[#076653] mb-4">
-                  <BookOpen className="w-5 h-5 stroke-[1.5]" />
-                  <h3 className="font-semibold text-xs uppercase tracking-[0.15em] text-[#0C342C]">Historical Data</h3>
-                </div>
-                <p className="text-[#06231D]/75 text-sm leading-relaxed font-light">
-                  Discover longitudinal insights spanning across all semesters and departments.
-                </p>
-              </div>
-            </div>
-            
-          </div>
-
-          {/* Right Image Area (Structured Asset Container) */}
-          <div className="flex-1 w-full relative">
-            <div className="relative aspect-[4/3] lg:aspect-square w-full rounded-2xl overflow-hidden border border-[#076653]/30 shadow-xl shadow-[#0C342C]/5 bg-[#E2FBCE]">
-              <img
-                src="/kia-campus.jpg"
-                alt="Kumaraguru Institute of Agriculture Campus"
-                className="w-full h-full object-cover object-center"
-              />
-            </div>
-            {/* Subtle decorative offset border to reinforce agricultural identity layout */}
-            <div className="absolute -z-10 -bottom-5 -right-5 w-full h-full rounded-2xl border border-[#076653]/15 bg-[#FFFDEE]"></div>
-          </div>
-
+          <a
+            href="#admissions"
+            className="px-10 py-5 bg-transparent border border-[#FFFDEE]/30 text-[#FFFDEE] text-xs font-bold tracking-[0.15em] uppercase hover:border-[#FFFDEE] transition-colors duration-300 rounded-none w-full sm:w-auto text-center"
+          >
+            Admissions
+          </a>
         </div>
       </div>
+
+      {/* Right Cinematic Image Block */}
+      <div className="w-full lg:w-7/12 relative min-h-[60vh] lg:min-h-0 bg-[#06231D]">
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          <img
+            src="/kia-campus.jpg"
+            alt="Kumaraguru Institute of Agriculture Campus"
+            className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-[30s] ease-out"
+          />
+          {/* Subtle multiplying overlay to deepen shadows and unify with branding */}
+          <div className="absolute inset-0 bg-[#0C342C]/20 mix-blend-multiply"></div>
+        </div>
+        
+        {/* Cinematic inner frame overlay */}
+        <div className="absolute inset-4 sm:inset-8 border border-[#FFFDEE]/20 pointer-events-none z-10 hidden lg:block"></div>
+        
+        {/* Caption */}
+        <div className="absolute bottom-12 right-12 z-20 text-[#FFFDEE]/80 text-[10px] uppercase tracking-[0.25em] font-bold hidden lg:block">
+          Sakthi Nagar, Erode District
+        </div>
+      </div>
+      
     </section>
   );
 };
