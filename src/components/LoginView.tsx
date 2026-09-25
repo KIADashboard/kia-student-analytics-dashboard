@@ -8,15 +8,123 @@ interface LoginViewProps {
 }
 
 export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => (
-  <div className="min-h-screen bg-slate-50 text-slate-900 flex items-center justify-center p-5 relative overflow-hidden">
-    <div className="absolute inset-0 opacity-40 bg-[linear-gradient(#e2e8f0_1px,transparent_1px),linear-gradient(90deg,#e2e8f0_1px,transparent_1px)] bg-size-[44px_44px]" />
-    <div className="relative w-full max-w-5xl grid lg:grid-cols-[1.1fr_0.9fr] bg-white border border-slate-200 shadow-2xl shadow-slate-200/60 overflow-hidden">
-      <div className="bg-slate-900 text-white p-8 sm:p-12 lg:p-16 flex flex-col justify-between min-h-107.5">
-        <div className="flex items-center gap-3"><InstitutionLogo className="w-12 h-12 rounded-lg bg-white p-1 object-contain" imageClassName="object-contain" /><span className="font-bold tracking-tight">Kumaraguru Institute of Agriculture</span></div>
-        <div className="max-w-md mt-14"><p className="text-slate-300 text-xs uppercase tracking-[0.25em] font-bold mb-5">Kumaraguru Institute of Agriculture</p><h1 className="text-4xl sm:text-5xl font-semibold tracking-tight leading-[1.05]">Your academic journey, in one place.</h1><p className="mt-6 text-slate-300 leading-relaxed">Access your student records, goals, achievements, and documents with clarity.</p></div>
-        <p className="text-xs text-slate-400 mt-14">Secure institutional access · Academic year 2024–25</p>
+  <div className="min-h-screen bg-[#FFFDEE] text-[#0C342C] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden select-none">
+    {/* Subtle Institutional Grid Texture */}
+    <div className="absolute inset-0 opacity-40 bg-[linear-gradient(rgba(12,52,44,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(12,52,44,0.06)_1px,transparent_1px)] bg-[size:44px_44px]" />
+    
+    {/* Ambient Glow */}
+    <div className="absolute -top-32 -left-32 w-96 h-96 bg-radial from-[#076653]/15 to-transparent rounded-full blur-3xl pointer-events-none" />
+    <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-radial from-[#E2FBCE]/30 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+    <div className="relative w-full max-w-5xl grid lg:grid-cols-[1.1fr_0.9fr] bg-white border border-[#0C342C]/10 rounded-3xl shadow-2xl shadow-[#0C342C]/10 overflow-hidden">
+      {/* Left Institutional Showcase Panel */}
+      <div className="bg-[#0C342C] text-[#FFFDEE] p-8 sm:p-12 lg:p-14 flex flex-col justify-between relative overflow-hidden">
+        <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-radial from-[#076653]/40 to-transparent pointer-events-none rounded-full blur-2xl" />
+
+        {/* Brand Header */}
+        <div className="relative z-10 flex items-center gap-3">
+          <InstitutionLogo 
+            className="w-12 h-12 rounded-xl bg-white p-1.5 object-contain shadow-xs shrink-0" 
+            imageClassName="object-contain" 
+          />
+          <div className="flex flex-col">
+            <span className="text-sm font-bold tracking-wide uppercase text-[#FFFDEE]">
+              Kumaraguru
+            </span>
+            <div className="h-[2px] w-full bg-[#c8953e] my-[2px] opacity-80"></div>
+            <span className="text-[10px] text-[#E2FBCE] font-semibold tracking-wider uppercase">
+              Institute of Agriculture
+            </span>
+          </div>
+        </div>
+
+        {/* Hero Copy */}
+        <div className="relative z-10 max-w-md my-12">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-8 h-px bg-[#E2FBCE]/60"></span>
+            <p className="text-[#E2FBCE] text-[10px] uppercase tracking-[0.25em] font-bold">
+              Campus Analytics Portal
+            </p>
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal leading-[1.1] tracking-tight">
+            Cultivating excellence, <br />
+            <span className="italic font-light text-[#E2FBCE]">guided by data.</span>
+          </h1>
+          <p className="mt-5 text-sm sm:text-base text-[#FFFDEE]/80 leading-relaxed font-light">
+            Access your student records, monitor academic performance, chart aspirations, and review verified credentials in one integrated portal.
+          </p>
+        </div>
+
+        {/* Footer Note */}
+        <div className="relative z-10 text-xs text-[#FFFDEE]/60 flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#E3EF26]"></span>
+          <span>Sakthi Nagar Campus, Erode &middot; AY 2026–2027</span>
+        </div>
       </div>
-      <div className="p-8 sm:p-12 lg:p-16 flex flex-col justify-center"><div className="flex items-center gap-2 text-slate-700 mb-3"><Sparkles className="w-4 h-4" /><span className="text-xs uppercase tracking-[0.2em] font-bold">Welcome back</span></div><h2 className="text-3xl font-semibold tracking-tight">Sign in to continue</h2><p className="text-sm text-slate-500 mt-3 mb-8">Choose the workspace connected to your account.</p><div className="space-y-3"><button onClick={() => onLogin('student')} className="w-full flex items-center justify-between p-4 border border-slate-300 bg-slate-50 hover:bg-slate-100 transition text-left group"><span className="flex items-center gap-3"><span className="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center"><GraduationCap className="w-4 h-4" /></span><span><span className="block font-semibold text-sm">Student portal</span><span className="block text-xs text-slate-500 mt-0.5">Manage your personal academic journey</span></span></span><ArrowRight className="w-4 h-4 text-slate-700 group-hover:translate-x-1 transition" /></button><button onClick={() => onLogin('admin')} className="w-full flex items-center justify-between p-4 border border-slate-200 hover:border-slate-400 hover:bg-slate-50 transition text-left group"><span className="flex items-center gap-3"><span className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center"><ShieldCheck className="w-4 h-4" /></span><span><span className="block font-semibold text-sm">Administration</span><span className="block text-xs text-slate-500 mt-0.5">Analytics, directory, and reports</span></span></span><ArrowRight className="w-4 h-4 text-slate-600 group-hover:translate-x-1 transition" /></button></div><p className="text-[11px] text-slate-400 mt-8">Demo access is enabled for this frontend preview.</p></div>
+
+      {/* Right Login Action Panel */}
+      <div className="p-8 sm:p-12 lg:p-14 flex flex-col justify-center bg-white">
+        <div className="flex items-center gap-2 text-[#076653] mb-3">
+          <Sparkles className="w-4 h-4" />
+          <span className="text-[10px] uppercase tracking-[0.22em] font-bold">
+            Portal Access
+          </span>
+        </div>
+        <h2 className="text-2xl sm:text-3xl font-serif text-[#0C342C] font-bold tracking-tight">
+          Sign In to Continue
+        </h2>
+        <p className="text-xs sm:text-sm text-[#06231D]/65 mt-2 mb-8">
+          Choose the role corresponding to your verified KIA account.
+        </p>
+
+        <div className="space-y-4">
+          {/* 1. Student Portal Button */}
+          <button 
+            onClick={() => onLogin('student')} 
+            className="w-full flex items-center justify-between p-4 sm:p-5 border border-[#076653]/30 bg-[#FFFDEE] hover:bg-[#E2FBCE]/60 rounded-2xl transition-all duration-300 text-left group shadow-xs hover:shadow-md hover:border-[#076653]"
+          >
+            <span className="flex items-center gap-3.5">
+              <span className="w-11 h-11 rounded-xl bg-linear-to-br from-[#076653] to-[#0C342C] text-[#FFFDEE] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                <GraduationCap className="w-5 h-5 text-[#E2FBCE]" />
+              </span>
+              <span>
+                <span className="block font-bold text-sm text-[#0C342C]">
+                  KIA Student Portal
+                </span>
+                <span className="block text-xs text-[#06231D]/65 mt-0.5">
+                  Academics, aspiration survey, and student profile
+                </span>
+              </span>
+            </span>
+            <ArrowRight className="w-4 h-4 text-[#076653] group-hover:translate-x-1.5 transition-transform" />
+          </button>
+
+          {/* 2. Admin Portal Button */}
+          <button 
+            onClick={() => onLogin('admin')} 
+            className="w-full flex items-center justify-between p-4 sm:p-5 border border-[#0C342C]/15 hover:border-[#076653]/50 hover:bg-[#FFFDEE] rounded-2xl transition-all duration-300 text-left group"
+          >
+            <span className="flex items-center gap-3.5">
+              <span className="w-11 h-11 rounded-xl bg-white text-[#0C342C] border border-[#0C342C]/15 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                <ShieldCheck className="w-5 h-5 text-[#076653]" />
+              </span>
+              <span>
+                <span className="block font-bold text-sm text-[#0C342C]">
+                  Institutional Administration
+                </span>
+                <span className="block text-xs text-[#06231D]/65 mt-0.5">
+                  Cohort analytics, student directory, and reports
+                </span>
+              </span>
+            </span>
+            <ArrowRight className="w-4 h-4 text-[#0C342C]/50 group-hover:text-[#076653] group-hover:translate-x-1.5 transition-all" />
+          </button>
+        </div>
+
+        <p className="text-[11px] text-[#0C342C]/50 mt-8 text-center sm:text-left">
+          Kumaraguru Institute of Agriculture &middot; Official Student Information System
+        </p>
+      </div>
     </div>
   </div>
 );

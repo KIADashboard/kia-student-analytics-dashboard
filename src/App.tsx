@@ -350,7 +350,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex text-slate-800 antialiased font-sans">
+    <div className="min-h-screen bg-[#FFFDEE] flex text-[#0C342C] antialiased font-sans">
       {/* Desktop Fixed Left Sidebar */}
       <div className="hidden lg:block shrink-0">
         <Sidebar
@@ -363,25 +363,27 @@ export default function App() {
       {/* Mobile Drawer Navigation Backdrop */}
       {mobileMenuOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-xs lg:hidden"
+          className="fixed inset-0 z-40 bg-[#0C342C]/60 backdrop-blur-xs lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
 
       {/* Mobile Drawer */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-72 bg-white transform transition-transform duration-300 ease-in-out lg:hidden ${
+      <div className={`fixed inset-y-0 left-0 z-50 w-72 bg-[#FFFDEE] transform transition-transform duration-300 ease-in-out lg:hidden shadow-2xl border-r border-[#0C342C]/10 ${
         mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        <div className="flex items-center justify-between p-4 border-b border-slate-200">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white font-bold">
-              <InstitutionLogo className="w-8 h-8 rounded-lg object-contain" />
+        <div className="flex items-center justify-between p-4 border-b border-[#0C342C]/10 bg-white/70">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[#0C342C] flex items-center justify-center p-1 text-white font-bold">
+              <InstitutionLogo className="w-full h-full object-contain" />
             </div>
-            <span className="font-bold text-slate-900 text-sm">Kumaraguru Institute of Agriculture</span>
+            <span className="font-bold text-[#0C342C] text-xs uppercase tracking-wide">
+              Kumaraguru
+            </span>
           </div>
           <button 
             onClick={() => setMobileMenuOpen(false)}
-            className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg"
+            className="p-1.5 text-[#0C342C]/60 hover:text-[#0C342C] rounded-lg hover:bg-[#E2FBCE]/50"
           >
             <X className="w-5 h-5" />
           </button>
@@ -394,25 +396,25 @@ export default function App() {
       </div>
 
       {/* Main Viewport Container */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-[#FFFDEE]">
         {/* Mobile Header Bar Toggle */}
-        <div className="lg:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+        <div className="lg:hidden bg-[#FFFDEE]/95 border-b border-[#0C342C]/10 px-4 py-3 flex items-center justify-between sticky top-0 z-30 backdrop-blur-md">
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="p-2 -ml-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100"
+            className="p-2 -ml-2 text-[#0C342C] hover:bg-[#E2FBCE]/60 rounded-lg transition"
           >
             <Menu className="w-5 h-5" />
           </button>
           <div className="flex items-center gap-2">
-            <InstitutionLogo className="w-5 h-5 object-contain" />
-            <span className="font-bold text-slate-900 text-sm">Kumaraguru Institute of Agriculture</span>
+            <InstitutionLogo className="w-6 h-6 object-contain" />
+            <span className="font-bold text-[#0C342C] text-xs uppercase tracking-wide">Kumaraguru Institute of Agriculture</span>
           </div>
           <button
             type="button"
             title="Log out"
             aria-label="Log out"
             onClick={() => setRole(null)}
-            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
+            className="p-1.5 text-[#0C342C]/70 hover:text-[#0C342C] hover:bg-[#E2FBCE]/60 rounded-lg transition"
           >
             <LogOut className="w-4 h-4" />
           </button>

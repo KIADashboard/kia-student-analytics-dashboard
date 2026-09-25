@@ -36,63 +36,703 @@
   }
 }
 
-.student-portal {
-  --portal-ink: #143c3a;
-  --portal-gold: #c8953e;
-  background: #f7f8f4;
-  color: #18302f;
-  font-family: Georgia, 'Times New Roman', serif;
+/* ==========================================================================
+   KIA Institutional Design System Tokens & Student Portal Styles
+   Aligned with LandingPage, Navbar & HeroSection
+   Palette:
+     Cream: #FFFDEE
+     Deep Pine: #0C342C
+     Dark Pine Hover: #06231D
+     Emerald: #076653
+     Mint Accent: #E2FBCE
+     Electric Lime: #E3EF26
+     Gold Accent: #c8953e / #e7b75b
+   ========================================================================== */
+
+:root {
+  --kia-cream: #FFFDEE;
+  --kia-pine: #0C342C;
+  --kia-pine-dark: #06231D;
+  --kia-emerald: #076653;
+  --kia-mint: #E2FBCE;
+  --kia-electric: #E3EF26;
+  --kia-gold: #c8953e;
 }
-.student-portal button, .student-portal input, .student-portal select, .student-portal textarea { font-family: 'Segoe UI', system-ui, sans-serif; }
-.student-sidebar { width: 252px; position: fixed; inset: 0 auto 0 0; background: #143c3a; color: #eaf4ef; display: flex; flex-direction: column; z-index: 30; }
-.student-brand { padding: 28px 22px; display: flex; gap: 11px; align-items: center; border-bottom: 1px solid rgba(255,255,255,.12); }
-.student-brand strong, .student-brand small, .student-sidebar-footer strong, .student-sidebar-footer small { display: block; }
-.student-brand strong { font-size: 15px; }.student-brand small, .student-sidebar-footer small { color: #9fc3b5; font-size: 11px; margin-top: 3px; }
-.brand-mark { width: 35px; height: 35px; display: grid; place-items: center; background: #e7b75b; color: #143c3a; }
-.student-sidebar nav { padding: 22px 13px; flex: 1; }.student-sidebar nav button { width: 100%; border: 0; background: transparent; color: #a9c8bc; display: flex; align-items: center; gap: 12px; padding: 11px 12px; font-size: 13px; text-align: left; cursor: pointer; margin-bottom: 4px; transition: .2s; }
-.student-sidebar nav button:hover, .student-sidebar nav button.active { background: #235651; color: white; }.student-sidebar nav button.active { box-shadow: inset 3px 0 #e7b75b; }
-.student-sidebar-footer { margin: 14px; padding: 14px 0 4px; border-top: 1px solid rgba(255,255,255,.12); display: flex; align-items: center; gap: 9px; }.student-sidebar-footer strong { font: 600 12px 'Segoe UI', sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 128px; }.student-sidebar-footer .icon-button { margin-left: auto; color: #a9c8bc; }
-.student-main { margin-left: 252px; min-height: 100vh; }.student-header { height: 82px; background: rgba(255,255,255,.88); border-bottom: 1px solid #dde6df; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; position: sticky; top: 0; z-index: 20; backdrop-filter: blur(12px); }.student-header p { margin: 3px 0 0; font: 600 14px 'Segoe UI', sans-serif; color: #18302f; }.header-user { display: flex; align-items: center; gap: 10px; font: 600 12px 'Segoe UI', sans-serif; }.mini-avatar { width: 32px; height: 32px; display: grid; place-items: center; flex: none; background: #d8ebe1; color: #143c3a; font: 700 11px 'Segoe UI', sans-serif; }.student-content { max-width: 1120px; padding: 52px 5% 80px; margin: auto; }.student-content h1 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1; letter-spacing: -.04em; font-weight: 600; color: #143c3a; }.student-content h2 { font-size: 1.25rem; letter-spacing: -.02em; font-weight: 600; color: #143c3a; }.portal-kicker { color: #98702b; font: 700 10px 'Segoe UI', sans-serif; letter-spacing: .19em; text-transform: uppercase; }.portal-hero { background: #143c3a; color: white; padding: clamp(26px, 5vw, 48px); display: flex; justify-content: space-between; align-items: center; min-height: 220px; position: relative; overflow: hidden; }.portal-hero:after { content: ''; position: absolute; width: 310px; height: 310px; border: 1px solid rgba(231,183,91,.35); border-radius: 50%; right: -120px; top: -100px; }.portal-hero h1 { color: white; font-size: clamp(2rem, 5vw, 3.6rem); max-width: 600px; position: relative; z-index: 1; }.completion-ring { width: 92px; height: 92px; border: 5px solid #e7b75b; border-left-color: rgba(231,183,91,.25); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: none; position: relative; z-index: 1; }.completion-ring strong { font: 700 17px Georgia, serif; }.completion-ring span { font: 9px 'Segoe UI', sans-serif; color: #b8d7cd; text-align: center; margin-top: 2px; }.summary-item { padding: 17px; border: 1px solid #dbe5df; background: #fff; }.summary-item span { display: block; color: #72857d; font: 10px 'Segoe UI', sans-serif; text-transform: uppercase; letter-spacing: .1em; }.summary-item strong { display: block; color: #143c3a; font: 600 16px Georgia, serif; margin-top: 7px; }.portal-action, .portal-list { display: flex; align-items: center; gap: 14px; width: 100%; padding: 18px; background: #fff; border: 1px solid #dbe5df; text-align: left; transition: .2s; }.portal-action { cursor: pointer; }.portal-action:hover { border-color: #6da392; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(20,60,58,.08); }.portal-action strong, .portal-list h3 { display: block; font: 600 14px 'Segoe UI', sans-serif; color: #18302f; }.portal-action small { display: block; font: 12px 'Segoe UI', sans-serif; color: #72857d; margin-top: 4px; }.portal-icon { width: 40px; height: 40px; display: grid; place-items: center; background: #e8f2ed; color: #23645a; flex: none; }.portal-status, .portal-section { background: #fff; border: 1px solid #dbe5df; padding: clamp(20px, 4vw, 32px); }.portal-section { box-shadow: 0 5px 18px rgba(20,60,58,.03); }.portal-label { display: block; color: #72857d; font: 700 10px 'Segoe UI', sans-serif; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 7px; }.portal-input { width: 100%; border: 1px solid #cfded6; background: #fbfcfa; padding: 10px 12px; color: #18302f; font-size: 13px; outline: none; }.portal-input:focus { border-color: #5b9485; box-shadow: 0 0 0 3px rgba(91,148,133,.12); }.portal-primary, .portal-secondary { display: inline-flex; align-items: center; gap: 8px; padding: 10px 15px; font: 600 12px 'Segoe UI', sans-serif; cursor: pointer; border: 1px solid transparent; }.portal-primary { color: white; background: #143c3a; }.portal-primary:hover { background: #235651; }.portal-secondary { color: #143c3a; background: white; border-color: #cfded6; }.portal-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; color: #527066; background: #edf4f0; font: 700 10px 'Segoe UI', sans-serif; }.portal-badge.green { color: #267156; background: #e6f4eb; }.portal-badge.amber { color: #98702b; background: #fff3d8; }.portal-choice { display: inline-flex; align-items: center; gap: 6px; padding: 8px 10px; border: 1px solid #dbe5df; color: #526a61; font: 12px 'Segoe UI', sans-serif; cursor: pointer; }.portal-choice.selected { border-color: #6da392; background: #e8f2ed; color: #143c3a; }.portal-choice input { accent-color: #23645a; }.portal-notice { display: flex; align-items: flex-start; gap: 9px; padding: 12px 14px; background: #edf5f0; color: #437267; font: 12px 'Segoe UI', sans-serif; }.status-dot { width: 7px; height: 7px; display: inline-block; border-radius: 50%; margin-right: 6px; }.status-dot.green { background: #3d9a72; }.status-dot.amber { background: #d19a35; }.icon-button { border: 0; background: transparent; color: #83958e; cursor: pointer; padding: 5px; }.icon-button:hover { color: #143c3a; }.mobile-menu, .mobile-close { display: none; }
-@media (max-width: 800px) { .student-sidebar { transform: translateX(-100%); transition: transform .25s; box-shadow: 10px 0 30px rgba(0,0,0,.15); }.student-sidebar.open { transform: translateX(0); }.student-main { margin-left: 0; }.student-header { height: 70px; padding: 0 20px; }.mobile-menu, .mobile-close { display: inline-flex; }.mobile-menu { margin-right: 12px; }.student-header > div:first-of-type { display: flex; align-items: center; }.header-user span, .header-user > .icon-button { display: none; }.student-content { padding: 35px 20px 60px; }.portal-hero { align-items: flex-start; gap: 20px; }.completion-ring { width: 76px; height: 76px; }.portal-hero h1 { font-size: 2.3rem; } }
-@media (max-width: 480px) { .summary-item { padding: 12px; }.summary-item strong { font-size: 13px; }.portal-hero { display: block; }.completion-ring { margin-top: 24px; }.student-content h1 { font-size: 2.25rem; } }
 
-/* Student surfaces inherit the admin portal's slate design language. */
-.student-portal { background: #f8fafc; color: #1e293b; font-family: inherit; }
-.student-sidebar { width: 256px; background: #fff; color: #1e293b; border-right: 1px solid #e2e8f0; }
-.student-brand { padding: 20px; border-bottom: 1px solid #e2e8f0; }
-.student-brand strong { color: #0f172a; font: 700 14px inherit; letter-spacing: -.02em; }
-.student-brand em { font: 700 10px inherit; font-style: normal; text-transform: uppercase; padding: 2px 5px; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; margin-left: 4px; }
-.student-brand small { color: #64748b; }
-.admin-brand-mark { width: 36px; height: 36px; border-radius: 8px; background: #0f172a; color: #e2e8f0; display: grid; place-items: center; flex: none; }
-.student-sidebar-context { margin: 0 20px; padding: 13px 0; border-bottom: 1px solid #f1f5f9; color: #475569; font: 500 11px inherit; display: flex; justify-content: space-between; gap: 8px; }
-.student-sidebar-context span { color: #334155; font-weight: 700; white-space: nowrap; }
-.student-nav-label { margin: 0 12px 8px; color: #94a3b8; font: 700 10px inherit; text-transform: uppercase; letter-spacing: .12em; }
-.student-sidebar nav { padding: 18px 12px; }
-.student-sidebar nav button { color: #475569; border-radius: 8px; padding: 10px 12px; font: 500 12px inherit; }
-.student-sidebar nav button:hover { color: #0f172a; background: #f8fafc; }
-.student-sidebar nav button.active { color: #0f172a; background: #f1f5f9; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(15,23,42,.04); }
-.student-sidebar nav button.active svg { color: #0f172a; }
-.student-sidebar-footer { margin: 12px; padding: 14px 8px 4px; border-top: 1px solid #e2e8f0; }
-.student-sidebar-footer strong { color: #334155; font: 600 11px inherit; }.student-sidebar-footer small { color: #94a3b8; }
-.student-sidebar-footer .icon-button { color: #64748b; }
-.student-main { margin-left: 256px; background: #f8fafc; }
-.student-header { height: 68px; background: rgba(255,255,255,.95); border-bottom: 1px solid #e2e8f0; padding: 0 24px; }
-.student-header p { color: #0f172a; font: 700 11px inherit; text-transform: uppercase; letter-spacing: .08em; }
-.portal-kicker { color: #64748b; font: 700 10px inherit; letter-spacing: .12em; }
-.header-user { color: #334155; font: 600 12px inherit; }.admin-icon-button { position: relative; padding: 7px; color: #64748b; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; }.admin-icon-button:hover { color: #0f172a; background: #f8fafc; }
-.mini-avatar { border-radius: 8px; background: #1e293b; color: #fff; }
-.student-content { max-width: 1280px; padding: 32px 24px 64px; }
-.student-content h1 { color: #0f172a; font: 700 24px inherit; letter-spacing: -.025em; }.student-content h2 { color: #0f172a; font: 700 16px inherit; letter-spacing: -.015em; }
-.portal-hero { background: #fff; color: #1e293b; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 2px rgba(15,23,42,.04); padding: 24px; min-height: 0; }.portal-hero:after { display: none; }.portal-hero h1 { color: #0f172a; font: 700 24px inherit; letter-spacing: -.025em; }.portal-hero .portal-kicker { color: #64748b; }.portal-hero p:not(.portal-kicker) { color: #64748b; }.completion-ring { width: 78px; height: 78px; border: 4px solid #334155; border-left-color: #e2e8f0; }.completion-ring strong { color: #0f172a; font: 700 17px inherit; }.completion-ring span { color: #64748b; font: 10px inherit; }
-.summary-item, .portal-status, .portal-section { border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(15,23,42,.04); }.summary-item span, .portal-label { color: #64748b; font-family: inherit; }.summary-item strong { color: #0f172a; font-family: inherit; }
-.portal-action, .portal-list { border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; }.portal-action:hover { border-color: #cbd5e1; box-shadow: 0 3px 8px rgba(15,23,42,.06); }.portal-action strong, .portal-list h3 { color: #0f172a; font-family: inherit; }.portal-action small { color: #64748b; font-family: inherit; }.portal-icon { border-radius: 8px; background: #f1f5f9; color: #475569; }
-.portal-primary { border-radius: 8px; background: #1e293b; color: #fff; }.portal-primary:hover { background: #0f172a; }.portal-secondary { border-radius: 8px; color: #334155; border-color: #cbd5e1; }.portal-secondary:hover { background: #f8fafc; }.portal-input { border-radius: 8px; border-color: #cbd5e1; background: #fff; color: #1e293b; }.portal-input:focus { border-color: #64748b; box-shadow: 0 0 0 2px rgba(100,116,139,.15); }.portal-choice { border-radius: 8px; border-color: #cbd5e1; }.portal-choice.selected { border-color: #64748b; background: #f1f5f9; color: #0f172a; }.portal-badge { border-radius: 6px; color: #475569; background: #f1f5f9; }.portal-badge.green { color: #166534; background: #f0fdf4; }.portal-badge.amber { color: #92400e; background: #fffbeb; }.portal-notice { border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; color: #475569; }.completion-bar { height: 8px; background: #f1f5f9; border-radius: 999px; overflow: hidden; margin-top: 22px; }.completion-bar span { display: block; height: 100%; background: #334155; border-radius: inherit; transition: width .2s ease; }
-@media (max-width: 800px) { .student-sidebar { width: 256px; }.student-main { margin-left: 0; }.student-header { padding: 0 16px; }.student-content { padding: 24px 16px 48px; } }
+.student-portal {
+  background-color: #FFFDEE;
+  color: #0C342C;
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
 
-.student-brand > span > strong { font-size: 0; }
-.student-brand > span > strong::after { content: 'Kumaraguru Institute of Agriculture'; font-size: 14px; }
-.student-sidebar-context span { font-size: 0; }
-.student-sidebar-context span::after { content: 'KIA'; font-size: 11px; }
-.student-header .portal-kicker { font-size: 0; }
-.student-header .portal-kicker::after { content: 'Kumaraguru Institute of Agriculture'; font: 700 10px inherit; letter-spacing: .12em; }
+.student-portal button, 
+.student-portal input, 
+.student-portal select, 
+.student-portal textarea { 
+  font-family: inherit; 
+}
+
+/* Sidebar */
+.student-sidebar { 
+  width: 264px; 
+  position: fixed; 
+  inset: 0 auto 0 0; 
+  background: #0C342C; 
+  color: #FFFDEE; 
+  display: flex; 
+  flex-direction: column; 
+  z-index: 30; 
+  border-right: 1px solid rgba(226, 251, 206, 0.15);
+}
+
+.student-brand { 
+  padding: 22px 20px; 
+  display: flex; 
+  gap: 12px; 
+  align-items: center; 
+  border-bottom: 1px solid rgba(226, 251, 206, 0.12);
+  background: rgba(6, 35, 29, 0.4);
+}
+
+.student-brand strong { 
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #FFFDEE;
+}
+
+.student-brand small { 
+  display: block;
+  color: #E2FBCE; 
+  font-size: 10px; 
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-top: 2px; 
+}
+
+.student-sidebar-context { 
+  margin: 0 16px; 
+  padding: 12px 14px; 
+  border-bottom: 1px solid rgba(226, 251, 206, 0.1); 
+  color: rgba(255, 253, 238, 0.7); 
+  font-size: 11px; 
+  font-weight: 500;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  gap: 8px; 
+}
+
+.student-sidebar-context span { 
+  color: #E2FBCE; 
+  font-weight: 700; 
+  white-space: nowrap; 
+}
+
+.student-nav-label { 
+  margin: 0 16px 8px; 
+  color: #E2FBCE; 
+  font-size: 10px; 
+  font-weight: 700; 
+  text-transform: uppercase; 
+  letter-spacing: 0.2em; 
+  opacity: 0.8;
+}
+
+.student-sidebar nav { 
+  padding: 18px 12px; 
+  flex: 1; 
+  overflow-y: auto;
+}
+
+.student-sidebar nav button { 
+  width: 100%; 
+  border: 0; 
+  background: transparent; 
+  color: rgba(255, 253, 238, 0.78); 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  padding: 11px 14px; 
+  font-size: 13px; 
+  font-weight: 500;
+  border-radius: 12px;
+  text-align: left; 
+  cursor: pointer; 
+  margin-bottom: 4px; 
+  transition: all 0.2s ease; 
+}
+
+.student-sidebar nav button:hover { 
+  background: rgba(7, 102, 83, 0.4); 
+  color: #FFFDEE; 
+}
+
+.student-sidebar nav button.active { 
+  background: linear-gradient(135deg, #076653 0%, #0C342C 100%); 
+  color: #FFFDEE; 
+  font-weight: 700;
+  border: 1px solid rgba(226, 251, 206, 0.3);
+  box-shadow: 0 4px 14px rgba(7, 102, 83, 0.35);
+  position: relative;
+}
+
+.student-sidebar nav button.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3.5px;
+  background: #E3EF26;
+  border-radius: 0 4px 4px 0;
+}
+
+.student-sidebar nav button.active svg { 
+  color: #E2FBCE; 
+}
+
+.student-sidebar-footer { 
+  margin: 12px; 
+  padding: 14px 10px 8px; 
+  border-top: 1px solid rgba(226, 251, 206, 0.12); 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+}
+
+.student-sidebar-footer strong { 
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FFFDEE;
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+  max-width: 130px; 
+}
+
+.student-sidebar-footer small { 
+  display: block;
+  color: #E2FBCE; 
+  font-size: 10px; 
+  font-family: monospace;
+  margin-top: 2px; 
+}
+
+.student-sidebar-footer .icon-button { 
+  margin-left: auto; 
+  color: rgba(255, 253, 238, 0.7); 
+}
+
+.student-sidebar-footer .icon-button:hover { 
+  color: #FFFDEE; 
+}
+
+/* Main Content Area */
+.student-main { 
+  margin-left: 264px; 
+  min-height: 100vh; 
+  background: #FFFDEE;
+}
+
+.student-header { 
+  height: 74px; 
+  background: rgba(255, 253, 238, 0.92); 
+  border-bottom: 1px solid rgba(12, 52, 44, 0.1); 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  padding: 0 32px; 
+  position: sticky; 
+  top: 0; 
+  z-index: 20; 
+  backdrop-filter: blur(12px); 
+}
+
+.student-header p { 
+  margin: 2px 0 0; 
+  font-size: 18px; 
+  font-weight: 700; 
+  font-family: 'Playfair Display', Georgia, serif; 
+  color: #0C342C; 
+}
+
+.portal-kicker { 
+  color: #076653; 
+  font-size: 10px; 
+  font-weight: 700; 
+  letter-spacing: 0.22em; 
+  text-transform: uppercase; 
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-user { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  font-size: 12px; 
+  font-weight: 600; 
+  color: #0C342C; 
+}
+
+.mini-avatar { 
+  width: 36px; 
+  height: 36px; 
+  border-radius: 9999px; 
+  display: grid; 
+  place-items: center; 
+  flex: none; 
+  background: linear-gradient(135deg, #076653 0%, #0C342C 100%); 
+  color: #FFFDEE; 
+  font-size: 12px; 
+  font-weight: 700; 
+  border: 1px solid rgba(226, 251, 206, 0.4);
+  box-shadow: 0 2px 6px rgba(12, 52, 44, 0.15);
+}
+
+.admin-icon-button { 
+  position: relative; 
+  padding: 8px; 
+  color: #0C342C; 
+  background: #ffffff; 
+  border: 1px solid rgba(12, 52, 44, 0.12); 
+  border-radius: 9999px; 
+  cursor: pointer; 
+  transition: all 0.2s ease;
+}
+
+.admin-icon-button:hover { 
+  color: #0C342C; 
+  background: #E2FBCE; 
+  border-color: #076653; 
+}
+
+.student-content { 
+  max-width: 1240px; 
+  padding: 40px 32px 80px; 
+  margin: auto; 
+}
+
+.student-content h1 { 
+  font-size: clamp(2rem, 3.5vw, 2.75rem); 
+  line-height: 1.15; 
+  letter-spacing: -0.025em; 
+  font-weight: 700; 
+  font-family: 'Playfair Display', Georgia, serif; 
+  color: #0C342C; 
+}
+
+.student-content h2 { 
+  font-size: 1.25rem; 
+  letter-spacing: -0.015em; 
+  font-weight: 700; 
+  font-family: 'Playfair Display', Georgia, serif; 
+  color: #0C342C; 
+}
+
+/* Hero Panel */
+.portal-hero { 
+  background: #0C342C; 
+  color: #FFFDEE; 
+  border: 1px solid rgba(226, 251, 206, 0.2); 
+  border-radius: 1.5rem; 
+  padding: clamp(28px, 4vw, 42px); 
+  box-shadow: 0 16px 36px rgba(12, 52, 44, 0.15); 
+  position: relative; 
+  overflow: hidden; 
+}
+
+.portal-hero::after { 
+  content: ''; 
+  position: absolute; 
+  width: 320px; 
+  height: 320px; 
+  background: radial-gradient(circle, rgba(7, 102, 83, 0.5) 0%, transparent 70%); 
+  border-radius: 50%; 
+  right: -80px; 
+  top: -80px; 
+  pointer-events: none;
+}
+
+.portal-hero h1 { 
+  color: #FFFDEE; 
+  position: relative; 
+  z-index: 1; 
+}
+
+.portal-hero .portal-kicker { 
+  color: #E2FBCE; 
+}
+
+.portal-hero p:not(.portal-kicker) { 
+  color: rgba(255, 253, 238, 0.85); 
+}
+
+/* Completion Elements */
+.completion-ring { 
+  width: 88px; 
+  height: 88px; 
+  border: 5px solid #076653; 
+  border-top-color: #E2FBCE; 
+  border-right-color: #E3EF26; 
+  border-radius: 50%; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  flex: none; 
+  position: relative; 
+  z-index: 1; 
+}
+
+.completion-ring strong { 
+  font-size: 18px; 
+  font-weight: 700; 
+  font-family: 'Playfair Display', Georgia, serif; 
+  color: #FFFDEE; 
+}
+
+.completion-ring span { 
+  font-size: 9px; 
+  color: #E2FBCE; 
+  text-align: center; 
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 2px; 
+}
+
+.completion-bar { 
+  height: 10px; 
+  background: rgba(226, 251, 206, 0.7); 
+  border: 1px solid rgba(7, 102, 83, 0.2); 
+  border-radius: 9999px; 
+  overflow: hidden; 
+  margin-top: 18px; 
+  padding: 1.5px;
+}
+
+.completion-bar span { 
+  display: block; 
+  height: 100%; 
+  background: linear-gradient(90deg, #076653 0%, #0C342C 50%, #076653 100%); 
+  border-radius: 9999px; 
+  transition: width 0.4s ease; 
+}
+
+/* Cards & Sections */
+.summary-item, 
+.portal-status, 
+.portal-section { 
+  border: 1px solid rgba(12, 52, 44, 0.1); 
+  border-radius: 1.25rem; 
+  background: #ffffff; 
+  box-shadow: 0 2px 10px rgba(12, 52, 44, 0.03); 
+  padding: clamp(20px, 3.5vw, 28px);
+}
+
+.summary-item { 
+  padding: 20px; 
+  transition: all 0.25s ease;
+}
+
+.summary-item:hover {
+  border-color: rgba(7, 102, 83, 0.35);
+  box-shadow: 0 6px 18px rgba(12, 52, 44, 0.06);
+  transform: translateY(-2px);
+}
+
+.summary-item span, 
+.portal-label { 
+  display: block; 
+  color: #076653; 
+  font-size: 10px; 
+  font-weight: 700; 
+  letter-spacing: 0.18em; 
+  text-transform: uppercase; 
+}
+
+.summary-item strong { 
+  display: block; 
+  color: #0C342C; 
+  font-size: 26px; 
+  font-weight: 700; 
+  font-family: 'Playfair Display', Georgia, serif; 
+  margin-top: 8px; 
+}
+
+.portal-action, 
+.portal-list { 
+  display: flex; 
+  align-items: center; 
+  gap: 16px; 
+  width: 100%; 
+  padding: 18px 22px; 
+  background: #ffffff; 
+  border: 1px solid rgba(12, 52, 44, 0.1); 
+  border-radius: 1rem; 
+  text-align: left; 
+  transition: all 0.25s ease; 
+}
+
+.portal-action { 
+  cursor: pointer; 
+}
+
+.portal-action:hover { 
+  border-color: rgba(7, 102, 83, 0.4); 
+  transform: translateY(-2px); 
+  box-shadow: 0 8px 22px rgba(12, 52, 44, 0.08); 
+}
+
+.portal-action strong, 
+.portal-list h3 { 
+  display: block; 
+  font-size: 15px; 
+  font-weight: 700; 
+  color: #0C342C; 
+}
+
+.portal-action small { 
+  display: block; 
+  font-size: 12px; 
+  color: rgba(6, 35, 29, 0.65); 
+  margin-top: 4px; 
+}
+
+.portal-icon { 
+  width: 44px; 
+  height: 44px; 
+  border-radius: 12px; 
+  display: grid; 
+  place-items: center; 
+  background: #E2FBCE; 
+  color: #076653; 
+  flex: none; 
+}
+
+/* Inputs & Form Elements */
+.portal-input { 
+  width: 100%; 
+  border: 1px solid rgba(12, 52, 44, 0.18); 
+  background: rgba(255, 253, 238, 0.5); 
+  border-radius: 0.75rem; 
+  padding: 10px 14px; 
+  color: #0C342C; 
+  font-size: 13px; 
+  outline: none; 
+  transition: all 0.2s ease;
+}
+
+.portal-input:focus { 
+  border-color: #076653; 
+  box-shadow: 0 0 0 3px rgba(7, 102, 83, 0.18); 
+  background: #ffffff; 
+}
+
+.portal-choice { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 8px; 
+  padding: 8px 14px; 
+  border: 1px solid rgba(12, 52, 44, 0.18); 
+  border-radius: 0.75rem; 
+  color: #0C342C; 
+  background: #ffffff; 
+  font-size: 12px; 
+  cursor: pointer; 
+  transition: all 0.2s ease;
+}
+
+.portal-choice.selected { 
+  border-color: #076653; 
+  background: #E2FBCE; 
+  color: #0C342C; 
+  font-weight: 700; 
+  box-shadow: 0 2px 6px rgba(7, 102, 83, 0.12);
+}
+
+.portal-choice input { 
+  accent-color: #076653; 
+}
+
+/* Buttons */
+.portal-primary, 
+.portal-secondary { 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center;
+  gap: 8px; 
+  padding: 10px 22px; 
+  font-size: 12px; 
+  font-weight: 700; 
+  letter-spacing: 0.08em; 
+  text-transform: uppercase; 
+  border-radius: 9999px; 
+  cursor: pointer; 
+  transition: all 0.25s ease; 
+}
+
+.portal-primary { 
+  color: #FFFDEE; 
+  background: linear-gradient(135deg, #076653 0%, #0C342C 100%); 
+  border: 1px solid rgba(226, 251, 206, 0.3); 
+  box-shadow: 0 4px 14px rgba(7, 102, 83, 0.25); 
+}
+
+.portal-primary:hover { 
+  background: linear-gradient(135deg, #0C342C 0%, #06231D 100%); 
+  transform: translateY(-1px); 
+  box-shadow: 0 6px 18px rgba(12, 52, 44, 0.3); 
+}
+
+.portal-secondary { 
+  color: #0C342C; 
+  background: #FFFDEE; 
+  border: 1px solid rgba(12, 52, 44, 0.2); 
+}
+
+.portal-secondary:hover { 
+  background: #E2FBCE; 
+  border-color: #076653; 
+  transform: translateY(-1px); 
+}
+
+/* Badges */
+.portal-badge { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 5px; 
+  padding: 4px 10px; 
+  border-radius: 9999px; 
+  font-size: 11px; 
+  font-weight: 600; 
+  background: rgba(12, 52, 44, 0.06); 
+  color: #0C342C; 
+  border: 1px solid rgba(12, 52, 44, 0.12); 
+}
+
+.portal-badge.green { 
+  background: #E2FBCE; 
+  color: #0C342C; 
+  border-color: rgba(7, 102, 83, 0.25); 
+}
+
+.portal-badge.amber { 
+  background: #FFF8E7; 
+  color: #98702b; 
+  border-color: rgba(200, 149, 62, 0.35); 
+}
+
+.portal-notice { 
+  display: flex; 
+  align-items: flex-start; 
+  gap: 10px; 
+  padding: 14px 18px; 
+  border: 1px solid rgba(7, 102, 83, 0.2); 
+  border-radius: 0.875rem; 
+  background: #E2FBCE; 
+  color: #0C342C; 
+  font-size: 13px; 
+}
+
+.status-dot { 
+  width: 7px; 
+  height: 7px; 
+  display: inline-block; 
+  border-radius: 50%; 
+  margin-right: 6px; 
+}
+
+.status-dot.green { 
+  background: #076653; 
+}
+
+.status-dot.amber { 
+  background: #c8953e; 
+}
+
+.icon-button { 
+  border: 0; 
+  background: transparent; 
+  color: rgba(12, 52, 44, 0.5); 
+  cursor: pointer; 
+  padding: 6px; 
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.icon-button:hover { 
+  color: #0C342C; 
+  background: rgba(12, 52, 44, 0.05);
+}
+
+.mobile-menu, 
+.mobile-close { 
+  display: none; 
+}
+
+@media (max-width: 800px) { 
+  .student-sidebar { 
+    transform: translateX(-100%); 
+    transition: transform .25s ease; 
+    box-shadow: 10px 0 30px rgba(0,0,0,.25); 
+  }
+  .student-sidebar.open { 
+    transform: translateX(0); 
+  }
+  .student-main { 
+    margin-left: 0; 
+  }
+  .student-header { 
+    height: 68px; 
+    padding: 0 20px; 
+  }
+  .mobile-menu, 
+  .mobile-close { 
+    display: inline-flex; 
+  }
+  .mobile-menu { 
+    margin-right: 12px; 
+  }
+  .student-header > div:first-of-type { 
+    display: flex; 
+    align-items: center; 
+  }
+  .header-user span, 
+  .header-user > .icon-button { 
+    display: none; 
+  }
+  .student-content { 
+    padding: 28px 18px 60px; 
+  }
+  .portal-hero { 
+    align-items: flex-start; 
+    gap: 20px; 
+  }
+  .completion-ring { 
+    width: 76px; 
+    height: 76px; 
+  }
+}
+
+@media (max-width: 480px) { 
+  .summary-item { 
+    padding: 14px; 
+  }
+  .summary-item strong { 
+    font-size: 20px; 
+  }
+  .portal-hero { 
+    display: block; 
+  }
+  .completion-ring { 
+    margin-top: 24px; 
+  }
+}
 
