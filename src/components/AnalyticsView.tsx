@@ -44,24 +44,26 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
 
   return (
     <div id="analytics-view" className="space-y-6 pb-16 animate-in fade-in duration-300">
-      {/* 1. Header & Title Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
-        <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Student Analytics</h2>
-          <p className="text-xs text-slate-500 mt-1">
-            Institution-wide student profile and performance insights
-          </p>
-        </div>
+      <div className="portal-hero rounded-3xl p-6 sm:p-8">
+        <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <span className="portal-kicker">Institutional Administration</span>
+            <h2 className="mt-3 text-3xl font-serif text-[#FFFDEE] leading-tight">Student Analytics</h2>
+            <p className="mt-2 max-w-2xl text-sm sm:text-base text-[#FFFDEE]/80">
+              Monitor academic outcomes, demographic patterns, and institutional performance from a single operational dashboard.
+            </p>
+          </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onNavigateToDirectory}
-            className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-xs transition flex items-center gap-1.5"
-            title="Browse all student records in Directory"
-          >
-            <Users className="w-3.5 h-3.5" />
-            <span>Explore Student Directory ({students.length})</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onNavigateToDirectory}
+              className="portal-primary text-[10px]"
+              title="Browse all student records in Directory"
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span>Explore Directory ({students.length})</span>
+            </button>
+          </div>
         </div>
       </div>
 

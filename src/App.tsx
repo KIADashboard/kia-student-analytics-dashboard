@@ -430,7 +430,7 @@ export default function App() {
         />
 
         {/* Dynamic Content Viewport */}
-        <main id="main-content-viewport" className="flex-1 px-4 sm:px-6 lg:px-8 py-6 max-w-7xl w-full mx-auto">
+        <main id="main-content-viewport" className="admin-portal-surface flex-1 px-4 sm:px-6 lg:px-8 py-6 max-w-7xl w-full mx-auto">
           {selectedStudent ? (
             /* Student Profile Drill-down View */
             <ProfileView

@@ -102,11 +102,11 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => (
           {/* 2. Admin Portal Button */}
           <button 
             onClick={() => onLogin('admin')} 
-            className="w-full flex items-center justify-between p-4 sm:p-5 border border-[#0C342C]/15 hover:border-[#076653]/50 hover:bg-[#FFFDEE] rounded-2xl transition-all duration-300 text-left group"
+            className="w-full flex items-center justify-between p-4 sm:p-5 border border-[#076653]/25 bg-[#E2FBCE]/45 hover:bg-[#E2FBCE]/70 rounded-2xl transition-all duration-300 text-left group shadow-sm hover:shadow-md hover:border-[#076653]"
           >
             <span className="flex items-center gap-3.5">
-              <span className="w-11 h-11 rounded-xl bg-white text-[#0C342C] border border-[#0C342C]/15 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
-                <ShieldCheck className="w-5 h-5 text-[#076653]" />
+              <span className="w-11 h-11 rounded-xl bg-linear-to-br from-[#076653] to-[#0C342C] text-[#FFFDEE] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                <ShieldCheck className="w-5 h-5 text-[#E2FBCE]" />
               </span>
               <span>
                 <span className="block font-bold text-sm text-[#0C342C]">
@@ -117,7 +117,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => (
                 </span>
               </span>
             </span>
-            <ArrowRight className="w-4 h-4 text-[#0C342C]/50 group-hover:text-[#076653] group-hover:translate-x-1.5 transition-all" />
+            <ArrowRight className="w-4 h-4 text-[#076653] group-hover:translate-x-1.5 transition-transform" />
           </button>
         </div>
 

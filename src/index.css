@@ -59,6 +59,81 @@
   --kia-gold: #c8953e;
 }
 
+.admin-portal-surface {
+  position: relative;
+}
+
+.admin-portal-surface [class*="bg-white"] {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+}
+
+.admin-portal-surface [class*="bg-slate-50"],
+.admin-portal-surface [class*="bg-slate-100"],
+.admin-portal-surface [class*="bg-slate-200"] {
+  background-color: rgba(226, 251, 206, 0.4) !important;
+}
+
+.admin-portal-surface [class*="bg-slate-800"],
+.admin-portal-surface [class*="bg-slate-900"] {
+  background: linear-gradient(135deg, #076653 0%, #0C342C 100%) !important;
+}
+
+.admin-portal-surface [class*="border-slate-100"],
+.admin-portal-surface [class*="border-slate-200"],
+.admin-portal-surface [class*="border-slate-300"] {
+  border-color: rgba(12, 52, 44, 0.12) !important;
+}
+
+.admin-portal-surface [class*="text-slate-900"] {
+  color: #0C342C !important;
+}
+
+.admin-portal-surface [class*="text-slate-800"] {
+  color: #0C342C !important;
+}
+
+.admin-portal-surface [class*="text-slate-700"],
+.admin-portal-surface [class*="text-slate-600"],
+.admin-portal-surface [class*="text-slate-500"],
+.admin-portal-surface [class*="text-slate-400"] {
+  color: rgba(6, 35, 29, 0.72) !important;
+}
+
+.admin-portal-surface [class*="text-slate-300"],
+.admin-portal-surface [class*="text-slate-200"] {
+  color: rgba(255, 253, 238, 0.82) !important;
+}
+
+.admin-portal-surface [class*="shadow-xs"],
+.admin-portal-surface [class*="shadow-2xs"] {
+  box-shadow: 0 10px 24px rgba(12, 52, 44, 0.06) !important;
+}
+
+.admin-portal-surface input,
+.admin-portal-surface select,
+.admin-portal-surface textarea {
+  background-color: rgba(255, 253, 238, 0.72) !important;
+  border-color: rgba(12, 52, 44, 0.18) !important;
+  color: #0C342C !important;
+}
+
+.admin-portal-surface input:focus,
+.admin-portal-surface select:focus,
+.admin-portal-surface textarea:focus {
+  border-color: #076653 !important;
+  box-shadow: 0 0 0 3px rgba(7, 102, 83, 0.12) !important;
+  background-color: #ffffff !important;
+}
+
+.admin-portal-surface [class*="focus:ring-slate-300"] {
+  box-shadow: 0 0 0 3px rgba(7, 102, 83, 0.12) !important;
+}
+
+.admin-portal-surface [class*="bg-slate-800"] svg,
+.admin-portal-surface [class*="bg-slate-900"] svg {
+  color: #E2FBCE !important;
+}
+
 .student-portal {
   background-color: #FFFDEE;
   color: #0C342C;

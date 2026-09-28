@@ -193,44 +193,41 @@ export const DirectoryView: React.FC<DirectoryViewProps> = ({
 
   return (
     <div id="student-directory-page" className="space-y-4 pb-20 animate-in fade-in duration-300">
-      {/* 1. Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <span>Student Directory</span>
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-              {students.length} Records
-            </span>
-          </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Search, filter and explore student records
-          </p>
-        </div>
+      <div className="portal-hero rounded-3xl p-6 sm:p-8">
+        <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <span className="portal-kicker">Institutional Administration</span>
+            <h1 className="mt-3 text-3xl font-serif text-[#FFFDEE] leading-tight flex items-center gap-3 flex-wrap">
+              <span>Student Directory</span>
+              <span className="portal-badge green text-[10px]">{students.length} Records</span>
+            </h1>
+            <p className="mt-2 text-sm sm:text-base text-[#FFFDEE]/80">
+              Search, filter, and explore verified student records across all departments and admissions cohorts.
+            </p>
+          </div>
 
-        <div className="flex items-center gap-2">
-          {/* Generate Report Action */}
-          {onNavigateToReports && (
-            <button
-              onClick={onNavigateToReports}
-              className="px-3.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 shadow-2xs transition flex items-center gap-1.5"
-              title="Open Reports page with active filters"
-            >
-              <FileText className="w-3.5 h-3.5 text-slate-500" />
-              <span>Generate Report</span>
-            </button>
-          )}
+          <div className="flex items-center gap-2">
+            {onNavigateToReports && (
+              <button
+                onClick={onNavigateToReports}
+                className="portal-secondary text-[10px]"
+                title="Open Reports page with active filters"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>Generate Report</span>
+              </button>
+            )}
 
-          {/* Export Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
-              className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-xs transition flex items-center gap-1.5"
-              title="Export records"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Export</span>
-              <ChevronDown className="w-3 h-3 ml-0.5 text-slate-400" />
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
+                className="portal-primary text-[10px]"
+                title="Export records"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Export</span>
+                <ChevronDown className="w-3 h-3 ml-0.5" />
+              </button>
 
             {exportDropdownOpen && (
               <div 
@@ -258,6 +255,7 @@ export const DirectoryView: React.FC<DirectoryViewProps> = ({
           </div>
         </div>
       </div>
+    </div>
 
       {/* 2. Search Bar + Filter Bar Card */}
       <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-3">

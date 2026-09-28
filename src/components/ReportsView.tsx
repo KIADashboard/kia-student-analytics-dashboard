@@ -231,17 +231,17 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
 
   return (
     <div id="reports-view" className="space-y-6 pb-16 animate-in fade-in duration-300">
-      {/* View Title */}
-      <div className="border-b border-slate-200 pb-4">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-          <span>Institutional Batch Reports & Data Exports</span>
-          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-            Official Academic Registrar Suite
-          </span>
-        </h2>
-        <p className="text-xs text-slate-500 mt-1">
-          Generate, preview, and download institutional cohort data summaries, semester transcripts, and regulatory audit dossiers.
-        </p>
+      <div className="portal-hero rounded-3xl p-6 sm:p-8">
+        <div className="relative z-10">
+          <span className="portal-kicker">Institutional Administration</span>
+          <h2 className="mt-3 text-3xl font-serif text-[#FFFDEE] leading-tight flex items-center gap-3 flex-wrap">
+            <span>Batch Reports & Data Exports</span>
+            <span className="portal-badge green text-[10px]">Official Registrar Suite</span>
+          </h2>
+          <p className="mt-2 max-w-3xl text-sm sm:text-base text-[#FFFDEE]/80">
+            Generate, preview, and download institutional cohort summaries, semester audit dossiers, and verified academic exports.
+          </p>
+        </div>
       </div>
 
       {/* Main Grid: Report Generation Form + Live Batch Preview */}
