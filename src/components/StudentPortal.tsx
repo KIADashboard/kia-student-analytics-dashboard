@@ -921,7 +921,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
             </div>
 
             {/* Notification Button */}
-            <button className="admin-icon-button" title="Notifications">
+            <button className="student-icon-button" title="Notifications">
               <Bell className="w-4 h-4" />
               <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#076653] ring-2 ring-white"></span>
             </button>
@@ -940,7 +940,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
             {/* Logout */}
             <button 
               title="Log out" 
-              className="admin-icon-button" 
+              className="student-icon-button" 
               onClick={onLogout}
             >
               <LogOut className="w-4 h-4" />

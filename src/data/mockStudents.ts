@@ -1122,7 +1122,7 @@ function generateDeterministicCohort(): Student[] {
   const generated: Student[] = [];
   let studentCounter = 101;
 
-  for (let year = 2021; year <= 2025; year++) {
+  for (let year = 2021; year <= 2026; year++) {
     const studentsInBatch = 20; // 20 per year = 100 students + 15 detailed = 115 total
     const currentSem = year === 2021 ? 8 : year === 2022 ? 6 : year === 2023 ? 4 : year === 2024 ? 2 : 1;
     const batchStr = `${year}–${year + 4}`;
@@ -1271,7 +1271,7 @@ export const INSTITUTION_METRICS = {
   totalStudents: 2450,
   newAdmissions: 480,
   averageMarks: 78.4,
-  activePeriod: "2021–2025",
+  activePeriod: "2021–2026",
   attendanceRate: 92.6,
   placementRate: 94.2,
   facultyCount: 184,
@@ -1308,7 +1308,7 @@ export const DEPARTMENT_LIST = [
   { code: "IT", name: "Information Technology" }
 ];
 
-export const ACADEMIC_YEARS = ["All Years", "2021", "2022", "2023", "2024", "2025"];
+export const ACADEMIC_YEARS = ["All Years", "2021", "2022", "2023", "2024", "2025", "2026"];
 
 export const CATEGORY_LIST = ["All Categories", "General", "OBC/BC", "MBC", "SC/ST", "Management/NRI"];
 

@@ -46,7 +46,7 @@ export interface Student {
   email: string;
   phone: string;
   gender: Gender;
-  academicYear: number; // 2021 to 2025
+  academicYear: number; // 2021 to 2026
   batch: string; // e.g. "2021–2025"
   admissionDate: string;
   currentSemester: number;
@@ -86,31 +86,9 @@ export interface Student {
   mentorName: string;
 }
 
-export interface GlobalFilterState {
-  academicYear: string;
-  gender: string;
-  admissionType?: string;
-  district: string;
-  quota: string;
-  schoolType: string;
-  board?: string;
-  category: string;
-  department: string;
-  searchQuery: string;
-  marksRange: string;
-  incomeCategory?: string;
-  agricultureBackground?: string;
-  firstGenerationGraduate?: string;
-  hostellerDayscholar?: string;
-  residenceArea?: string;
-  familyBackground?: string;
-}
-
-export type ActiveTab = 'analytics' | 'directory' | 'reports' | 'settings';
+export type StudentPortalTab = 'home' | 'profile' | 'academics' | 'achievements' | 'survey';
 
 export type UserRole = 'admin' | 'student';
-
-export type StudentPortalTab = 'home' | 'profile' | 'academics' | 'achievements' | 'survey';
 
 export interface StudentProfile {
   student: Student;
@@ -192,25 +170,4 @@ export interface StudentDocument {
   status: 'Verified' | 'Pending review';
 }
 
-export interface ReportConfig {
-  reportType: string;
-  batch: string;
-  district: string;
-  quota: string;
-  schoolType: string;
-  department: string;
-  minMarks: number;
-}
-
-export interface GeneratedReport {
-  id: string;
-  title: string;
-  type: string;
-  batch: string;
-  department: string;
-  recordCount: number;
-  generatedAt: string;
-  fileSize: string;
-  format: 'CSV' | 'PDF';
-}
 

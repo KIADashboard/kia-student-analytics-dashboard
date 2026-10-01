@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowRight, GraduationCap, ShieldCheck, Sparkles } from 'lucide-react';
-import { UserRole } from '../types';
 import { InstitutionLogo } from './InstitutionLogo';
+import { UserRole } from '../types';
 
 interface LoginViewProps {
   onLogin: (role: UserRole) => void;
@@ -74,13 +74,13 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => (
           Sign In to Continue
         </h2>
         <p className="text-xs sm:text-sm text-[#06231D]/65 mt-2 mb-8">
-          Choose the role corresponding to your verified KIA account.
+          Choose the portal corresponding to your verified KIA account.
         </p>
 
         <div className="space-y-4">
           {/* 1. Student Portal Button */}
           <button 
-            onClick={() => onLogin('student')} 
+            onClick={() => onLogin('student')}
             className="w-full flex items-center justify-between p-4 sm:p-5 border border-[#076653]/30 bg-[#FFFDEE] hover:bg-[#E2FBCE]/60 rounded-2xl transition-all duration-300 text-left group shadow-xs hover:shadow-md hover:border-[#076653]"
           >
             <span className="flex items-center gap-3.5">
@@ -99,9 +99,8 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => (
             <ArrowRight className="w-4 h-4 text-[#076653] group-hover:translate-x-1.5 transition-transform" />
           </button>
 
-          {/* 2. Admin Portal Button */}
-          <button 
-            onClick={() => onLogin('admin')} 
+          <button
+            onClick={() => onLogin('admin')}
             className="w-full flex items-center justify-between p-4 sm:p-5 border border-[#076653]/25 bg-[#E2FBCE]/45 hover:bg-[#E2FBCE]/70 rounded-2xl transition-all duration-300 text-left group shadow-sm hover:shadow-md hover:border-[#076653]"
           >
             <span className="flex items-center gap-3.5">
@@ -109,16 +108,13 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => (
                 <ShieldCheck className="w-5 h-5 text-[#E2FBCE]" />
               </span>
               <span>
-                <span className="block font-bold text-sm text-[#0C342C]">
-                  Institutional Administration
-                </span>
-                <span className="block text-xs text-[#06231D]/65 mt-0.5">
-                  Cohort analytics, student directory, and reports
-                </span>
+                <span className="block font-bold text-sm text-[#0C342C]">Institutional Administration</span>
+                <span className="block text-xs text-[#06231D]/65 mt-0.5">Overview, academic performance, analytics, and reports</span>
               </span>
             </span>
             <ArrowRight className="w-4 h-4 text-[#076653] group-hover:translate-x-1.5 transition-transform" />
           </button>
+
         </div>
 
         <p className="text-[11px] text-[#0C342C]/50 mt-8 text-center sm:text-left">
