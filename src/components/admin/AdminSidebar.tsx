@@ -1,15 +1,13 @@
 import React from 'react';
-import { Activity, BookOpenCheck, ChartNoAxesCombined, ClipboardList, FileText, Gauge, GraduationCap, Settings, UsersRound } from 'lucide-react';
+import { Activity, BookOpenCheck, ChartNoAxesCombined, Gauge, GraduationCap, Settings, UsersRound } from 'lucide-react';
 
-export type AdminPage = 'overview' | 'students' | 'academic' | 'arrears' | 'analytics' | 'reports' | 'settings';
+export type AdminPage = 'overview' | 'students' | 'academic' | 'analytics' | 'settings';
 
 const navigation = [
   { id: 'overview', label: 'Overview', icon: Gauge },
   { id: 'students', label: 'Student Profiles', icon: UsersRound },
   { id: 'academic', label: 'Academic Performance', icon: BookOpenCheck },
-  { id: 'arrears', label: 'Arrears', icon: ClipboardList },
-  { id: 'analytics', label: 'Analytics', icon: ChartNoAxesCombined },
-  { id: 'reports', label: 'Reports', icon: FileText }
+  { id: 'analytics', label: 'Analytics', icon: ChartNoAxesCombined }
 ] as const;
 
 export function AdminSidebar({ activePage, onNavigate, onLogout, mobileOpen, onClose }: {

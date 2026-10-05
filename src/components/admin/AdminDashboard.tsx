@@ -4,9 +4,7 @@ import { AdminSidebar, AdminPage } from './AdminSidebar';
 import { AdminTopbar } from './AdminTopbar';
 import { AcademicPerformancePage } from './AcademicPerformancePage';
 import { AnalyticsPage } from './AnalyticsPage';
-import { ArrearsPage } from './ArrearsPage';
 import { OverviewPage } from './OverviewPage';
-import { ReportsPage } from './ReportsPage';
 import { SettingsPage } from './SettingsPage';
 import { StudentProfilesPage } from './StudentProfilesPage';
 import './admin.css';
@@ -22,9 +20,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
     overview: <OverviewPage students={MOCK_STUDENTS} onNavigate={navigate} />,
     students: <StudentProfilesPage students={MOCK_STUDENTS} />,
     academic: <AcademicPerformancePage students={MOCK_STUDENTS} />,
-    arrears: <ArrearsPage students={MOCK_STUDENTS} />,
     analytics: <AnalyticsPage students={MOCK_STUDENTS} />,
-    reports: <ReportsPage students={MOCK_STUDENTS} />,
     settings: <SettingsPage />
   }[activePage];
 

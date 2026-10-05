@@ -6,9 +6,7 @@ const titles: Record<AdminPage, string> = {
   overview: 'College Overview',
   students: 'Student Profiles',
   academic: 'Academic Performance',
-  arrears: 'Arrears Management',
   analytics: 'Institutional Analytics',
-  reports: 'Reports',
   settings: 'Settings'
 };
 
