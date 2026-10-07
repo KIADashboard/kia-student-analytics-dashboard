@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, BookOpenCheck, ChartNoAxesCombined, Gauge, GraduationCap, Settings, UsersRound } from 'lucide-react';
+import { Activity, BookOpenCheck, ChartNoAxesCombined, Gauge, GraduationCap, LogOut, Settings, UsersRound } from 'lucide-react';
 import { InstitutionLogo } from '../InstitutionLogo';
 
 export type AdminPage = 'overview' | 'students' | 'academic' | 'analytics' | 'settings';
