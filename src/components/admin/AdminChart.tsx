@@ -14,156 +14,30 @@ import {
 } from 'chart.js';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 
-ChartJS.register(
-  ArcElement,
-  BarElement,
-  CategoryScale,
-  Filler,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Tooltip
-);
+ChartJS.register(ArcElement, BarElement, CategoryScale, Filler, Legend, LinearScale, LineElement, PointElement, Tooltip);
 
-const gridColor = '#f1f5f9';
-const basePlugins = {
-  legend: { display: false },
-  tooltip: {
-    backgroundColor: '#0f172a',
-    padding: 10,
-    cornerRadius: 8,
-    boxPadding: 4,
-    usePointStyle: true,
-    titleFont: { size: 12, family: 'Inter, system-ui, sans-serif', weight: 'bold' as const },
-    bodyFont: { size: 11, family: 'Inter, system-ui, sans-serif' }
-  }
-};
+ChartJS.defaults.font.family = "'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
 
-export function AdminBarChart({
-  data,
-  horizontal = false,
-  showLegend = false
-}: {
-  data: ChartData<'bar'>;
-  horizontal?: boolean;
-  showLegend?: boolean;
-}) {
-  return (
-    <Bar
-      data={data}
-      options={{
-        responsive: true,
-        maintainAspectRatio: false,
-        indexAxis: horizontal ? 'y' : 'x',
-        plugins: {
-          ...basePlugins,
-          legend: {
-            display: showLegend,
-            position: 'top' as const,
-            labels: {
-              color: '#475569',
-              boxWidth: 10,
-              boxHeight: 10,
-              padding: 12,
-              font: { size: 11, family: 'Inter, system-ui, sans-serif' }
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: { display: false },
-            border: { display: false },
-            ticks: {
-              color: '#64748b',
-              font: { size: 11, family: 'Inter, system-ui, sans-serif' }
-            }
-          },
-          y: {
-            beginAtZero: true,
-            grid: { color: gridColor },
-            border: { display: false },
-            ticks: {
-              color: '#64748b',
-              font: { size: 11, family: 'Inter, system-ui, sans-serif' }
-            }
-          }
-        }
-      }}
-    />
-  );
+const gridColor = '#edf0ee';
+const basePlugins = { legend: { display: false }, tooltip: { backgroundColor: '#1f2926', padding: 10, titleFont: { size: 13, weight: 600 }, bodyFont: { size: 12 } } };
+
+export function AdminBarChart({ data, horizontal = false, showLegend = false }: { data: ChartData<'bar'>; horizontal?: boolean; showLegend?: boolean }) {
+  return <Bar data={data} options={{ responsive: true, maintainAspectRatio: false, indexAxis: horizontal ? 'y' : 'x', plugins: { ...basePlugins, legend: { display: showLegend, position: 'top' as const, labels: { color: '#68716d', boxWidth: 10, boxHeight: 10, padding: 14, font: { size: 12 } } } }, scales: { x: { grid: { display: false }, border: { display: false }, ticks: { color: '#78817d', font: { size: 12 } } }, y: { beginAtZero: true, grid: { color: gridColor }, border: { display: false }, ticks: { color: '#78817d', font: { size: 12 } } } } }} />;
 }
 
-export function AdminLineChart({
-  data,
-  showLegend = false
-}: {
-  data: ChartData<'line'>;
-  showLegend?: boolean;
-}) {
+export function AdminLineChart({ data, showLegend = false }: { data: ChartData<'line'>; showLegend?: boolean }) {
   const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {
-      ...basePlugins,
-      legend: {
-        ...basePlugins.legend,
-        display: showLegend,
-        position: 'top' as const,
-        labels: {
-          color: '#475569',
-          boxWidth: 10,
-          boxHeight: 10,
-          padding: 12,
-          font: { size: 11, family: 'Inter, system-ui, sans-serif' }
-        }
-      }
-    },
+    plugins: { ...basePlugins, legend: { ...basePlugins.legend, display: showLegend } },
     scales: {
-      x: {
-        grid: { display: false },
-        border: { display: false },
-        ticks: {
-          color: '#64748b',
-          font: { size: 11, family: 'Inter, system-ui, sans-serif' }
-        }
-      },
-      y: {
-        beginAtZero: false,
-        grid: { color: gridColor },
-        border: { display: false },
-        ticks: {
-          color: '#64748b',
-          font: { size: 11, family: 'Inter, system-ui, sans-serif' }
-        }
-      }
+      x: { grid: { display: false }, border: { display: false }, ticks: { color: '#78817d', font: { size: 12 } } },
+      y: { beginAtZero: false, grid: { color: gridColor }, border: { display: false }, ticks: { color: '#78817d', font: { size: 12 } } }
     }
   };
   return <Line data={data} options={options} />;
 }
 
 export function AdminDoughnutChart({ data }: { data: ChartData<'doughnut'> }) {
-  return (
-    <Doughnut
-      data={data}
-      options={{
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '70%',
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              color: '#475569',
-              boxWidth: 10,
-              boxHeight: 10,
-              padding: 14,
-              font: { size: 11, family: 'Inter, system-ui, sans-serif' }
-            }
-          },
-          tooltip: basePlugins.tooltip
-        }
-      }}
-    />
-  );
+  return <Doughnut data={data} options={{ responsive: true, maintainAspectRatio: false, cutout: '68%', plugins: { legend: { position: 'bottom', labels: { color: '#68716d', boxWidth: 10, boxHeight: 10, padding: 16, font: { size: 12 } } }, tooltip: basePlugins.tooltip } }} />;
 }
