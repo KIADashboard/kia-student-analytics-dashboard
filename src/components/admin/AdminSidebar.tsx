@@ -1,5 +1,6 @@
 import React from 'react';
-import { BookOpenCheck, ChartNoAxesCombined, Gauge, LogOut, Settings, UsersRound } from 'lucide-react';
+import { Activity, BookOpenCheck, ChartNoAxesCombined, Gauge, GraduationCap, Settings, UsersRound } from 'lucide-react';
+import { InstitutionLogo } from '../InstitutionLogo';
 
 export type AdminPage = 'overview' | 'students' | 'academic' | 'analytics' | 'settings';
 
@@ -38,26 +39,21 @@ export function AdminSidebar({
         />
       )}
       <aside className={`admin-sidebar${mobileOpen ? ' is-open' : ''}`}>
-        {/* Top-Left: Administrator / College Office Profile */}
-        <div className="admin-profile-header">
-          <div className="admin-profile-badge">
-            <div className="admin-profile-avatar-wrap">
-              <span className="admin-profile-avatar">A</span>
-              <span className="admin-avatar-status" title="Online" />
-            </div>
-            <div className="admin-profile-info">
-              <strong className="admin-profile-name">Administrator</strong>
-              <span className="admin-profile-role">College Office</span>
-            </div>
+        <div className="admin-brand">
+          <div className="admin-brand-mark">
+            <InstitutionLogo className="admin-brand-logo-img" />
           </div>
-          <button
-            className="admin-profile-logout-btn"
-            onClick={onLogout}
-            title="Sign out of Administration"
-            aria-label="Sign out"
-          >
-            <LogOut size={16} strokeWidth={2} />
-          </button>
+          <div className="admin-brand-details">
+            <div className="admin-brand-lockup">
+              <span className="admin-brand-primary">KUMARAGURU</span>
+              <div className="admin-brand-rule" />
+              <div className="admin-brand-line2">
+                <span className="admin-brand-sub">INSTITUTE OF</span>
+                <span className="admin-brand-focus">AGRICULTURE</span>
+              </div>
+            </div>
+            <div className="admin-brand-subtitle">Student Administration</div>
+          </div>
         </div>
 
         {/* Navigation list */}
