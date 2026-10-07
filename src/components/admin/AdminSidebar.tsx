@@ -39,20 +39,11 @@ export function AdminSidebar({
         />
       )}
       <aside className={`admin-sidebar${mobileOpen ? ' is-open' : ''}`}>
-        <div className="admin-brand">
-          <div className="admin-brand-mark">
-            <InstitutionLogo className="admin-brand-logo-img" />
-          </div>
-          <div className="admin-brand-details">
-            <div className="admin-brand-lockup">
-              <span className="admin-brand-primary">KUMARAGURU</span>
-              <div className="admin-brand-rule" />
-              <div className="admin-brand-line2">
-                <span className="admin-brand-sub">INSTITUTE OF</span>
-                <span className="admin-brand-focus">AGRICULTURE</span>
-              </div>
-            </div>
-            <div className="admin-brand-subtitle">Student Administration</div>
+        <div className="admin-brand" style={{ padding: '20px 18px', borderBottom: '1px solid var(--admin-border)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div className="admin-avatar">AD</div>
+          <div className="admin-info">
+            <strong>Administrator</strong>
+            <span style={{ color: 'var(--admin-muted)', fontSize: '11.5px' }}>College Office</span>
           </div>
         </div>
 

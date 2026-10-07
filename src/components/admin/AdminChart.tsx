@@ -35,7 +35,7 @@ const basePlugins = {
     cornerRadius: 8,
     boxPadding: 4,
     usePointStyle: true,
-    titleFont: { size: 12, family: 'Inter, system-ui, sans-serif', weight: '600' as const },
+    titleFont: { size: 12, family: 'Inter, system-ui, sans-serif', weight: 'bold' as const },
     bodyFont: { size: 11, family: 'Inter, system-ui, sans-serif' }
   }
 };

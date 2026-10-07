@@ -20,38 +20,14 @@ export function AdminTopbar({ activePage, onMenuClick }: { activePage: AdminPage
           <Menu size={20} />
         </button>
 
-        <div className="admin-topbar-mobile-brand">
-          <InstitutionLogo className="admin-topbar-logo" />
-          <div className="admin-brand-lockup compact">
-            <span className="admin-brand-primary">KUMARAGURU</span>
-            <div className="admin-brand-rule" />
-            <div className="admin-brand-line2">
-              <span className="admin-brand-sub">INSTITUTE OF</span>
-              <span className="admin-brand-focus">AGRICULTURE</span>
-            </div>
-          </div>
-        </div>
+
 
         <div className="admin-heading">
-          <div className="admin-breadcrumb">
-            <span className="admin-breadcrumb-institution">Kumaraguru Institute of Agriculture</span>
-            <span className="admin-breadcrumb-sep">/</span>
-            <span>Administration</span>
-            <span className="admin-breadcrumb-sep">/</span>
-            <strong>{title}</strong>
-          </div>
           <h1>{title}</h1>
         </div>
       </div>
 
       <div className="admin-topbar-actions">
-        <div className="admin-topbar-inst-badge" title="Kumaraguru Institute of Agriculture">
-          <InstitutionLogo className="admin-topbar-inst-logo" />
-          <div className="admin-topbar-inst-info">
-            <span className="admin-topbar-inst-name">Kumaraguru Institute of Agriculture</span>
-            <span className="admin-topbar-inst-tag">Institutional Administration</span>
-          </div>
-        </div>
         <div className="admin-academic-session">
           <span>Academic Session</span>
           <strong>2026 – 27</strong>
