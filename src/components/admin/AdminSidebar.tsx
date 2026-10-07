@@ -1,5 +1,6 @@
 import React from 'react';
 import { Activity, BookOpenCheck, ChartNoAxesCombined, Gauge, GraduationCap, Settings, UsersRound } from 'lucide-react';
+import { InstitutionLogo } from '../InstitutionLogo';
 
 export type AdminPage = 'overview' | 'students' | 'academic' | 'analytics' | 'settings';
 
@@ -27,8 +28,20 @@ export function AdminSidebar({ activePage, onNavigate, onLogout, mobileOpen, onC
       {mobileOpen && <button className="admin-drawer-backdrop" aria-label="Close navigation" onClick={onClose} />}
       <aside className={`admin-sidebar${mobileOpen ? ' is-open' : ''}`}>
         <div className="admin-brand">
-          <div className="admin-brand-mark">K</div>
-          <div><div className="admin-brand-name">KIA</div><div className="admin-brand-subtitle">Student Administration</div></div>
+          <div className="admin-brand-mark">
+            <InstitutionLogo className="admin-brand-logo-img" />
+          </div>
+          <div className="admin-brand-details">
+            <div className="admin-brand-lockup">
+              <span className="admin-brand-primary">KUMARAGURU</span>
+              <div className="admin-brand-rule" />
+              <div className="admin-brand-line2">
+                <span className="admin-brand-sub">INSTITUTE OF</span>
+                <span className="admin-brand-focus">AGRICULTURE</span>
+              </div>
+            </div>
+            <div className="admin-brand-subtitle">Student Administration</div>
+          </div>
         </div>
         <div className="admin-sidebar-section-title">MAIN MENU</div>
         <nav className="admin-sidebar-nav" aria-label="Administration pages">
