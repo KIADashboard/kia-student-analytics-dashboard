@@ -98,7 +98,7 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
               ['XII Standard Percentage', profile.twelfthMarks],
               ['XII Standard Pass-out Year', profile.twelfthPassingDate],
               ['School Type', selectedStudent.schoolType],
-              ['Cut-off', `${selectedStudent.cutoffScore.toFixed(1)} / 200`
+              ['Cut-off', `${selectedStudent.cutoffScore.toFixed(1)} / 200`]
             ]
           ],
           [
