@@ -499,6 +499,422 @@
   margin-bottom: 27px;
 }
 
+/* ----------------------------------------------------
+   KPI GRID & CARD STYLES
+   ---------------------------------------------------- */
+.admin-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 1024px) {
+  .admin-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-kpi-card {
+  background: var(--admin-surface);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border-subtle);
+  padding: 16px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-kpi-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-kpi-top span {
+  font-size: 13px;
+  color: var(--admin-muted);
+  font-weight: 500;
+}
+
+.admin-kpi-card strong {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.admin-kpi-icon {
+  display: flex;
+  align-items: center;
+}
+
+.admin-kpi-icon.teal {
+  color: var(--admin-primary);
+}
+
+.admin-kpi-icon.blue {
+  color: var(--admin-blue);
+}
+
+.admin-kpi-icon.purple {
+  color: var(--admin-purple);
+}
+
+.admin-kpi-icon.amber {
+  color: var(--admin-warning);
+}
+
+/* MINI STAT GRID */
+.admin-mini-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.admin-mini-stat-grid div {
+  background: var(--admin-surface);
+  border-radius: 10px;
+  border: 1px solid var(--admin-border-subtle);
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.admin-mini-stat-grid span {
+  font-size: 13px;
+  color: var(--admin-muted);
+  display: block;
+}
+
+.admin-mini-stat-grid strong {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--admin-text);
+  margin-top: 4px;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .admin-mini-stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-mini-stat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* PERFORMANCE GRID */
+.admin-performance-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.admin-performance-card {
+  background: var(--admin-surface);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border-subtle);
+  padding: 16px 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.admin-performance-card span {
+  font-size: 13px;
+  color: var(--admin-muted);
+}
+
+.admin-performance-card strong {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--admin-text);
+  margin-top: 4px;
+  display: block;
+}
+
+.admin-meter {
+  height: 6px;
+  background: var(--admin-surface-muted);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.admin-meter i {
+  display: block;
+  height: 100%;
+  background: var(--admin-primary);
+}
+
+@media (max-width: 1024px) {
+  .admin-performance-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-performance-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* CHART GRID */
+.admin-chart-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.admin-chart-grid.two-columns {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 1000px) {
+  .admin-chart-grid.two-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* OVERVIEW BOTTOM GRID */
+.admin-overview-bottom-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+@media (max-width: 1000px) {
+  .admin-overview-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* End of admin layout CSS */
+
+/* ----------------------------------------------------
+   KPI GRID & CARD STYLES
+   ---------------------------------------------------- */
+.admin-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 1024px) {
+  .admin-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-kpi-card {
+  background: var(--admin-surface);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border-subtle);
+  padding: 16px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-kpi-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-kpi-top span {
+  font-size: 13px;
+  color: var(--admin-muted);
+  font-weight: 500;
+}
+
+.admin-kpi-card strong {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.admin-kpi-icon {
+  display: flex;
+  align-items: center;
+}
+
+.admin-kpi-icon.teal {
+  color: var(--admin-primary);
+}
+
+.admin-kpi-icon.blue {
+  color: var(--admin-blue);
+}
+
+.admin-kpi-icon.purple {
+  color: var(--admin-purple);
+}
+
+.admin-kpi-icon.amber {
+  color: var(--admin-warning);
+}
+
+/* ----------------------------------------------------
+   MINI STAT GRID (Secondary Student Stats)
+   ---------------------------------------------------- */
+.admin-mini-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.admin-mini-stat-grid div {
+  background: var(--admin-surface);
+  border-radius: 10px;
+  border: 1px solid var(--admin-border-subtle);
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.admin-mini-stat-grid span {
+  font-size: 13px;
+  color: var(--admin-muted);
+  display: block;
+}
+
+.admin-mini-stat-grid strong {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--admin-text);
+  margin-top: 4px;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .admin-mini-stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-mini-stat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----------------------------------------------------
+   INSTITUTIONAL PERFORMANCE GRID
+   ---------------------------------------------------- */
+.admin-performance-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.admin-performance-card {
+  background: var(--admin-surface);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border-subtle);
+  padding: 16px 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.admin-performance-card span {
+  font-size: 13px;
+  color: var(--admin-muted);
+}
+
+.admin-performance-card strong {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--admin-text);
+  margin-top: 4px;
+  display: block;
+}
+
+.admin-meter {
+  height: 6px;
+  background: var(--admin-surface-muted);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.admin-meter i {
+  display: block;
+  height: 100%;
+  background: var(--admin-primary);
+}
+
+@media (max-width: 1024px) {
+  .admin-performance-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-performance-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----------------------------------------------------
+   CHART GRID
+   ---------------------------------------------------- */
+.admin-chart-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.admin-chart-grid.two-columns {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 1000px) {
+  .admin-chart-grid.two-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----------------------------------------------------
+   OVERVIEW BOTTOM GRID (Quick Actions & Arrear Overview)
+   ---------------------------------------------------- */
+.admin-overview-bottom-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+@media (max-width: 1000px) {
+  .admin-overview-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* End of added admin layout styles */
+display: flex;
+align-items: flex-end;
+justify-content: space-between;
+gap: 25px;
+margin-bottom: 27px;
+}
+
 .admin-section-label {
   display: block;
   color: #89938e;
