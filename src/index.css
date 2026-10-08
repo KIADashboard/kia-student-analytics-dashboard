@@ -11,169 +11,173 @@
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f5f7f4;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #d8dedb;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #9aa39f;
 }
 
 @media print {
-  aside, header, #no-print, .no-print {
+
+  aside,
+  header,
+  #no-print,
+  .no-print {
     display: none !important;
   }
-  body, main {
+
+  body,
+  main {
     background: white !important;
     padding: 0 !important;
     margin: 0 !important;
   }
+
   .print-only {
     display: block !important;
   }
 }
 
 /* ==========================================================================
-   KIA Institutional Design System Tokens & Student Portal Styles
-   Aligned with LandingPage, Navbar & HeroSection
-   Palette:
-     Cream: #FFFDEE
-     Deep Pine: #0C342C
-     Dark Pine Hover: #06231D
-     Emerald: #076653
-     Mint Accent: #E2FBCE
-     Electric Lime: #E3EF26
-     Gold Accent: #c8953e / #e7b75b
+   KIA Admin-aligned Student Portal Theme
+   Uses the current Admin Portal palette: warm off-white background, white
+   surfaces, deep text, teal primary, soft green accents and subtle borders.
    ========================================================================== */
 
 :root {
-  --kia-cream: #FFFDEE;
-  --kia-pine: #0C342C;
-  --kia-pine-dark: #06231D;
-  --kia-emerald: #076653;
-  --kia-mint: #E2FBCE;
-  --kia-electric: #E3EF26;
-  --kia-gold: #c8953e;
+  --kia-bg: #f5f7f4;
+  --kia-surface: #ffffff;
+  --kia-primary: #1f5f52;
+  --kia-primary-dark: #174a40;
+  --kia-text: #1f2926;
+  --kia-primary-light: #e8f2ef;
+  --kia-muted: #78817d;
+  --kia-border: #e5e9e6;
 }
 
 .student-portal {
-  background-color: #FFFDEE;
-  color: #0C342C;
+  background-color: #f5f7f4;
+  color: #1f2926;
   min-height: 100vh;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.student-portal button, 
-.student-portal input, 
-.student-portal select, 
-.student-portal textarea { 
-  font-family: inherit; 
+.student-portal button,
+.student-portal input,
+.student-portal select,
+.student-portal textarea {
+  font-family: inherit;
 }
 
 /* Sidebar */
-.student-sidebar { 
-  width: 264px; 
-  position: fixed; 
-  inset: 0 auto 0 0; 
-  background: #0C342C; 
-  color: #FFFDEE; 
-  display: flex; 
-  flex-direction: column; 
-  z-index: 30; 
+.student-sidebar {
+  width: 264px;
+  position: fixed;
+  inset: 0 auto 0 0;
+  background: #1f2926;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  z-index: 30;
   border-right: 1px solid rgba(226, 251, 206, 0.15);
 }
 
-.student-brand { 
-  padding: 22px 20px; 
-  display: flex; 
-  gap: 12px; 
-  align-items: center; 
+.student-brand {
+  padding: 22px 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
   border-bottom: 1px solid rgba(226, 251, 206, 0.12);
   background: rgba(6, 35, 29, 0.4);
 }
 
-.student-brand strong { 
+.student-brand strong {
   display: block;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #FFFDEE;
+  color: #ffffff;
 }
 
-.student-brand small { 
+.student-brand small {
   display: block;
-  color: #E2FBCE; 
-  font-size: 10px; 
+  color: #e8f2ef;
+  font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  margin-top: 2px; 
+  margin-top: 2px;
 }
 
-.student-sidebar-context { 
-  margin: 0 16px; 
-  padding: 12px 14px; 
-  border-bottom: 1px solid rgba(226, 251, 206, 0.1); 
-  color: rgba(255, 253, 238, 0.7); 
-  font-size: 11px; 
+.student-sidebar-context {
+  margin: 0 16px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(226, 251, 206, 0.1);
+  color: rgba(255, 253, 238, 0.7);
+  font-size: 11px;
   font-weight: 500;
-  display: flex; 
-  justify-content: space-between; 
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px; 
+  gap: 8px;
 }
 
-.student-sidebar-context span { 
-  color: #E2FBCE; 
-  font-weight: 700; 
-  white-space: nowrap; 
+.student-sidebar-context span {
+  color: #e8f2ef;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-.student-nav-label { 
-  margin: 0 16px 8px; 
-  color: #E2FBCE; 
-  font-size: 10px; 
-  font-weight: 700; 
-  text-transform: uppercase; 
-  letter-spacing: 0.2em; 
+.student-nav-label {
+  margin: 0 16px 8px;
+  color: #e8f2ef;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
   opacity: 0.8;
 }
 
-.student-sidebar nav { 
-  padding: 18px 12px; 
-  flex: 1; 
+.student-sidebar nav {
+  padding: 18px 12px;
+  flex: 1;
   overflow-y: auto;
 }
 
-.student-sidebar nav button { 
-  width: 100%; 
-  border: 0; 
-  background: transparent; 
-  color: rgba(255, 253, 238, 0.78); 
-  display: flex; 
-  align-items: center; 
-  gap: 12px; 
-  padding: 11px 14px; 
-  font-size: 13px; 
+.student-sidebar nav button {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 253, 238, 0.78);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  font-size: 13px;
   font-weight: 500;
   border-radius: 12px;
-  text-align: left; 
-  cursor: pointer; 
-  margin-bottom: 4px; 
-  transition: all 0.2s ease; 
+  text-align: left;
+  cursor: pointer;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
 }
 
-.student-sidebar nav button:hover { 
-  background: rgba(7, 102, 83, 0.4); 
-  color: #FFFDEE; 
+.student-sidebar nav button:hover {
+  background: rgba(7, 102, 83, 0.4);
+  color: #ffffff;
 }
 
-.student-sidebar nav button.active { 
-  background: linear-gradient(135deg, #076653 0%, #0C342C 100%); 
-  color: #FFFDEE; 
+.student-sidebar nav button.active {
+  background: linear-gradient(135deg, #1f5f52 0%, #1f2926 100%);
+  color: #ffffff;
   font-weight: 700;
   border: 1px solid rgba(226, 251, 206, 0.3);
   box-shadow: 0 4px 14px rgba(7, 102, 83, 0.35);
@@ -187,257 +191,257 @@
   top: 8px;
   bottom: 8px;
   width: 3.5px;
-  background: #E3EF26;
+  background: #1f5f52;
   border-radius: 0 4px 4px 0;
 }
 
-.student-sidebar nav button.active svg { 
-  color: #E2FBCE; 
+.student-sidebar nav button.active svg {
+  color: #e8f2ef;
 }
 
-.student-sidebar-footer { 
-  margin: 12px; 
-  padding: 14px 10px 8px; 
-  border-top: 1px solid rgba(226, 251, 206, 0.12); 
-  display: flex; 
-  align-items: center; 
-  gap: 10px; 
+.student-sidebar-footer {
+  margin: 12px;
+  padding: 14px 10px 8px;
+  border-top: 1px solid rgba(226, 251, 206, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.student-sidebar-footer strong { 
+.student-sidebar-footer strong {
   display: block;
   font-size: 12px;
   font-weight: 700;
-  color: #FFFDEE;
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  white-space: nowrap; 
-  max-width: 130px; 
+  color: #ffffff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 130px;
 }
 
-.student-sidebar-footer small { 
+.student-sidebar-footer small {
   display: block;
-  color: #E2FBCE; 
-  font-size: 10px; 
+  color: #e8f2ef;
+  font-size: 10px;
   font-family: monospace;
-  margin-top: 2px; 
+  margin-top: 2px;
 }
 
-.student-sidebar-footer .icon-button { 
-  margin-left: auto; 
-  color: rgba(255, 253, 238, 0.7); 
+.student-sidebar-footer .icon-button {
+  margin-left: auto;
+  color: rgba(255, 253, 238, 0.7);
 }
 
-.student-sidebar-footer .icon-button:hover { 
-  color: #FFFDEE; 
+.student-sidebar-footer .icon-button:hover {
+  color: #ffffff;
 }
 
 /* Main Content Area */
-.student-main { 
-  margin-left: 264px; 
-  min-height: 100vh; 
-  background: #FFFDEE;
+.student-main {
+  margin-left: 264px;
+  min-height: 100vh;
+  background: #f5f7f4;
 }
 
-.student-header { 
-  height: 74px; 
-  background: rgba(255, 253, 238, 0.92); 
-  border-bottom: 1px solid rgba(12, 52, 44, 0.1); 
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-  padding: 0 32px; 
-  position: sticky; 
-  top: 0; 
-  z-index: 20; 
-  backdrop-filter: blur(12px); 
+.student-header {
+  height: 74px;
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid rgba(12, 52, 44, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(12px);
 }
 
-.student-header p { 
-  margin: 2px 0 0; 
-  font-size: 18px; 
-  font-weight: 700; 
-  font-family: 'Playfair Display', Georgia, serif; 
-  color: #0C342C; 
+.student-header p {
+  margin: 2px 0 0;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'Playfair Display', Georgia, serif;
+  color: #1f2926;
 }
 
-.portal-kicker { 
-  color: #076653; 
-  font-size: 10px; 
-  font-weight: 700; 
-  letter-spacing: 0.22em; 
-  text-transform: uppercase; 
+.portal-kicker {
+  color: #1f5f52;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.header-user { 
-  display: flex; 
-  align-items: center; 
-  gap: 12px; 
-  font-size: 12px; 
-  font-weight: 600; 
-  color: #0C342C; 
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1f2926;
 }
 
-.mini-avatar { 
-  width: 36px; 
-  height: 36px; 
-  border-radius: 9999px; 
-  display: grid; 
-  place-items: center; 
-  flex: none; 
-  background: linear-gradient(135deg, #076653 0%, #0C342C 100%); 
-  color: #FFFDEE; 
-  font-size: 12px; 
-  font-weight: 700; 
+.mini-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: linear-gradient(135deg, #1f5f52 0%, #1f2926 100%);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
   border: 1px solid rgba(226, 251, 206, 0.4);
   box-shadow: 0 2px 6px rgba(12, 52, 44, 0.15);
 }
 
-.student-icon-button { 
-  position: relative; 
-  padding: 8px; 
-  color: #0C342C; 
-  background: #ffffff; 
-  border: 1px solid rgba(12, 52, 44, 0.12); 
-  border-radius: 9999px; 
-  cursor: pointer; 
+.student-icon-button {
+  position: relative;
+  padding: 8px;
+  color: #1f2926;
+  background: #ffffff;
+  border: 1px solid rgba(12, 52, 44, 0.12);
+  border-radius: 9999px;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.student-icon-button:hover { 
-  color: #0C342C; 
-  background: #E2FBCE; 
-  border-color: #076653; 
+.student-icon-button:hover {
+  color: #1f2926;
+  background: #e8f2ef;
+  border-color: #1f5f52;
 }
 
-.student-content { 
-  max-width: 1240px; 
-  padding: 40px 32px 80px; 
-  margin: auto; 
+.student-content {
+  max-width: 1240px;
+  padding: 40px 32px 80px;
+  margin: auto;
 }
 
-.student-content h1 { 
-  font-size: clamp(2rem, 3.5vw, 2.75rem); 
-  line-height: 1.15; 
-  letter-spacing: -0.025em; 
-  font-weight: 700; 
-  font-family: 'Playfair Display', Georgia, serif; 
-  color: #0C342C; 
+.student-content h1 {
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  font-family: 'Playfair Display', Georgia, serif;
+  color: #1f2926;
 }
 
-.student-content h2 { 
-  font-size: 1.25rem; 
-  letter-spacing: -0.015em; 
-  font-weight: 700; 
-  font-family: 'Playfair Display', Georgia, serif; 
-  color: #0C342C; 
+.student-content h2 {
+  font-size: 1.25rem;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  font-family: 'Playfair Display', Georgia, serif;
+  color: #1f2926;
 }
 
 /* Hero Panel */
-.portal-hero { 
-  background: #0C342C; 
-  color: #FFFDEE; 
-  border: 1px solid rgba(226, 251, 206, 0.2); 
-  border-radius: 1.5rem; 
-  padding: clamp(28px, 4vw, 42px); 
-  box-shadow: 0 16px 36px rgba(12, 52, 44, 0.15); 
-  position: relative; 
-  overflow: hidden; 
+.portal-hero {
+  background: #1f2926;
+  color: #ffffff;
+  border: 1px solid rgba(226, 251, 206, 0.2);
+  border-radius: 1.5rem;
+  padding: clamp(28px, 4vw, 42px);
+  box-shadow: 0 16px 36px rgba(12, 52, 44, 0.15);
+  position: relative;
+  overflow: hidden;
 }
 
-.portal-hero::after { 
-  content: ''; 
-  position: absolute; 
-  width: 320px; 
-  height: 320px; 
-  background: radial-gradient(circle, rgba(7, 102, 83, 0.5) 0%, transparent 70%); 
-  border-radius: 50%; 
-  right: -80px; 
-  top: -80px; 
+.portal-hero::after {
+  content: '';
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(7, 102, 83, 0.5) 0%, transparent 70%);
+  border-radius: 50%;
+  right: -80px;
+  top: -80px;
   pointer-events: none;
 }
 
-.portal-hero h1 { 
-  color: #FFFDEE; 
-  position: relative; 
-  z-index: 1; 
+.portal-hero h1 {
+  color: #ffffff;
+  position: relative;
+  z-index: 1;
 }
 
-.portal-hero .portal-kicker { 
-  color: #E2FBCE; 
+.portal-hero .portal-kicker {
+  color: #e8f2ef;
 }
 
-.portal-hero p:not(.portal-kicker) { 
-  color: rgba(255, 253, 238, 0.85); 
+.portal-hero p:not(.portal-kicker) {
+  color: rgba(255, 253, 238, 0.85);
 }
 
 /* Completion Elements */
-.completion-ring { 
-  width: 88px; 
-  height: 88px; 
-  border: 5px solid #076653; 
-  border-top-color: #E2FBCE; 
-  border-right-color: #E3EF26; 
-  border-radius: 50%; 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  flex: none; 
-  position: relative; 
-  z-index: 1; 
+.completion-ring {
+  width: 88px;
+  height: 88px;
+  border: 5px solid #1f5f52;
+  border-top-color: #e8f2ef;
+  border-right-color: #1f5f52;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  position: relative;
+  z-index: 1;
 }
 
-.completion-ring strong { 
-  font-size: 18px; 
-  font-weight: 700; 
-  font-family: 'Playfair Display', Georgia, serif; 
-  color: #FFFDEE; 
+.completion-ring strong {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'Playfair Display', Georgia, serif;
+  color: #ffffff;
 }
 
-.completion-ring span { 
-  font-size: 9px; 
-  color: #E2FBCE; 
-  text-align: center; 
+.completion-ring span {
+  font-size: 9px;
+  color: #e8f2ef;
+  text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-top: 2px; 
+  margin-top: 2px;
 }
 
-.completion-bar { 
-  height: 10px; 
-  background: rgba(226, 251, 206, 0.7); 
-  border: 1px solid rgba(7, 102, 83, 0.2); 
-  border-radius: 9999px; 
-  overflow: hidden; 
-  margin-top: 18px; 
+.completion-bar {
+  height: 10px;
+  background: rgba(226, 251, 206, 0.7);
+  border: 1px solid rgba(7, 102, 83, 0.2);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 18px;
   padding: 1.5px;
 }
 
-.completion-bar span { 
-  display: block; 
-  height: 100%; 
-  background: linear-gradient(90deg, #076653 0%, #0C342C 50%, #076653 100%); 
-  border-radius: 9999px; 
-  transition: width 0.4s ease; 
+.completion-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #1f5f52 0%, #1f2926 50%, #1f5f52 100%);
+  border-radius: 9999px;
+  transition: width 0.4s ease;
 }
 
 /* Cards & Sections */
-.summary-item, 
-.portal-status, 
-.portal-section { 
-  border: 1px solid rgba(12, 52, 44, 0.1); 
-  border-radius: 1.25rem; 
-  background: #ffffff; 
-  box-shadow: 0 2px 10px rgba(12, 52, 44, 0.03); 
+.summary-item,
+.portal-status,
+.portal-section {
+  border: 1px solid rgba(12, 52, 44, 0.1);
+  border-radius: 1.25rem;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(12, 52, 44, 0.03);
   padding: clamp(20px, 3.5vw, 28px);
 }
 
-.summary-item { 
-  padding: 20px; 
+.summary-item {
+  padding: 20px;
   transition: all 0.25s ease;
 }
 
@@ -447,292 +451,1014 @@
   transform: translateY(-2px);
 }
 
-.summary-item span, 
-.portal-label { 
-  display: block; 
-  color: #076653; 
-  font-size: 10px; 
-  font-weight: 700; 
-  letter-spacing: 0.18em; 
-  text-transform: uppercase; 
+.summary-item span,
+.portal-label {
+  display: block;
+  color: #1f5f52;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
-.summary-item strong { 
-  display: block; 
-  color: #0C342C; 
-  font-size: 26px; 
-  font-weight: 700; 
-  font-family: 'Playfair Display', Georgia, serif; 
-  margin-top: 8px; 
+.summary-item strong {
+  display: block;
+  color: #1f2926;
+  font-size: 26px;
+  font-weight: 700;
+  font-family: 'Playfair Display', Georgia, serif;
+  margin-top: 8px;
 }
 
-.portal-action, 
-.portal-list { 
-  display: flex; 
-  align-items: center; 
-  gap: 16px; 
-  width: 100%; 
-  padding: 18px 22px; 
-  background: #ffffff; 
-  border: 1px solid rgba(12, 52, 44, 0.1); 
-  border-radius: 1rem; 
-  text-align: left; 
-  transition: all 0.25s ease; 
+.portal-action,
+.portal-list {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 18px 22px;
+  background: #ffffff;
+  border: 1px solid rgba(12, 52, 44, 0.1);
+  border-radius: 1rem;
+  text-align: left;
+  transition: all 0.25s ease;
 }
 
-.portal-action { 
-  cursor: pointer; 
+.portal-action {
+  cursor: pointer;
 }
 
-.portal-action:hover { 
-  border-color: rgba(7, 102, 83, 0.4); 
-  transform: translateY(-2px); 
-  box-shadow: 0 8px 22px rgba(12, 52, 44, 0.08); 
+.portal-action:hover {
+  border-color: rgba(7, 102, 83, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(12, 52, 44, 0.08);
 }
 
-.portal-action strong, 
-.portal-list h3 { 
-  display: block; 
-  font-size: 15px; 
-  font-weight: 700; 
-  color: #0C342C; 
+.portal-action strong,
+.portal-list h3 {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2926;
 }
 
-.portal-action small { 
-  display: block; 
-  font-size: 12px; 
-  color: rgba(6, 35, 29, 0.65); 
-  margin-top: 4px; 
+.portal-action small {
+  display: block;
+  font-size: 12px;
+  color: rgba(6, 35, 29, 0.65);
+  margin-top: 4px;
 }
 
-.portal-icon { 
-  width: 44px; 
-  height: 44px; 
-  border-radius: 12px; 
-  display: grid; 
-  place-items: center; 
-  background: #E2FBCE; 
-  color: #076653; 
-  flex: none; 
+.portal-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #e8f2ef;
+  color: #1f5f52;
+  flex: none;
 }
 
 /* Inputs & Form Elements */
-.portal-input { 
-  width: 100%; 
-  border: 1px solid rgba(12, 52, 44, 0.18); 
-  background: rgba(255, 253, 238, 0.5); 
-  border-radius: 0.75rem; 
-  padding: 10px 14px; 
-  color: #0C342C; 
-  font-size: 13px; 
-  outline: none; 
+.portal-input {
+  width: 100%;
+  border: 1px solid rgba(12, 52, 44, 0.18);
+  background: rgba(255, 253, 238, 0.5);
+  border-radius: 0.75rem;
+  padding: 10px 14px;
+  color: #1f2926;
+  font-size: 13px;
+  outline: none;
   transition: all 0.2s ease;
 }
 
-.portal-input:focus { 
-  border-color: #076653; 
-  box-shadow: 0 0 0 3px rgba(7, 102, 83, 0.18); 
-  background: #ffffff; 
+.portal-input:focus {
+  border-color: #1f5f52;
+  box-shadow: 0 0 0 3px rgba(7, 102, 83, 0.18);
+  background: #ffffff;
 }
 
-.portal-choice { 
-  display: inline-flex; 
-  align-items: center; 
-  gap: 8px; 
-  padding: 8px 14px; 
-  border: 1px solid rgba(12, 52, 44, 0.18); 
-  border-radius: 0.75rem; 
-  color: #0C342C; 
-  background: #ffffff; 
-  font-size: 12px; 
-  cursor: pointer; 
+.portal-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid rgba(12, 52, 44, 0.18);
+  border-radius: 0.75rem;
+  color: #1f2926;
+  background: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.portal-choice.selected { 
-  border-color: #076653; 
-  background: #E2FBCE; 
-  color: #0C342C; 
-  font-weight: 700; 
+.portal-choice.selected {
+  border-color: #1f5f52;
+  background: #e8f2ef;
+  color: #1f2926;
+  font-weight: 700;
   box-shadow: 0 2px 6px rgba(7, 102, 83, 0.12);
 }
 
-.portal-choice input { 
-  accent-color: #076653; 
+.portal-choice input {
+  accent-color: #1f5f52;
 }
 
 /* Buttons */
-.portal-primary, 
-.portal-secondary { 
-  display: inline-flex; 
-  align-items: center; 
+.portal-primary,
+.portal-secondary {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  gap: 8px; 
-  padding: 10px 22px; 
-  font-size: 12px; 
-  font-weight: 700; 
-  letter-spacing: 0.08em; 
-  text-transform: uppercase; 
-  border-radius: 9999px; 
-  cursor: pointer; 
-  transition: all 0.25s ease; 
+  gap: 8px;
+  padding: 10px 22px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
-.portal-primary { 
-  color: #FFFDEE; 
-  background: linear-gradient(135deg, #076653 0%, #0C342C 100%); 
-  border: 1px solid rgba(226, 251, 206, 0.3); 
-  box-shadow: 0 4px 14px rgba(7, 102, 83, 0.25); 
+.portal-primary {
+  color: #ffffff;
+  background: linear-gradient(135deg, #1f5f52 0%, #1f2926 100%);
+  border: 1px solid rgba(226, 251, 206, 0.3);
+  box-shadow: 0 4px 14px rgba(7, 102, 83, 0.25);
 }
 
-.portal-primary:hover { 
-  background: linear-gradient(135deg, #0C342C 0%, #06231D 100%); 
-  transform: translateY(-1px); 
-  box-shadow: 0 6px 18px rgba(12, 52, 44, 0.3); 
+.portal-primary:hover {
+  background: linear-gradient(135deg, #1f2926 0%, #174a40 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(12, 52, 44, 0.3);
 }
 
-.portal-secondary { 
-  color: #0C342C; 
-  background: #FFFDEE; 
-  border: 1px solid rgba(12, 52, 44, 0.2); 
+.portal-secondary {
+  color: #1f2926;
+  background: #ffffff;
+  border: 1px solid rgba(12, 52, 44, 0.2);
 }
 
-.portal-secondary:hover { 
-  background: #E2FBCE; 
-  border-color: #076653; 
-  transform: translateY(-1px); 
+.portal-secondary:hover {
+  background: #e8f2ef;
+  border-color: #1f5f52;
+  transform: translateY(-1px);
 }
 
 /* Badges */
-.portal-badge { 
-  display: inline-flex; 
-  align-items: center; 
-  gap: 5px; 
-  padding: 4px 10px; 
-  border-radius: 9999px; 
-  font-size: 11px; 
-  font-weight: 600; 
-  background: rgba(12, 52, 44, 0.06); 
-  color: #0C342C; 
-  border: 1px solid rgba(12, 52, 44, 0.12); 
+.portal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(12, 52, 44, 0.06);
+  color: #1f2926;
+  border: 1px solid rgba(12, 52, 44, 0.12);
 }
 
-.portal-badge.green { 
-  background: #E2FBCE; 
-  color: #0C342C; 
-  border-color: rgba(7, 102, 83, 0.25); 
+.portal-badge.green {
+  background: #e8f2ef;
+  color: #1f2926;
+  border-color: rgba(7, 102, 83, 0.25);
 }
 
-.portal-badge.amber { 
-  background: #FFF8E7; 
-  color: #98702b; 
-  border-color: rgba(200, 149, 62, 0.35); 
+.portal-badge.amber {
+  background: #fdf7e8;
+  color: #98702b;
+  border-color: rgba(200, 149, 62, 0.35);
 }
 
-.portal-notice { 
-  display: flex; 
-  align-items: flex-start; 
-  gap: 10px; 
-  padding: 14px 18px; 
-  border: 1px solid rgba(7, 102, 83, 0.2); 
-  border-radius: 0.875rem; 
-  background: #E2FBCE; 
-  color: #0C342C; 
-  font-size: 13px; 
+.portal-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 18px;
+  border: 1px solid rgba(7, 102, 83, 0.2);
+  border-radius: 0.875rem;
+  background: #e8f2ef;
+  color: #1f2926;
+  font-size: 13px;
 }
 
-.status-dot { 
-  width: 7px; 
-  height: 7px; 
-  display: inline-block; 
-  border-radius: 50%; 
-  margin-right: 6px; 
+.status-dot {
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 6px;
 }
 
-.status-dot.green { 
-  background: #076653; 
+.status-dot.green {
+  background: #1f5f52;
 }
 
-.status-dot.amber { 
-  background: #c8953e; 
+.status-dot.amber {
+  background: #c28a35;
 }
 
-.icon-button { 
-  border: 0; 
-  background: transparent; 
-  color: rgba(12, 52, 44, 0.5); 
-  cursor: pointer; 
-  padding: 6px; 
+.icon-button {
+  border: 0;
+  background: transparent;
+  color: rgba(12, 52, 44, 0.5);
+  cursor: pointer;
+  padding: 6px;
   border-radius: 8px;
   transition: all 0.2s ease;
 }
 
-.icon-button:hover { 
-  color: #0C342C; 
+.icon-button:hover {
+  color: #1f2926;
   background: rgba(12, 52, 44, 0.05);
 }
 
-.mobile-menu, 
-.mobile-close { 
-  display: none; 
+.mobile-menu,
+.mobile-close {
+  display: none;
 }
 
-@media (max-width: 800px) { 
-  .student-sidebar { 
-    transform: translateX(-100%); 
-    transition: transform .25s ease; 
-    box-shadow: 10px 0 30px rgba(0,0,0,.25); 
+@media (max-width: 800px) {
+  .student-sidebar {
+    transform: translateX(-100%);
+    transition: transform .25s ease;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, .25);
   }
-  .student-sidebar.open { 
-    transform: translateX(0); 
-  }
-  .student-main { 
-    margin-left: 0; 
-  }
-  .student-header { 
-    height: 68px; 
-    padding: 0 20px; 
-  }
-  .mobile-menu, 
-  .mobile-close { 
-    display: inline-flex; 
-  }
-  .mobile-menu { 
-    margin-right: 12px; 
-  }
-  .student-header > div:first-of-type { 
-    display: flex; 
-    align-items: center; 
-  }
-  .header-user span, 
-  .header-user > .icon-button { 
-    display: none; 
-  }
-  .student-content { 
-    padding: 28px 18px 60px; 
-  }
-  .portal-hero { 
-    align-items: flex-start; 
-    gap: 20px; 
-  }
-  .completion-ring { 
-    width: 76px; 
-    height: 76px; 
-  }
-}
 
-@media (max-width: 480px) { 
-  .summary-item { 
-    padding: 14px; 
+  .student-sidebar.open {
+    transform: translateX(0);
   }
-  .summary-item strong { 
-    font-size: 20px; 
+
+  .student-main {
+    margin-left: 0;
   }
-  .portal-hero { 
-    display: block; 
+
+  .student-header {
+    height: 68px;
+    padding: 0 20px;
   }
-  .completion-ring { 
-    margin-top: 24px; 
+
+  .mobile-menu,
+  .mobile-close {
+    display: inline-flex;
+  }
+
+  .mobile-menu {
+    margin-right: 12px;
+  }
+
+  .student-header>div:first-of-type {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-user span,
+  .header-user>.icon-button {
+    display: none;
+  }
+
+  .student-content {
+    padding: 28px 18px 60px;
+  }
+
+  .portal-hero {
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .completion-ring {
+    width: 76px;
+    height: 76px;
   }
 }
 
+@media (max-width: 480px) {
+  .summary-item {
+    padding: 14px;
+  }
+
+  .summary-item strong {
+    font-size: 20px;
+  }
+
+  .portal-hero {
+    display: block;
+  }
+
+  .completion-ring {
+    margin-top: 24px;
+  }
+}
+
+
+
+/* ==========================================================================\n   LOGIN + STUDENT CONTRAST FIXES\n   Keep the Landing Page untouched. All palette overrides are scoped to the\n   LoginView and Student Portal so translucent/white utility classes elsewhere\n   are not accidentally recolored.\n   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   LOGIN PAGE
+   -------------------------------------------------------------------------- */
+
+#root>div.min-h-screen.select-none {
+  background: #f5f7f4 !important;
+  color: #1f2926 !important;
+}
+
+#root>div.min-h-screen.select-none>div.relative.w-full {
+  background: #ffffff !important;
+  border-color: #e5e9e6 !important;
+  box-shadow: 0 24px 60px rgba(31, 41, 38, 0.10) !important;
+}
+
+#root>div.min-h-screen.select-none>div.relative.w-full>div:first-child {
+  background: #1f5f52 !important;
+  color: #ffffff !important;
+}
+
+#root>div.min-h-screen.select-none>div.relative.w-full>div:last-child {
+  background: #ffffff !important;
+  color: #1f2926 !important;
+}
+
+#root>div.min-h-screen.select-none [class*="text-[#0C342C]"] {
+  color: #1f2926 !important;
+}
+
+#root>div.min-h-screen.select-none [class*="text-[#06231D]"] {
+  color: #174a40 !important;
+}
+
+#root>div.min-h-screen.select-none [class*="text-[#076653]"] {
+  color: #1f5f52 !important;
+}
+
+#root>div.min-h-screen.select-none [class*="text-[#FFFDEE]"] {
+  color: #ffffff !important;
+}
+
+#root>div.min-h-screen.select-none [class*="text-[#E2FBCE]"] {
+  color: #e8f2ef !important;
+}
+
+#root>div.min-h-screen.select-none [class*="bg-[#FFFDEE]"] {
+  background-color: #f8faf8 !important;
+}
+
+#root>div.min-h-screen.select-none [class*="bg-[#0C342C]"] {
+  background-color: #1f5f52 !important;
+}
+
+#root>div.min-h-screen.select-none [class*="bg-[#076653]"] {
+  background-color: #1f5f52 !important;
+}
+
+#root>div.min-h-screen.select-none [class*="bg-[#E2FBCE]"] {
+  background-color: #e8f2ef !important;
+}
+
+#root>div.min-h-screen.select-none [class*="bg-[#c8953e]"] {
+  background-color: #1f5f52 !important;
+}
+
+#root>div.min-h-screen.select-none [class*="border-[#0C342C]"] {
+  border-color: #e5e9e6 !important;
+}
+
+#root>div.min-h-screen.select-none [class*="border-[#076653]"] {
+  border-color: #1f5f52 !important;
+}
+
+#root>div.min-h-screen.select-none [class*="border-[#E2FBCE]"] {
+  border-color: #d5e5df !important;
+}
+
+#root>div.min-h-screen.select-none [class*="bg-linear-to-br"] {
+  background-image: linear-gradient(135deg, #1f5f52 0%, #174a40 100%) !important;
+}
+
+#root>div.min-h-screen.select-none [class*="text-[#FFFDEE]/80"] {
+  color: rgba(255, 255, 255, 0.86) !important;
+}
+
+#root>div.min-h-screen.select-none [class*="text-[#FFFDEE]/60"] {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+#root>div.min-h-screen.select-none [class*="text-[#06231D]/65"] {
+  color: #52635e !important;
+}
+
+#root>div.min-h-screen.select-none [class*="text-[#0C342C]/50"] {
+  color: #64736f !important;
+}
+
+/* Login portal choices: dark text on light surfaces */
+#root>div.min-h-screen.select-none button {
+  color: #1f2926;
+}
+
+#root>div.min-h-screen.select-none button [class*="text-[#0C342C]"] {
+  color: #1f2926 !important;
+}
+
+#root>div.min-h-screen.select-none button [class*="text-[#06231D]"] {
+  color: #52635e !important;
+}
+
+#root>div.min-h-screen.select-none button [class*="text-[#076653]"] {
+  color: #1f5f52 !important;
+}
+
+#root>div.min-h-screen.select-none button [class*="text-[#E2FBCE]"] {
+  color: #e8f2ef !important;
+}
+
+/* Keep icon blocks dark enough for their light icons */
+#root>div.min-h-screen.select-none button span[class*="bg-linear-to-br"] {
+  background-image: linear-gradient(135deg, #1f5f52 0%, #174a40 100%) !important;
+}
+
+/* --------------------------------------------------------------------------
+   STUDENT PORTAL
+   -------------------------------------------------------------------------- */
+
+.student-portal [class*="text-[#0C342C]"] {
+  color: #1f2926 !important;
+}
+
+.student-portal [class*="text-[#06231D]"] {
+  color: #52635e !important;
+}
+
+.student-portal [class*="text-[#076653]"] {
+  color: #1f5f52 !important;
+}
+
+.student-portal [class*="text-[#FFFDEE]"] {
+  color: #ffffff !important;
+}
+
+.student-portal [class*="text-[#E2FBCE]"] {
+  color: #e8f2ef !important;
+}
+
+.student-portal [class*="bg-[#FFFDEE]"] {
+  background-color: #f8faf8 !important;
+}
+
+.student-portal [class*="bg-[#0C342C]"] {
+  background-color: #1f5f52 !important;
+}
+
+.student-portal [class*="bg-[#076653]"] {
+  background-color: #1f5f52 !important;
+}
+
+.student-portal [class*="bg-[#E2FBCE]"] {
+  background-color: #e8f2ef !important;
+}
+
+.student-portal [class*="border-[#0C342C]"] {
+  border-color: #e5e9e6 !important;
+}
+
+.student-portal [class*="border-[#076653]"] {
+  border-color: #1f5f52 !important;
+}
+
+.student-portal [class*="border-[#E2FBCE]"] {
+  border-color: #d5e5df !important;
+}
+
+/* Hero stays dark, and every text element inside it stays readable. */
+.student-portal .portal-hero,
+.student-portal .portal-hero [class*="bg-[#0C342C]"] {
+  background-color: #1f5f52 !important;
+}
+
+.student-portal .portal-hero h1,
+.student-portal .portal-hero p,
+.student-portal .portal-hero span,
+.student-portal .portal-hero strong {
+  color: #ffffff;
+}
+
+.student-portal .portal-hero .portal-kicker,
+.student-portal .portal-hero [class*="text-[#E2FBCE]"],
+.student-portal .portal-hero [class*="text-[#FFFDEE]"] {
+  color: #e8f2ef !important;
+}
+
+.student-portal .portal-hero .completion-ring strong {
+  color: #1f2926 !important;
+}
+
+.student-portal .portal-hero .completion-ring span {
+  color: #64736f !important;
+}
+
+/* The verification card sits on the dark hero, so it must be a light card. */
+.student-portal .portal-hero [class*="bg-white/10"] {
+  background: #ffffff !important;
+  border-color: #e5e9e6 !important;
+  color: #1f2926 !important;
+  box-shadow: 0 8px 24px rgba(31, 41, 38, 0.10) !important;
+}
+
+.student-portal .portal-hero [class*="bg-white/10"] [class*="text-[#E2FBCE]"] {
+  color: #78817d !important;
+}
+
+.student-portal .portal-hero [class*="bg-white/10"] [class*="text-[#FFFDEE]"] {
+  color: #1f2926 !important;
+}
+
+.student-portal .portal-hero [class*="bg-white/10"] a,
+.student-portal .portal-hero [class*="bg-white/10"] button {
+  color: #1f5f52 !important;
+}
+
+/* Light cards: never allow pale hero text to leak onto white surfaces. */
+.student-portal .summary-item,
+.student-portal .portal-status,
+.student-portal .portal-section,
+.student-portal .portal-action,
+.student-portal .portal-list {
+  color: #1f2926 !important;
+}
+
+.student-portal .summary-item [class*="text-[#FFFDEE]"],
+.student-portal .portal-status [class*="text-[#FFFDEE]"],
+.student-portal .portal-section [class*="text-[#FFFDEE]"],
+.student-portal .portal-action [class*="text-[#FFFDEE]"],
+.student-portal .portal-list [class*="text-[#FFFDEE]"] {
+  color: #1f2926 !important;
+}
+
+.student-portal .summary-item [class*="text-[#E2FBCE]"],
+.student-portal .portal-status [class*="text-[#E2FBCE]"],
+.student-portal .portal-section [class*="text-[#E2FBCE]"],
+.student-portal .portal-action [class*="text-[#E2FBCE]"],
+.student-portal .portal-list [class*="text-[#E2FBCE]"] {
+  color: #1f5f52 !important;
+}
+
+/* Form controls */
+.student-portal input,
+.student-portal select,
+.student-portal textarea {
+  color: #1f2926 !important;
+  background: #ffffff !important;
+}
+
+.student-portal input::placeholder,
+.student-portal textarea::placeholder {
+  color: #8a9591 !important;
+  opacity: 1 !important;
+}
+
+.student-portal label {
+  color: #1f5f52;
+}
+
+/* Buttons always maintain readable contrast. */
+.student-portal .portal-primary {
+  color: #ffffff !important;
+  background: #1f5f52 !important;
+}
+
+.student-portal .portal-secondary {
+  color: #1f2926 !important;
+  background: #ffffff !important;
+}
+
+/* Avoid pale text on white badges/cards. */
+.student-portal .portal-badge,
+.student-portal .portal-badge.green {
+  color: #1f5f52 !important;
+}
+
+.student-portal .portal-badge.amber {
+  color: #8f6825 !important;
+}
+
+
+/* ==========================================================================\n   FINAL ADMIN-PALETTE OVERRIDES FOR STUDENT PORTAL\n   ========================================================================== */
+
+.student-sidebar {
+  background: #ffffff !important;
+  color: #1f2926 !important;
+  border-right: 1px solid #e5e9e6 !important;
+}
+
+.student-brand {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e5e9e6 !important;
+}
+
+.student-brand strong {
+  color: #1f2926 !important;
+}
+
+.student-brand small,
+.student-sidebar-context span,
+.student-nav-label {
+  color: #1f5f52 !important;
+}
+
+.student-sidebar-context {
+  color: #78817d !important;
+  border-bottom-color: #e5e9e6 !important;
+}
+
+.student-sidebar nav button {
+  color: #78817d !important;
+}
+
+.student-sidebar nav button:hover {
+  background: #f8faf8 !important;
+  color: #1f5f52 !important;
+}
+
+.student-sidebar nav button.active {
+  background: #e8f2ef !important;
+  color: #1f5f52 !important;
+  border: 1px solid #d5e5df !important;
+  box-shadow: none !important;
+}
+
+.student-sidebar nav button.active::before {
+  background: #1f5f52 !important;
+}
+
+.student-sidebar nav button.active svg {
+  color: #1f5f52 !important;
+}
+
+.student-sidebar-footer {
+  background: #ffffff !important;
+  border-top-color: #e5e9e6 !important;
+}
+
+.student-sidebar-footer strong {
+  color: #1f2926 !important;
+}
+
+.student-sidebar-footer small {
+  color: #78817d !important;
+}
+
+.student-sidebar-footer .icon-button {
+  color: #78817d !important;
+}
+
+.student-sidebar-footer .icon-button:hover {
+  color: #1f5f52 !important;
+  background: #f8faf8 !important;
+}
+
+.student-main,
+.student-portal {
+  background: #f5f7f4 !important;
+}
+
+.student-header {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border-bottom-color: #e5e9e6 !important;
+}
+
+.student-header p,
+.header-user,
+.student-content h1,
+.student-content h2 {
+  color: #1f2926 !important;
+}
+
+.portal-kicker {
+  color: #1f5f52 !important;
+}
+
+.mini-avatar {
+  background: #1f5f52 !important;
+  color: #ffffff !important;
+  border-color: #e8f2ef !important;
+  box-shadow: 0 2px 6px rgba(31, 95, 82, 0.14) !important;
+}
+
+.student-icon-button {
+  color: #1f2926 !important;
+  background: #ffffff !important;
+  border-color: #e5e9e6 !important;
+}
+
+.student-icon-button:hover {
+  color: #1f5f52 !important;
+  background: #f8faf8 !important;
+  border-color: #1f5f52 !important;
+}
+
+.summary-item,
+.portal-status,
+.portal-section,
+.portal-action,
+.portal-list {
+  background: #ffffff !important;
+  border-color: #e5e9e6 !important;
+  box-shadow: 0 2px 10px rgba(31, 41, 38, 0.035) !important;
+}
+
+.summary-item:hover,
+.portal-action:hover {
+  border-color: #cbdad4 !important;
+  box-shadow: 0 6px 18px rgba(31, 41, 38, 0.06) !important;
+}
+
+.summary-item span,
+.portal-label {
+  color: #1f5f52 !important;
+}
+
+.summary-item strong,
+.portal-action strong,
+.portal-list h3 {
+  color: #1f2926 !important;
+}
+
+.portal-action small {
+  color: #78817d !important;
+}
+
+.portal-icon {
+  background: #e8f2ef !important;
+  color: #1f5f52 !important;
+}
+
+.portal-input,
+.portal-choice {
+  color: #1f2926 !important;
+  background: #ffffff !important;
+  border-color: #e5e9e6 !important;
+}
+
+.portal-input:focus {
+  border-color: #1f5f52 !important;
+  box-shadow: 0 0 0 3px rgba(31, 95, 82, 0.12) !important;
+}
+
+.portal-choice.selected {
+  border-color: #1f5f52 !important;
+  background: #e8f2ef !important;
+  color: #1f2926 !important;
+  box-shadow: none !important;
+}
+
+.portal-choice input {
+  accent-color: #1f5f52 !important;
+}
+
+.portal-primary {
+  color: #ffffff !important;
+  background: #1f5f52 !important;
+  border-color: #1f5f52 !important;
+  box-shadow: 0 4px 12px rgba(31, 95, 82, 0.18) !important;
+}
+
+.portal-primary:hover {
+  background: #174a40 !important;
+  box-shadow: 0 6px 16px rgba(31, 95, 82, 0.22) !important;
+}
+
+.portal-secondary {
+  color: #1f2926 !important;
+  background: #ffffff !important;
+  border-color: #e5e9e6 !important;
+}
+
+.portal-secondary:hover {
+  background: #f8faf8 !important;
+  border-color: #1f5f52 !important;
+}
+
+.portal-badge {
+  background: #f5f7f4 !important;
+  color: #1f2926 !important;
+  border-color: #e5e9e6 !important;
+}
+
+.portal-badge.green {
+  background: #e8f2ef !important;
+  color: #1f5f52 !important;
+  border-color: #d5e5df !important;
+}
+
+.portal-badge.amber {
+  background: #fdf7e8 !important;
+  color: #8f6825 !important;
+  border-color: #ead8ad !important;
+}
+
+.portal-notice {
+  background: #e8f2ef !important;
+  color: #1f2926 !important;
+  border-color: #d5e5df !important;
+}
+
+.status-dot.green {
+  background: #3c8069 !important;
+}
+
+.status-dot.amber {
+  background: #c28a35 !important;
+}
+
+.icon-button {
+  color: #78817d !important;
+}
+
+.icon-button:hover {
+  color: #1f5f52 !important;
+  background: #f8faf8 !important;
+}
+
+
+/* ==========================================================================
+   FINAL CONTRAST + BRAND ALIGNMENT FIXES
+   These rules are intentionally scoped to the student portal/admin branding.
+   ========================================================================== */
+
+/* Student hero metadata pills: always readable against the dark hero. */
+.student-portal .portal-hero .portal-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 700;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.student-portal .portal-hero .portal-hero-pill-accent {
+  background: rgba(232, 242, 239, 0.96) !important;
+  color: #174a40 !important;
+  border: 1px solid rgba(232, 242, 239, 1) !important;
+}
+
+.student-portal .portal-hero .portal-hero-pill-light {
+  background: #ffffff !important;
+  color: #174a40 !important;
+  border: 1px solid #ffffff !important;
+}
+
+.student-portal .portal-hero .portal-hero-pill-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: #c9df00 !important;
+}
+
+/* The verification card is a white surface, so all of its text must be dark. */
+.student-portal .portal-hero .portal-verification-card {
+  background: #ffffff !important;
+  border: 1px solid #e5e9e6 !important;
+  color: #1f2926 !important;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.10) !important;
+}
+
+.student-portal .portal-hero .portal-verification-card span,
+.student-portal .portal-hero .portal-verification-card strong {
+  color: #1f2926 !important;
+}
+
+.student-portal .portal-hero .portal-verification-card span[class*="uppercase"] {
+  color: #78817d !important;
+}
+
+.student-portal .portal-hero .portal-verification-card button,
+.student-portal .portal-hero .portal-verification-card a {
+  color: #1f5f52 !important;
+}
+
+/* Never let generic hero text rules recolor the explicit metadata pills. */
+.student-portal .portal-hero .portal-hero-pill,
+.student-portal .portal-hero .portal-hero-pill * {
+  color: #174a40 !important;
+}
+
+.student-portal .portal-hero .portal-hero-pill-dot {
+  color: transparent !important;
+}
+
+/* ==========================================================================
+   Admin top-left brand: same alignment/lockup proportions as Student Portal.
+   ========================================================================== */
+
+.kia-admin .admin-brand {
+  min-height: 96px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  background: var(--admin-primary-dark);
+  border-bottom: 1px solid rgba(255, 253, 238, 0.12);
+}
+
+.kia-admin .admin-brand-lockup-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+}
+
+.kia-admin .admin-brand-logo-img {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  object-fit: contain;
+  display: block;
+  filter: none;
+}
+
+.kia-admin .admin-brand-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.kia-admin .admin-brand-lockup {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.kia-admin .admin-brand-primary {
+  font-family: 'DM Sans', Inter, system-ui, sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ffffff !important;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.kia-admin .admin-brand-rule {
+  width: 100%;
+  max-width: 112px;
+  height: 2px;
+  margin: 3px 0 2px;
+  background: #c8953e !important;
+  border-radius: 1px;
+}
+
+.kia-admin .admin-brand-line2 {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.kia-admin .admin-brand-sub {
+  font-family: 'DM Sans', Inter, system-ui, sans-serif;
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: #e8f2ef !important;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.kia-admin .admin-brand-focus {
+  font-family: 'DM Sans', Inter, system-ui, sans-serif;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ffffff !important;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.kia-admin .admin-brand-subtitle {
+  display: none !important;
+}
+
+@media (max-width: 1100px) {
+  .kia-admin .admin-brand {
+    padding: 14px 16px;
+  }
+
+  .kia-admin .admin-brand-lockup-wrap {
+    gap: 10px;
+  }
+
+  .kia-admin .admin-brand-logo-img {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+}

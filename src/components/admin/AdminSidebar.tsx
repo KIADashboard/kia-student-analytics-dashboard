@@ -28,19 +28,18 @@ export function AdminSidebar({ activePage, onNavigate, onLogout, mobileOpen, onC
       {mobileOpen && <button className="admin-drawer-backdrop" aria-label="Close navigation" onClick={onClose} />}
       <aside className={`admin-sidebar${mobileOpen ? ' is-open' : ''}`}>
         <div className="admin-brand">
-          <div className="admin-brand-mark">
+          <div className="admin-brand-lockup-wrap">
             <InstitutionLogo className="admin-brand-logo-img" />
-          </div>
-          <div className="admin-brand-details">
-            <div className="admin-brand-lockup">
-              <span className="admin-brand-primary">KUMARAGURU</span>
-              <div className="admin-brand-rule" />
-              <div className="admin-brand-line2">
-                <span className="admin-brand-sub">INSTITUTE OF</span>
-                <span className="admin-brand-focus">AGRICULTURE</span>
+            <div className="admin-brand-details">
+              <div className="admin-brand-lockup">
+                <span className="admin-brand-primary">KUMARAGURU</span>
+                <div className="admin-brand-rule" />
+                <div className="admin-brand-line2">
+                  <span className="admin-brand-sub">INSTITUTE OF</span>
+                  <span className="admin-brand-focus">AGRICULTURE</span>
+                </div>
               </div>
             </div>
-            <div className="admin-brand-subtitle">Student Administration</div>
           </div>
         </div>
         <div className="admin-sidebar-section-title">MAIN MENU</div>
