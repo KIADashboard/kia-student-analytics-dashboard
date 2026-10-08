@@ -30,7 +30,7 @@ export function AdminSidebar({ activePage, onNavigate, onLogout, mobileOpen, onC
     <>
       {mobileOpen && <button className="admin-drawer-backdrop" aria-label="Close navigation" onClick={onClose} />}
       <aside className={`admin-sidebar${mobileOpen ? ' is-open' : ''}`}>
-        <div className="admin-brand">
+        <div className="admin-brand" style={{ background: '#ffffff' }}>
           <img className="admin-brand-logo" src={kiaLogo} alt="Kumaraguru Institute of Agriculture" />
           {showBrandText && <div><div className="admin-brand-name">KIA</div><div className="admin-brand-subtitle">Student Administration</div></div>}
         </div>

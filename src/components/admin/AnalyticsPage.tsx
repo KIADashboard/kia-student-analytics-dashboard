@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Student } from '../../types';
 import { AdminBarChart, AdminDoughnutChart, AdminLineChart } from './AdminChart';
 import { batchOptions, chartDataFromCounts, countsFor, mean, residenceLabel, studentsForBatch } from './adminData';
+import { BatchProfileReport } from './BatchProfileReport';
 
 const palette = ['#1f5f52', '#c28a35', '#527aa5', '#75679a', '#b65d5d', '#3c8069', '#8a6b45', '#5c8a99'];
-type AnalyticsTab = 'batch' | 'compare' | 'trend';
+type AnalyticsTab = 'profile' | 'compare' | 'trend';
 type DistributionDimension = { key: string; label: string; select: (student: Student) => string; chart: 'bar' | 'doughnut'; color: string };
 
 const dimensions: DistributionDimension[] = [
@@ -28,7 +29,6 @@ const dimensions: DistributionDimension[] = [
   { key: 'semester', label: 'Current Semester', select: student => `Semester ${student.currentSemester}`, chart: 'bar', color: palette[1] }
 ];
 
-const extraBatchDimensions = dimensions.filter(dimension => !['gender', 'residence', 'school-type', 'quota'].includes(dimension.key));
 const cutoffBands = [
   { label: '100-119.9', min: 100, max: 120 },
   { label: '120-139.9', min: 120, max: 140 },
@@ -97,12 +97,10 @@ function ChartPanel({ eyebrow, title, children, size = '' }: { eyebrow: string; 
 }
 
 export function AnalyticsPage({ students }: { students: Student[] }) {
-  const [tab, setTab] = useState<AnalyticsTab>('batch');
-  const [batch, setBatch] = useState('2026');
+  const [tab, setTab] = useState<AnalyticsTab>('profile');
   const [firstBatch, setFirstBatch] = useState('2026');
   const [secondBatch, setSecondBatch] = useState('2025');
   const [metric, setMetric] = useState<'strength' | 'cgpa' | 'attendance' | 'pass' | 'arrears' | 'hostel'>('strength');
-  const selected = useMemo(() => studentsForBatch(students, batch), [students, batch]);
   const availableBatches = batchOptions.slice(1).filter(year => studentsForBatch(students, year).length > 0);
   useEffect(() => {
     if (firstBatch === secondBatch) {
@@ -130,14 +128,8 @@ export function AnalyticsPage({ students }: { students: Student[] }) {
 
   return <>
     <div className="admin-page-heading-row"><div><span className="admin-section-label">INSTITUTIONAL INSIGHTS</span><h2>Analytics</h2><p>Understand student demographics and academic patterns.</p></div></div>
-    <div className="admin-analytics-tabs" role="tablist" aria-label="Analytics views">{([['batch', 'Batch Analytics'], ['compare', 'Compare Two Batches'], ['trend', 'Six-Year Trends']] as [AnalyticsTab, string][]).map(([id, label]) => <button key={id} role="tab" aria-selected={tab === id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}</button>)}</div>
-    {tab === 'batch' && <>
-    <div className="admin-analytics-toolbar"><div><span>Selected Batch</span><select value={batch} onChange={event => setBatch(event.target.value)}>{availableBatches.map(year => <option key={year}>{year}</option>)}</select></div></div>
-    <div className="admin-analytics-card-grid">{[['Students', selected.length], ['Average CGPA', mean(selected.map(student => student.cgpa)).toFixed(2)], ['Attendance', `${mean(selected.map(student => student.attendance)).toFixed(1)}%`], ['Arrear Rate', `${compareArrearRate(selected).toFixed(1)}%`]].map(([label, value]) => <div className="admin-analytics-stat" key={String(label)}><span>{label}</span><strong>{value}</strong></div>)}</div>
-    <div className="admin-section-title-row"><div><span className="admin-section-label">BATCH ANALYTICS</span><h3>Student Profile Distributions</h3></div></div>
-    <div className="admin-analytics-chart-grid">{dimensions.filter(dimension => !extraBatchDimensions.includes(dimension)).map(dimension => <ChartPanel key={dimension.key} eyebrow="STUDENT PROFILE" title={dimension.label} size={dimension.chart === 'doughnut' ? 'doughnut' : ''}><DistributionChart students={selected} dimension={dimension} /></ChartPanel>)}</div>
-    <div className="admin-analytics-chart-grid">{extraBatchDimensions.map(dimension => <ChartPanel key={dimension.key} eyebrow="STUDENT PROFILE" title={dimension.label}><DistributionChart students={selected} dimension={dimension} /></ChartPanel>)}<ChartPanel eyebrow="ADMISSION PERFORMANCE" title="Cut-off Score Distribution"><CutoffHistogram students={selected} /></ChartPanel><ChartPanel eyebrow="ACADEMIC PERFORMANCE" title="Academic Indicators"><AdminBarChart data={{ labels: ['Average CGPA (x10)', 'Attendance %', 'Pass %', 'Arrear %'], datasets: [{ label: batch, data: [mean(selected.map(student => student.cgpa)) * 10, mean(selected.map(student => student.attendance)), comparePassRate(selected), compareArrearRate(selected)], backgroundColor: palette[0], borderRadius: 4 }] }} /></ChartPanel></div>
-    </>}
+    <div className="admin-analytics-tabs" role="tablist" aria-label="Analytics views">{([['profile', 'Batch Profile'], ['compare', 'Compare Two Batches'], ['trend', 'Six-Year Trends']] as [AnalyticsTab, string][]).map(([id, label]) => <button key={id} role="tab" aria-selected={tab === id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}</button>)}</div>
+    {tab === 'profile' && <BatchProfileReport />}
     {tab === 'compare' && <>
     <div className="admin-comparison-controls"><label>First Batch<select value={firstBatch} onChange={event => { if (event.target.value !== secondBatch) setFirstBatch(event.target.value); }}>{availableBatches.map(year => <option key={year} value={year} disabled={year === secondBatch}>{year}</option>)}</select></label><span className="admin-versus">VS</span><label>Second Batch<select value={secondBatch} onChange={event => { if (event.target.value !== firstBatch) setSecondBatch(event.target.value); }}>{availableBatches.map(year => <option key={year} value={year} disabled={year === firstBatch}>{year}</option>)}</select></label></div>
     <div className="admin-comparison-grid">{[['Student Strength', compareFirst.length, compareSecond.length], ['Average CGPA', mean(compareFirst.map(student => student.cgpa)).toFixed(2), mean(compareSecond.map(student => student.cgpa)).toFixed(2)], ['Attendance', `${mean(compareFirst.map(student => student.attendance)).toFixed(1)}%`, `${mean(compareSecond.map(student => student.attendance)).toFixed(1)}%`], ['Pass Percentage', `${comparePassRate(compareFirst).toFixed(1)}%`, `${comparePassRate(compareSecond).toFixed(1)}%`]].map(([label, left, right]) => <article className="admin-comparison-card" key={String(label)}><span>{label}</span><div><strong>{left}</strong><strong>{right}</strong></div></article>)}</div>
