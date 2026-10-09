@@ -127,7 +127,6 @@ export function AnalyticsPage({ students }: { students: Student[] }) {
   const metricLabels = { strength: 'Student Strength', cgpa: 'Average CGPA', attendance: 'Attendance', pass: 'Pass Percentage', arrears: 'Arrear Percentage', hostel: 'Hostel Residents' };
 
   return <>
-    <div className="admin-page-heading-row"><div><span className="admin-section-label">INSTITUTIONAL INSIGHTS</span><h2>Analytics</h2><p>Understand student demographics and academic patterns.</p></div></div>
     <div className="admin-analytics-tabs" role="tablist" aria-label="Analytics views">{([['profile', 'Batch Profile'], ['compare', 'Compare Two Batches'], ['trend', 'Six-Year Trends']] as [AnalyticsTab, string][]).map(([id, label]) => <button key={id} role="tab" aria-selected={tab === id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}</button>)}</div>
     {tab === 'profile' && <BatchProfileReport />}
     {tab === 'compare' && <>

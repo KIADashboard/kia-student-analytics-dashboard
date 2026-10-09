@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Download, Eye, Search, X } from 'lucide-react';
 import { Student } from '../../types';
+import { AdminHeaderAction } from './AdminHeaderAction';
 import { batchOptions, downloadCsv, studentCsvRow, studentsForBatch } from './adminData';
 import { getStudentProfile } from '../../studentData';
 
@@ -50,7 +51,7 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
 
   return (
     <>
-      <div className="admin-page-heading-row"><div><span className="admin-section-label">STUDENT DIRECTORY</span><h2>Student Profiles</h2><p>Search, filter and access complete student records.</p></div><button className="admin-primary-button" onClick={() => downloadCsv('kia-students.csv', filtered.map(studentCsvRow))}><Download size={14} /> Export Student Data</button></div>
+      <AdminHeaderAction><button className="admin-primary-button" onClick={() => downloadCsv('kia-students.csv', filtered.map(studentCsvRow))}><Download size={14} /> Export Student Data</button></AdminHeaderAction>
       <div className="admin-filter-panel">
         <label className="admin-search-field"><Search size={16} /><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search by name or register number..." /></label>
         <select aria-label="Batch" value={batch} onChange={event => setBatch(event.target.value)}>{batchOptions.map(option => <option key={option} value={option}>{option === 'all' ? 'All Batches' : option}</option>)}</select>

@@ -42,7 +42,7 @@ export const HeroSection: React.FC<{ onNavigateToLogin?: () => void }> = ({ onNa
               onClick={onNavigateToLogin}
               className="flex items-center justify-center gap-3 px-10 py-5 bg-[#FFFDEE] text-[#0C342C] text-xs font-bold tracking-[0.15em] uppercase hover:bg-[#E2FBCE] transition-colors duration-300 rounded-sm w-full sm:w-auto"
             >
-              Explore Analytics
+              Sign In
               <ArrowRight className="w-4 h-4" />
             </button>
             
