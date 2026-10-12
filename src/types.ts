@@ -86,7 +86,7 @@ export interface Student {
   mentorName: string;
 }
 
-export type StudentPortalTab = 'home' | 'profile' | 'academics' | 'achievements' | 'survey';
+export type StudentPortalTab = 'profile' | 'academics';
 
 export type UserRole = 'admin' | 'student';
 

@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect } from 'react';
-import { ArrowRight, Users, User, History } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, LinearScale, Tooltip } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import { Student } from '../../types';
@@ -127,46 +127,26 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
   return (
     <div className="admin-overview-page-wrapper">
       <div className="admin-ov-kpis">
-        <article className="admin-ov-card" style={{ ['--i' as string]: 0, ['--card-color' as string]: deepTeal } as React.CSSProperties}>
-          <div className="admin-ov-card-header">
-            <span className="admin-ov-label">Total Students</span>
-            <div className="admin-ov-icon-box" style={{ background: `${deepTeal}1A`, color: deepTeal }}>
-              <Users size={18} />
-            </div>
-          </div>
+        <article className="admin-ov-card">
+          <span className="admin-ov-label">Total Students</span>
           <strong className="admin-ov-value">{totalStudentsAll.toLocaleString()}</strong>
           <span className="admin-ov-note">Current academic year</span>
         </article>
 
-        <article className="admin-ov-card" style={{ ['--i' as string]: 1, ['--card-color' as string]: teal } as React.CSSProperties}>
-          <div className="admin-ov-card-header">
-            <span className="admin-ov-label">Male Students</span>
-            <div className="admin-ov-icon-box" style={{ background: `${teal}1A`, color: teal }}>
-              <User size={18} />
-            </div>
-          </div>
+        <article className="admin-ov-card">
+          <span className="admin-ov-label">Male Students</span>
           <strong className="admin-ov-value">{maleStudentsAll.toLocaleString()}</strong>
           <span className="admin-ov-note">Male students in current year</span>
         </article>
 
-        <article className="admin-ov-card" style={{ ['--i' as string]: 2, ['--card-color' as string]: orange } as React.CSSProperties}>
-          <div className="admin-ov-card-header">
-            <span className="admin-ov-label">Female Students</span>
-            <div className="admin-ov-icon-box" style={{ background: `${orange}1A`, color: orange }}>
-              <User size={18} />
-            </div>
-          </div>
+        <article className="admin-ov-card">
+          <span className="admin-ov-label">Female Students</span>
           <strong className="admin-ov-value">{femaleStudentsAll.toLocaleString()}</strong>
           <span className="admin-ov-note">Female students in current year</span>
         </article>
 
-        <article className="admin-ov-card" style={{ ['--i' as string]: 3, ['--card-color' as string]: oliveGreen } as React.CSSProperties}>
-          <div className="admin-ov-card-header">
-            <span className="admin-ov-label">Seven-Year Student Strength</span>
-            <div className="admin-ov-icon-box" style={{ background: `${oliveGreen}1A`, color: oliveGreen }}>
-              <History size={18} />
-            </div>
-          </div>
+        <article className="admin-ov-card">
+          <span className="admin-ov-label">Seven-Year Student Strength</span>
           <strong className="admin-ov-value">{past6YearsStudents.toLocaleString()}</strong>
           <span className="admin-ov-note">Total students over 7 years</span>
         </article>

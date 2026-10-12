@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { MOCK_STUDENTS } from '../../data/mockStudents';
 import { AdminSidebar, AdminPage } from './AdminSidebar';
 import { AdminTopbar } from './AdminTopbar';
@@ -11,7 +11,38 @@ import './admin.css';
 
 export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [activePage, setActivePage] = useState<AdminPage>('overview');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarHoverOpen, setSidebarHoverOpen] = useState(false);
+  const hoverCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sidebarVisible = sidebarOpen || sidebarHoverOpen;
+
+  const cancelHoverClose = () => {
+    if (hoverCloseTimeout.current !== null) {
+      clearTimeout(hoverCloseTimeout.current);
+      hoverCloseTimeout.current = null;
+    }
+  };
+  const scheduleHoverClose = (event: React.PointerEvent) => {
+    if (event.pointerType !== 'mouse') return;
+    cancelHoverClose();
+    hoverCloseTimeout.current = setTimeout(() => setSidebarHoverOpen(false), 160);
+  };
+  const openOnHover = (event: React.PointerEvent) => {
+    if (event.pointerType !== 'mouse') return;
+    cancelHoverClose();
+    setSidebarHoverOpen(true);
+  };
+  const closeSidebar = () => {
+    cancelHoverClose();
+    setSidebarOpen(false);
+    setSidebarHoverOpen(false);
+  };
+  const toggleSidebar = () => {
+    cancelHoverClose();
+    setSidebarHoverOpen(false);
+    setSidebarOpen(previous => !previous);
+  };
+
   const navigate = (page: AdminPage) => {
     setActivePage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -25,10 +56,24 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   }[activePage];
 
   return (
-    <div className="kia-admin">
-      <AdminSidebar activePage={activePage} onNavigate={navigate} onLogout={onLogout} mobileOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+    <div className={`kia-admin${sidebarVisible ? ' sidebar-expanded' : ''}`}>
+      <AdminSidebar
+        activePage={activePage}
+        onNavigate={navigate}
+        onLogout={onLogout}
+        mobileOpen={sidebarVisible}
+        onClose={closeSidebar}
+        onPointerEnter={openOnHover}
+        onPointerLeave={scheduleHoverClose}
+      />
       <main className="admin-main-content">
-        <AdminTopbar activePage={activePage} onMenuClick={() => setMobileMenuOpen(true)} />
+        <AdminTopbar
+          activePage={activePage}
+          onMenuClick={toggleSidebar}
+          onMenuPointerEnter={openOnHover}
+          onMenuPointerLeave={scheduleHoverClose}
+          menuOpen={sidebarVisible}
+        />
         <div className="admin-content-area">{pageContent}</div>
       </main>
     </div>

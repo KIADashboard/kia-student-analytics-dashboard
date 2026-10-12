@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { batchProfiles } from './batchProfileData';
-import { BarCard, CutoffCard, DistrictCard, DonutCard, FlowCard, QuotaCutoffCard, TamilMediumCard, palette, percent } from './ProfileCharts';
+import { BarCard, CutoffCard, DistrictCard, DonutCard, FlowCard, QuotaCutoffCard, TamilMediumCard, palette, percent } from './Profilecharts';
 
 function Kpi({ label, value, unit, foot }: { label: string; value: string; unit?: string; foot: string }) {
   return <article className="admin-pf-kpi"><span>{label}</span><strong>{value}{unit && <small>{unit}</small>}</strong><em>{foot}</em></article>;

@@ -2,7 +2,19 @@ import React from 'react';
 import { Bell, Menu } from 'lucide-react';
 import { AdminPage } from './AdminSidebar';
 
-export function AdminTopbar({ activePage, onMenuClick }: { activePage: AdminPage; onMenuClick: () => void }) {
+export function AdminTopbar({
+  activePage,
+  onMenuClick,
+  onMenuPointerEnter,
+  onMenuPointerLeave,
+  menuOpen
+}: {
+  activePage: AdminPage;
+  onMenuClick: () => void;
+  onMenuPointerEnter: (event: React.PointerEvent) => void;
+  onMenuPointerLeave: (event: React.PointerEvent) => void;
+  menuOpen: boolean;
+}) {
   const pageHeadings: Record<AdminPage, { section: string; title: string; description: string }> = {
     overview: { section: '', title: 'Overview', description: 'Student strength and academic insights' },
     students: { section: 'STUDENT DIRECTORY', title: 'Student Profiles', description: 'Search, filter and access complete student records.' },
@@ -14,7 +26,18 @@ export function AdminTopbar({ activePage, onMenuClick }: { activePage: AdminPage
 
   return (
     <header className="admin-topbar">
-      <button className="admin-mobile-menu" onClick={onMenuClick} aria-label="Open administration navigation"><Menu size={20} /></button>
+      <button
+        className="admin-mobile-menu"
+        onClick={onMenuClick}
+        onPointerEnter={onMenuPointerEnter}
+        onPointerLeave={onMenuPointerLeave}
+        aria-label="Toggle navigation menu"
+        aria-expanded={menuOpen}
+        aria-controls="admin-navigation"
+        title="Toggle navigation"
+      >
+        <Menu size={20} />
+      </button>
       <div className="admin-heading">
         <div className="admin-heading-copy">
           {heading.section && <span className="admin-section-label">{heading.section}</span>}
