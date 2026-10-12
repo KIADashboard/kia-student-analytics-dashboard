@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { ArrowRight } from 'lucide-react';
+import React, { useMemo, useEffect } from 'react';
+import { ArrowRight, Users, User, History } from 'lucide-react';
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, LinearScale, Tooltip } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import { Student } from '../../types';
@@ -8,9 +8,12 @@ import { curriculumSemesters } from './courseCurriculum';
 
 ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip);
 
-const green = '#1f5f52';
-const lightGreen = '#a9cabd';
-const amber = '#c28a35';
+const deepTeal = '#0B2F31';
+const teal = '#14736E';
+const oliveGreen = '#5A6B3D';
+const orange = '#F28C18';
+const goldenYellow = '#F6B23D';
+const warmCream = '#F2E9D8';
 const labelFont = '600 12px Inter, system-ui, sans-serif';
 const romanSemesters = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
@@ -75,50 +78,38 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
   const batchLabel = data[0]?.batch ?? String(currentYear);
   const semester = data.reduce((latest, student) => Math.max(latest, student.currentSemester), 1);
 
+  useEffect(() => {
+    document.documentElement.style.setProperty('--admin-bg', warmCream);
+    document.body.classList.add('admin-overview-active');
+    return () => {
+      document.documentElement.style.removeProperty('--admin-bg');
+      document.body.classList.remove('admin-overview-active');
+    };
+  }, []);
+
   // KPI cards
-  const male = data.filter(student => student.gender === 'Male').length;
-  const female = data.filter(student => student.gender === 'Female').length;
-  const dayScholars = data.filter(student => student.residentialType === 'Day Scholar').length;
-  const hostellers = data.length - dayScholars;
+  const totalStudentsAll = data.length;
+  const maleStudentsAll = data.filter(student => student.gender === 'Male').length;
+  const femaleStudentsAll = data.filter(student => student.gender === 'Female').length;
+  const past6YearsStudents = students.filter(student => student.academicYear >= currentYear - 6 && student.academicYear <= currentYear).length;
 
-  // Pass percentage (students with no arrears) and how arrears are spread
-  const withArrears = data.filter(student => student.backlogs > 0);
-  const totalPapers = withArrears.reduce((total, student) => total + student.backlogs, 0);
-  const pass = data.length ? ((data.length - withArrears.length) / data.length) * 100 : 0;
-  const passSplit = [
-    { label: 'No arrears', count: data.length - withArrears.length, color: green },
-    { label: '1 arrear paper', count: withArrears.filter(student => student.backlogs === 1).length, color: '#e6c48f' },
-    { label: '2 arrear papers', count: withArrears.filter(student => student.backlogs === 2).length, color: amber },
-    { label: '3 or more papers', count: withArrears.filter(student => student.backlogs >= 3).length, color: '#8a5a14' }
-  ];
-  const passCenter = {
-    id: 'passCenter',
-    afterDraw(chart: ChartJS) {
-      const { ctx, chartArea } = chart;
-      const x = (chartArea.left + chartArea.right) / 2;
-      const y = (chartArea.top + chartArea.bottom) / 2;
-      ctx.save();
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#1f2926';
-      ctx.font = "600 28px Outfit, Inter, system-ui, sans-serif";
-      ctx.fillText(`${pass.toFixed(1)}%`, x, y + 4);
-      ctx.fillStyle = '#78817d';
-      ctx.font = "500 12px Inter, system-ui, sans-serif";
-      ctx.fillText('passed', x, y + 24);
-      ctx.restore();
-    }
-  };
-
-  // Subjects with most arrears: the subjects this batch has studied so far, with the batch's arrear papers shared across them
-  const topSubjects = useMemo(() => {
-    const studied = new Map<string, { code: string; weight: number }>();
-    curriculumSemesters.filter(item => romanSemesters.slice(0, semester).includes(item.semester)).forEach(item => item.courses.forEach(course => {
-      if (!studied.has(course.title)) studied.set(course.title, { code: course.code, weight: course.activeBacklogs });
+  // Student Enrollment by Academic Year
+  const enrollmentByYear = useMemo(() => {
+    const years = Array.from(new Set(students.map(s => s.academicYear))).sort((a, b) => a - b);
+    return years.map(year => ({
+      year: String(year),
+      count: students.filter(s => s.academicYear === year).length
     }));
-    const titles = [...studied.keys()];
-    const counts = allocate(titles.map(title => studied.get(title)?.weight ?? 0), totalPapers);
-    return titles.map((title, index) => ({ title, code: studied.get(title)?.code ?? '', count: counts[index] })).filter(item => item.count > 0).sort((left, right) => right.count - left.count).slice(0, 5);
-  }, [semester, totalPapers]);
+  }, [students]);
+
+  // Batch-wise Student Distribution
+  const distributionByBatch = useMemo(() => {
+    const batches = Array.from(new Set(students.map(s => s.batch))).sort((a, b) => a.localeCompare(b));
+    return batches.map(batch => ({
+      batch,
+      count: students.filter(s => s.batch === batch).length
+    }));
+  }, [students]);
 
   // CGPA distribution
   const bands = [
@@ -130,75 +121,99 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
   ] as const;
 
   // Students needing attention (current batch only)
+  const withArrears = useMemo(() => data.filter(student => student.backlogs > 0), [data]);
   const attention = useMemo(() => [...withArrears].sort((left, right) => right.backlogs - left.backlogs || left.cgpa - right.cgpa).slice(0, 5), [withArrears]);
 
   return (
-    <>
+    <div className="admin-overview-page-wrapper">
       <div className="admin-ov-kpis">
-        <article className="admin-ov-card" style={{ ['--i' as string]: 0 }}>
-          <span className="admin-ov-label">Total students</span>
-          <strong className="admin-ov-value">{data.length.toLocaleString()}</strong>
-          <span className="admin-ov-sub">Batch {batchLabel}</span>
-          <span className="admin-ov-note">Currently in semester {semester}</span>
+        <article className="admin-ov-card" style={{ ['--i' as string]: 0, ['--card-color' as string]: deepTeal } as React.CSSProperties}>
+          <div className="admin-ov-card-header">
+            <span className="admin-ov-label">Total Students</span>
+            <div className="admin-ov-icon-box" style={{ background: `${deepTeal}1A`, color: deepTeal }}>
+              <Users size={18} />
+            </div>
+          </div>
+          <strong className="admin-ov-value">{totalStudentsAll.toLocaleString()}</strong>
+          <span className="admin-ov-note">Current academic year</span>
         </article>
 
-        <article className="admin-ov-card" style={{ ['--i' as string]: 1 }}>
-          <span className="admin-ov-label">Gender ratio</span>
-          <div className="admin-ov-pair">
-            <div><span>Male</span><strong>{male}</strong></div>
-            <div><span>Female</span><strong>{female}</strong></div>
+        <article className="admin-ov-card" style={{ ['--i' as string]: 1, ['--card-color' as string]: teal } as React.CSSProperties}>
+          <div className="admin-ov-card-header">
+            <span className="admin-ov-label">Male Students</span>
+            <div className="admin-ov-icon-box" style={{ background: `${teal}1A`, color: teal }}>
+              <User size={18} />
+            </div>
           </div>
-          <span className="admin-ov-note">{female > 0 ? `${(male / female).toFixed(2)} male for every 1 female` : 'No female students on record'}</span>
+          <strong className="admin-ov-value">{maleStudentsAll.toLocaleString()}</strong>
+          <span className="admin-ov-note">Male students in current year</span>
         </article>
 
-        <article className="admin-ov-card" style={{ ['--i' as string]: 2 }}>
-          <span className="admin-ov-label">Residence</span>
-          <div className="admin-ov-pair">
-            <div><span>Hostellers</span><strong>{hostellers}</strong></div>
-            <div><span>Day scholars</span><strong>{dayScholars}</strong></div>
+        <article className="admin-ov-card" style={{ ['--i' as string]: 2, ['--card-color' as string]: orange } as React.CSSProperties}>
+          <div className="admin-ov-card-header">
+            <span className="admin-ov-label">Female Students</span>
+            <div className="admin-ov-icon-box" style={{ background: `${orange}1A`, color: orange }}>
+              <User size={18} />
+            </div>
           </div>
-          <span className="admin-ov-note">Hostel and day scholar strength of the batch</span>
+          <strong className="admin-ov-value">{femaleStudentsAll.toLocaleString()}</strong>
+          <span className="admin-ov-note">Female students in current year</span>
+        </article>
+
+        <article className="admin-ov-card" style={{ ['--i' as string]: 3, ['--card-color' as string]: oliveGreen } as React.CSSProperties}>
+          <div className="admin-ov-card-header">
+            <span className="admin-ov-label">Seven-Year Student Strength</span>
+            <div className="admin-ov-icon-box" style={{ background: `${oliveGreen}1A`, color: oliveGreen }}>
+              <History size={18} />
+            </div>
+          </div>
+          <strong className="admin-ov-value">{past6YearsStudents.toLocaleString()}</strong>
+          <span className="admin-ov-note">Total students over 7 years</span>
         </article>
       </div>
 
       <div className="admin-ov-row">
         <section className="admin-panel">
-          <div className="admin-panel-header"><div><h3>Pass Percentage</h3></div></div>
-          <div className="admin-ov-donut">
-            <div className="admin-ov-donut-chart">
-              <Doughnut
-                plugins={[passCenter]}
-                data={{ labels: passSplit.map(item => item.label), datasets: [{ data: passSplit.map(item => item.count), backgroundColor: passSplit.map(item => item.color), borderWidth: 2, borderColor: '#fff' }] }}
-                options={{ responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1f2926', padding: 10, callbacks: { label: item => ` ${item.parsed} students` } } } }}
-              />
-            </div>
-            <ul className="admin-ov-donut-legend">{passSplit.map(item => <li key={item.label}><i style={{ background: item.color }} /><span>{item.label}</span><strong>{item.count}</strong></li>)}</ul>
+          <div className="admin-panel-header"><div><h3>Student Enrollment by Academic Year</h3></div></div>
+          <div className="admin-chart-box large">
+            <Bar
+              plugins={[countLabels]}
+              data={{ labels: enrollmentByYear.map(item => item.year), datasets: [{ label: 'Students', data: enrollmentByYear.map(item => item.count), backgroundColor: teal, borderRadius: 5, maxBarThickness: 40 }] }}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: { top: 24 } },
+                plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1f2926', padding: 10, callbacks: { label: item => ` ${item.parsed.y} students` } } },
+                scales: {
+                  x: { grid: { display: false }, border: { display: false }, ticks: { color: '#78817d', font: { size: 12 } } },
+                  y: { beginAtZero: true, grid: { color: '#edf0ee' }, border: { display: false }, ticks: { precision: 0, color: '#78817d', font: { size: 12 } } }
+                }
+              }}
+            />
           </div>
-          <p className="admin-ov-caption">Students of batch {batchLabel} who have cleared every paper, and how many have arrears.</p>
+          <p className="admin-ov-caption">Enrollment trends across available academic years.</p>
         </section>
 
         <section className="admin-panel">
-          <div className="admin-panel-header"><div><h3>Subjects with Most Arrears</h3></div></div>
+          <div className="admin-panel-header"><div><h3>Batch-wise Student Distribution</h3></div></div>
           <div className="admin-chart-box large">
-            {topSubjects.length === 0 ? <p className="admin-ov-empty">No arrears in this batch.</p> : (
-              <Bar
-                plugins={[barEndLabels]}
-                data={{ labels: topSubjects.map(item => wrapLabel(item.title)), datasets: [{ label: 'Arrear papers', data: topSubjects.map(item => item.count), backgroundColor: amber, borderRadius: 5, maxBarThickness: 24 }] }}
-                options={{
-                  indexAxis: 'y',
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  layout: { padding: { right: 28 } },
-                  plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1f2926', padding: 10, callbacks: { title: items => topSubjects[items[0].dataIndex].title, label: item => ` ${item.parsed.x} arrear papers` } } },
-                  scales: {
-                    x: { beginAtZero: true, grid: { color: '#edf0ee' }, border: { display: false }, ticks: { precision: 0, color: '#78817d', font: { size: 12 } } },
-                    y: { grid: { display: false }, border: { display: false }, ticks: { autoSkip: false, color: '#3d4944', font: { size: 12 } } }
-                  }
-                }}
-              />
-            )}
+            <Bar
+              plugins={[barEndLabels]}
+              data={{ labels: distributionByBatch.map(item => item.batch), datasets: [{ label: 'Students', data: distributionByBatch.map(item => item.count), backgroundColor: oliveGreen, borderRadius: 5, maxBarThickness: 24 }] }}
+              options={{
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: { right: 28 } },
+                plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1f2926', padding: 10, callbacks: { title: items => distributionByBatch[items[0].dataIndex].batch, label: item => ` ${item.parsed.x} students` } } },
+                scales: {
+                  x: { beginAtZero: true, grid: { color: '#edf0ee' }, border: { display: false }, ticks: { precision: 0, color: '#78817d', font: { size: 12 } } },
+                  y: { grid: { display: false }, border: { display: false }, ticks: { autoSkip: false, color: '#3d4944', font: { size: 12 } } }
+                }
+              }}
+            />
           </div>
-          <p className="admin-ov-caption">Arrear papers in the subjects this batch has studied so far.</p>
+          <p className="admin-ov-caption">Comparison of student counts across batches.</p>
         </section>
       </div>
 
@@ -208,7 +223,7 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
           <div className="admin-chart-box">
             <Bar
               plugins={[countLabels]}
-              data={{ labels: bands.map(([label]) => label), datasets: [{ label: 'Students', data: bands.map(([, count]) => count), backgroundColor: lightGreen, borderRadius: 6, maxBarThickness: 54 }] }}
+              data={{ labels: bands.map(([label]) => label), datasets: [{ label: 'Students', data: bands.map(([, count]) => count), backgroundColor: deepTeal, borderRadius: 6, maxBarThickness: 54 }] }}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
@@ -229,6 +244,6 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
           <ul className="admin-ov-list">{attention.length === 0 ? <li className="admin-ov-empty">No students have arrears.</li> : attention.map(student => <li key={student.id}><div><strong>{student.name}</strong><small>{student.rollNo}</small></div><span className="admin-ov-chip warn">{student.backlogs} {student.backlogs === 1 ? 'arrear' : 'arrears'}</span></li>)}</ul>
         </section>
       </div>
-    </>
+    </div>
   );
 }

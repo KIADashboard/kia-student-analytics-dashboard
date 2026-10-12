@@ -4,7 +4,7 @@ import { AdminPage } from './AdminSidebar';
 
 export function AdminTopbar({ activePage, onMenuClick }: { activePage: AdminPage; onMenuClick: () => void }) {
   const pageHeadings: Record<AdminPage, { section: string; title: string; description: string }> = {
-    overview: { section: 'COLLEGE ADMINISTRATION', title: 'College Overview', description: 'Current batch and institution-wide performance.' },
+    overview: { section: '', title: 'Overview', description: 'Student strength and academic insights' },
     students: { section: 'STUDENT DIRECTORY', title: 'Student Profiles', description: 'Search, filter and access complete student records.' },
     academic: { section: 'ACADEMIC PERFORMANCE', title: 'Academic Performance', description: 'Review performance across batches, semesters and subjects.' },
     analytics: { section: 'INSTITUTIONAL INSIGHTS', title: 'Analytics', description: 'Understand student demographics and academic patterns.' },
@@ -17,7 +17,7 @@ export function AdminTopbar({ activePage, onMenuClick }: { activePage: AdminPage
       <button className="admin-mobile-menu" onClick={onMenuClick} aria-label="Open administration navigation"><Menu size={20} /></button>
       <div className="admin-heading">
         <div className="admin-heading-copy">
-          <span className="admin-section-label">{heading.section}</span>
+          {heading.section && <span className="admin-section-label">{heading.section}</span>}
           <h1>{heading.title}</h1>
           <p>{heading.description}</p>
         </div>
