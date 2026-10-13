@@ -167,6 +167,103 @@
 .admin-nav-link:hover { background: #f4f7f5; color: var(--admin-primary); }
 .admin-nav-link.active { background: var(--admin-primary-light); color: var(--admin-primary); font-weight: 600; }
 
+.admin-nav-item-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.admin-nav-item-wrapper.has-submenu .admin-submenu {
+  display: none;
+}
+
+.admin-nav-item-wrapper.has-submenu:hover .admin-submenu,
+.admin-nav-item-wrapper.has-submenu:focus-within .admin-submenu {
+  display: flex;
+}
+
+/* Expanded sidebar: sub-options listed directly down beneath Analytics */
+.kia-admin.sidebar-expanded .admin-submenu {
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0 6px 36px;
+  animation: adminSubmenuSlide .18s ease;
+}
+
+.kia-admin.sidebar-expanded .admin-submenu-link {
+  border: 0;
+  background: transparent;
+  color: #727e78;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-align: left;
+  padding: 7px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s ease;
+  position: relative;
+}
+
+.kia-admin.sidebar-expanded .admin-submenu-link:hover {
+  background: #f4f7f5;
+  color: var(--admin-primary);
+  transform: translateX(2px);
+}
+
+.kia-admin.sidebar-expanded .admin-submenu-link.active {
+  background: var(--admin-primary-light);
+  color: var(--admin-primary);
+  font-weight: 600;
+}
+
+/* Collapsed sidebar: flyout list next to Analytics icon on hover */
+.kia-admin:not(.sidebar-expanded) .admin-nav-item-wrapper.has-submenu:hover .admin-submenu {
+  position: fixed;
+  left: 68px;
+  margin-top: -38px;
+  background: #ffffff;
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 195px;
+  box-shadow: 0 10px 30px rgba(20, 35, 30, 0.12);
+  z-index: 90;
+  animation: adminSubmenuSlide .18s ease;
+}
+
+.kia-admin:not(.sidebar-expanded) .admin-submenu-link {
+  border: 0;
+  background: transparent;
+  color: #55625d;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s ease, color .15s ease;
+}
+
+.kia-admin:not(.sidebar-expanded) .admin-submenu-link:hover {
+  background: #f4f7f5;
+  color: var(--admin-primary);
+}
+
+.kia-admin:not(.sidebar-expanded) .admin-submenu-link.active {
+  background: var(--admin-primary-light);
+  color: var(--admin-primary);
+  font-weight: 600;
+}
+
+@keyframes adminSubmenuSlide {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .admin-nav-symbol {
   width: 24px;
   height: 24px;

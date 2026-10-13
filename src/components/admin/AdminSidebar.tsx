@@ -7,6 +7,13 @@ import { Activity, BookOpenCheck, ChartNoAxesCombined, Gauge, GraduationCap, Set
 const showBrandText = false;
 
 export type AdminPage = 'overview' | 'students' | 'academic' | 'analytics' | 'settings';
+export type AnalyticsSubTab = 'profile' | 'compare' | 'trend';
+
+const analyticsSubTabs: { id: AnalyticsSubTab; label: string }[] = [
+  { id: 'profile', label: 'Batch Profile' },
+  { id: 'compare', label: 'Compare Two Batches' },
+  { id: 'trend', label: 'Six-Year Trends' }
+];
 
 const navigation = [
   { id: 'overview', label: 'Overview', icon: Gauge },
@@ -15,9 +22,21 @@ const navigation = [
   { id: 'analytics', label: 'Analytics', icon: ChartNoAxesCombined }
 ] as const;
 
-export function AdminSidebar({ activePage, onNavigate, onLogout, mobileOpen, onClose, onPointerEnter, onPointerLeave }: {
+export function AdminSidebar({
+  activePage,
+  activeAnalyticsTab = 'profile',
+  onNavigate,
+  onNavigateAnalytics,
+  onLogout,
+  mobileOpen,
+  onClose,
+  onPointerEnter,
+  onPointerLeave
+}: {
   activePage: AdminPage;
+  activeAnalyticsTab?: AnalyticsSubTab;
   onNavigate: (page: AdminPage) => void;
+  onNavigateAnalytics?: (tab: AnalyticsSubTab) => void;
   onLogout: () => void;
   mobileOpen: boolean;
   onClose: () => void;
@@ -26,6 +45,16 @@ export function AdminSidebar({ activePage, onNavigate, onLogout, mobileOpen, onC
 }) {
   const choose = (page: AdminPage) => {
     onNavigate(page);
+    onClose();
+  };
+
+  const chooseAnalyticsTab = (tab: AnalyticsSubTab, event: React.MouseEvent) => {
+    event.stopPropagation();
+    if (onNavigateAnalytics) {
+      onNavigateAnalytics(tab);
+    } else {
+      onNavigate('analytics');
+    }
     onClose();
   };
 
@@ -46,11 +75,39 @@ export function AdminSidebar({ activePage, onNavigate, onLogout, mobileOpen, onC
         </div>
         <div className="admin-sidebar-section-title">MAIN MENU</div>
         <nav className="admin-sidebar-nav" aria-label="Administration pages">
-          {navigation.map(({ id, label, icon: Icon }) => (
-            <button key={id} className={`admin-nav-link${activePage === id ? ' active' : ''}`} onClick={() => choose(id)} title={label}>
-              <span className="admin-nav-symbol"><Icon size={18} strokeWidth={1.8} /></span><span className="admin-nav-label">{label}</span>
-            </button>
-          ))}
+          {navigation.map(({ id, label, icon: Icon }) => {
+            const isAnalytics = id === 'analytics';
+            return (
+              <div
+                key={id}
+                className={`admin-nav-item-wrapper${isAnalytics ? ' has-submenu' : ''}`}
+              >
+                <button
+                  className={`admin-nav-link${activePage === id ? ' active' : ''}`}
+                  onClick={() => choose(id)}
+                  title={label}
+                >
+                  <span className="admin-nav-symbol"><Icon size={18} strokeWidth={1.8} /></span>
+                  <span className="admin-nav-label">{label}</span>
+                </button>
+                {isAnalytics && (
+                  <div className="admin-submenu" role="menu" aria-label="Analytics sub-options">
+                    {analyticsSubTabs.map(sub => (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        role="menuitem"
+                        className={`admin-submenu-link${activePage === 'analytics' && activeAnalyticsTab === sub.id ? ' active' : ''}`}
+                        onClick={e => chooseAnalyticsTab(sub.id, e)}
+                      >
+                        {sub.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </nav>
         <div className="admin-sidebar-section-title system-title">SYSTEM</div>
         <nav className="admin-sidebar-nav" aria-label="System settings">

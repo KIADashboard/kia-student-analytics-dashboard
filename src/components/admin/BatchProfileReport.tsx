@@ -22,9 +22,17 @@ export function BatchProfileReport() {
   return <>
     <div className="admin-analytics-toolbar"><div>
       <span>Batch</span>
-      {years.length > 1
-        ? <select value={year} onChange={event => setYear(event.target.value)} aria-label="Batch profile year">{years.map(option => <option key={option}>{option}</option>)}</select>
-        : <span className="admin-pf-batch-pill">{profile.year} · {profile.total} students</span>}
+      <select
+        value={year}
+        onChange={event => setYear(event.target.value)}
+        aria-label="Batch profile year"
+      >
+        {years.map(option => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
     </div></div>
 
     <div className="admin-pf-kpis">

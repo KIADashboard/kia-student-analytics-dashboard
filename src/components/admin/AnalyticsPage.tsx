@@ -5,7 +5,7 @@ import { batchOptions, chartDataFromCounts, countsFor, mean, residenceLabel, stu
 import { BatchProfileReport } from './BatchProfileReport';
 
 const palette = ['#1f5f52', '#c28a35', '#527aa5', '#75679a', '#b65d5d', '#3c8069', '#8a6b45', '#5c8a99'];
-type AnalyticsTab = 'profile' | 'compare' | 'trend';
+export type AnalyticsTab = 'profile' | 'compare' | 'trend';
 type DistributionDimension = { key: string; label: string; select: (student: Student) => string; chart: 'bar' | 'doughnut'; color: string };
 
 const dimensions: DistributionDimension[] = [
@@ -96,8 +96,13 @@ function ChartPanel({ eyebrow, title, children, size = '' }: { eyebrow: string; 
   return <section className="admin-panel"><div className="admin-panel-header"><div><span className="admin-section-label">{eyebrow}</span><h3>{title}</h3></div></div><div className={`admin-chart-box ${size}`}>{children}</div></section>;
 }
 
-export function AnalyticsPage({ students }: { students: Student[] }) {
-  const [tab, setTab] = useState<AnalyticsTab>('profile');
+export function AnalyticsPage({
+  students,
+  activeTab = 'profile'
+}: {
+  students: Student[];
+  activeTab?: AnalyticsTab;
+}) {
   const [firstBatch, setFirstBatch] = useState('2026');
   const [secondBatch, setSecondBatch] = useState('2025');
   const [metric, setMetric] = useState<'strength' | 'cgpa' | 'attendance' | 'pass' | 'arrears' | 'hostel'>('strength');
@@ -127,15 +132,14 @@ export function AnalyticsPage({ students }: { students: Student[] }) {
   const metricLabels = { strength: 'Student Strength', cgpa: 'Average CGPA', attendance: 'Attendance', pass: 'Pass Percentage', arrears: 'Arrear Percentage', hostel: 'Hostel Residents' };
 
   return <>
-    <div className="admin-analytics-tabs" role="tablist" aria-label="Analytics views">{([['profile', 'Batch Profile'], ['compare', 'Compare Two Batches'], ['trend', 'Six-Year Trends']] as [AnalyticsTab, string][]).map(([id, label]) => <button key={id} role="tab" aria-selected={tab === id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}</button>)}</div>
-    {tab === 'profile' && <BatchProfileReport />}
-    {tab === 'compare' && <>
-    <div className="admin-comparison-controls"><label>First Batch<select value={firstBatch} onChange={event => { if (event.target.value !== secondBatch) setFirstBatch(event.target.value); }}>{availableBatches.map(year => <option key={year} value={year} disabled={year === secondBatch}>{year}</option>)}</select></label><span className="admin-versus">VS</span><label>Second Batch<select value={secondBatch} onChange={event => { if (event.target.value !== firstBatch) setSecondBatch(event.target.value); }}>{availableBatches.map(year => <option key={year} value={year} disabled={year === firstBatch}>{year}</option>)}</select></label></div>
+    {activeTab === 'profile' && <BatchProfileReport />}
+    {activeTab === 'compare' && <>
+    <div className="admin-comparison-controls"><label>First Batch<select value={firstBatch} onChange={event => setFirstBatch(event.target.value)}>{availableBatches.map(year => <option key={year} value={year}>{year}</option>)}</select></label><span className="admin-versus">VS</span><label>Second Batch<select value={secondBatch} onChange={event => setSecondBatch(event.target.value)}>{availableBatches.filter(year => year !== firstBatch).map(year => <option key={year} value={year}>{year}</option>)}</select></label></div>
     <div className="admin-comparison-grid">{[['Student Strength', compareFirst.length, compareSecond.length], ['Average CGPA', mean(compareFirst.map(student => student.cgpa)).toFixed(2), mean(compareSecond.map(student => student.cgpa)).toFixed(2)], ['Attendance', `${mean(compareFirst.map(student => student.attendance)).toFixed(1)}%`, `${mean(compareSecond.map(student => student.attendance)).toFixed(1)}%`], ['Pass Percentage', `${comparePassRate(compareFirst).toFixed(1)}%`, `${comparePassRate(compareSecond).toFixed(1)}%`]].map(([label, left, right]) => <article className="admin-comparison-card" key={String(label)}><span>{label}</span><div><strong>{left}</strong><strong>{right}</strong></div></article>)}</div>
     <div className="admin-section-title-row"><div><span className="admin-section-label">BATCH COMPARISON</span><h3>Academic and Student Profile Comparisons</h3></div></div>
     <div className="admin-analytics-chart-grid">{dimensions.map(dimension => <ChartPanel key={dimension.key} eyebrow="BATCH COMPARISON" title={dimension.label}><ComparisonDistributionChart first={compareFirst} second={compareSecond} dimension={dimension} firstLabel={firstBatch} secondLabel={secondBatch} /></ChartPanel>)}<ChartPanel eyebrow="ADMISSION PERFORMANCE" title="Cut-off Score Comparison"><CutoffComparisonChart first={compareFirst} second={compareSecond} firstLabel={firstBatch} secondLabel={secondBatch} /></ChartPanel><ChartPanel eyebrow="ACADEMIC PERFORMANCE" title="Academic Indicators"><AdminBarChart showLegend data={{ labels: ['Average CGPA (x10)', 'Attendance %', 'Pass %', 'Arrear %'], datasets: [{ label: firstBatch, data: [mean(compareFirst.map(student => student.cgpa)) * 10, mean(compareFirst.map(student => student.attendance)), comparePassRate(compareFirst), compareArrearRate(compareFirst)], backgroundColor: palette[0], borderRadius: 4 }, { label: secondBatch, data: [mean(compareSecond.map(student => student.cgpa)) * 10, mean(compareSecond.map(student => student.attendance)), comparePassRate(compareSecond), compareArrearRate(compareSecond)], backgroundColor: palette[1], borderRadius: 4 }] }} /></ChartPanel></div>
     </>}
-    {tab === 'trend' && <>
+    {activeTab === 'trend' && <>
     <div className="admin-trend-header"><div><span className="admin-section-label">{years[0]} – {years[years.length - 1]}</span><h3>Six-Year Institutional Trend</h3></div><select aria-label="Trend metric" value={metric} onChange={event => setMetric(event.target.value as typeof metric)}><option value="strength">Student Strength</option><option value="cgpa">Average CGPA</option><option value="pass">Pass Percentage</option><option value="attendance">Attendance</option><option value="arrears">Arrear Percentage</option><option value="hostel">Hostel Residents</option></select></div>
     <ChartPanel eyebrow="INSTITUTIONAL TREND" title={metricLabels[metric]} size="huge"><AdminLineChart data={{ labels: years, datasets: [{ label: metricLabels[metric], data: trendMetric, borderColor: palette[0], backgroundColor: `${palette[0]}20`, borderWidth: 2, fill: true, tension: 0.32, pointRadius: 3 }] }} /></ChartPanel>
     <div className="admin-section-title-row"><div><span className="admin-section-label">PROFILE TRENDS</span><h3>Distributions Across Available Batches</h3></div></div>

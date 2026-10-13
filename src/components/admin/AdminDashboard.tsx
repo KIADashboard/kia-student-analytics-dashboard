@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { MOCK_STUDENTS } from '../../data/mockStudents';
-import { AdminSidebar, AdminPage } from './AdminSidebar';
+import { AdminSidebar, AdminPage, AnalyticsSubTab } from './AdminSidebar';
 import { AdminTopbar } from './AdminTopbar';
 import { AcademicPerformancePage } from './AcademicPerformancePage';
 import { AnalyticsPage } from './AnalyticsPage';
@@ -11,6 +11,7 @@ import './admin.css';
 
 export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [activePage, setActivePage] = useState<AdminPage>('overview');
+  const [activeAnalyticsTab, setActiveAnalyticsTab] = useState<AnalyticsSubTab>('profile');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarHoverOpen, setSidebarHoverOpen] = useState(false);
   const hoverCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -47,11 +48,18 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
     setActivePage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const navigateAnalytics = (tab: AnalyticsSubTab) => {
+    setActiveAnalyticsTab(tab);
+    setActivePage('analytics');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const pageContent = {
     overview: <OverviewPage students={MOCK_STUDENTS} onNavigate={navigate} />,
     students: <StudentProfilesPage students={MOCK_STUDENTS} />,
     academic: <AcademicPerformancePage students={MOCK_STUDENTS} />,
-    analytics: <AnalyticsPage students={MOCK_STUDENTS} />,
+    analytics: <AnalyticsPage students={MOCK_STUDENTS} activeTab={activeAnalyticsTab} />,
     settings: <SettingsPage />
   }[activePage];
 
@@ -59,7 +67,9 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
     <div className={`kia-admin${sidebarVisible ? ' sidebar-expanded' : ''}`}>
       <AdminSidebar
         activePage={activePage}
+        activeAnalyticsTab={activeAnalyticsTab}
         onNavigate={navigate}
+        onNavigateAnalytics={navigateAnalytics}
         onLogout={onLogout}
         mobileOpen={sidebarVisible}
         onClose={closeSidebar}
