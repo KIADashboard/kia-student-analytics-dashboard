@@ -10,16 +10,17 @@ export type AdminPage = 'overview' | 'students' | 'academic' | 'analytics' | 'se
 export type AnalyticsSubTab = 'profile' | 'compare' | 'trend';
 
 const analyticsSubTabs: { id: AnalyticsSubTab; label: string }[] = [
-  { id: 'profile', label: 'Batch Profile' },
-  { id: 'compare', label: 'Compare Two Batches' },
-  { id: 'trend', label: 'Six-Year Trends' }
+  { id: 'profile', label: 'Batch' },
+  { id: 'compare', label: 'Compare' },
+  { id: 'trend', label: 'Overall' }
 ];
 
 const navigation = [
   { id: 'overview', label: 'Overview', icon: Gauge },
-  { id: 'students', label: 'Student Profiles', icon: UsersRound },
-  { id: 'academic', label: 'Academic Performance', icon: BookOpenCheck },
-  { id: 'analytics', label: 'Analytics', icon: ChartNoAxesCombined }
+  { id: 'students', label: 'Students', icon: UsersRound },
+  { id: 'academic', label: 'Academics', icon: BookOpenCheck },
+  { id: 'analytics', label: 'Analytics', icon: ChartNoAxesCombined },
+  { id: 'settings', label: 'Settings', icon: Settings }
 ] as const;
 
 export function AdminSidebar({
@@ -108,12 +109,6 @@ export function AdminSidebar({
               </div>
             );
           })}
-        </nav>
-        <div className="admin-sidebar-section-title system-title">SYSTEM</div>
-        <nav className="admin-sidebar-nav" aria-label="System settings">
-          <button className={`admin-nav-link${activePage === 'settings' ? ' active' : ''}`} onClick={() => choose('settings')} title="Settings">
-            <span className="admin-nav-symbol"><Settings size={18} strokeWidth={1.8} /></span><span className="admin-nav-label">Settings</span>
-          </button>
         </nav>
         <button className="admin-sidebar-bottom" onClick={onLogout} title="Sign out of administration">
           <span className="admin-avatar">A</span><span className="admin-info"><strong>Administrator</strong><span>College Office</span></span><span className="admin-more">↗</span>
