@@ -45,12 +45,35 @@ function DistributionChart({ students, dimension }: { students: Student[]; dimen
   return <AdminBarChart horizontal={dimension.key === 'district' || dimension.key === 'quota'} data={{ labels: distribution.labels, datasets: [{ label: 'Students', data: distribution.values, backgroundColor: dimension.color, borderRadius: 4, maxBarThickness: 24 }] }} />;
 }
 
-function ComparisonDistributionChart({ first, second, dimension, firstLabel, secondLabel }: { first: Student[]; second: Student[]; dimension: DistributionDimension; firstLabel: string; secondLabel: string }) {
+// Professional institutional / agricultural color pairings matching executive dashboards:
+// Olive dark greens, warm wheat / ochre, terra cotta / terracotta rose, slate charcoal, muted sage
+const comparisonColorPairs: [string, string][] = [
+  ['#3e4a2e', '#d8bc88'], // Deep Olive & Warm Wheat (Reference primary combo)
+  ['#4a5840', '#cf9b82'], // Moss Forest & Muted Terracotta
+  ['#5a738e', '#d8bc88'], // Slate Blue & Warm Wheat
+  ['#3e4a2e', '#8fa189'], // Deep Olive & Soft Sage
+  ['#734c38', '#d8bc88'], // Warm Umber & Warm Wheat
+  ['#405559', '#cf9b82'], // Slate Teal & Terracotta
+  ['#3e4a2e', '#b8a67c'], // Forest Olive & Sandstone
+  ['#5c6b4e', '#cf9b82'], // Herb Olive & Muted Terracotta
+  ['#50697f', '#d8bc88'], // Slate Steel & Warm Wheat
+  ['#3e4a2e', '#d8bc88'], // Deep Olive & Warm Wheat
+  ['#664639', '#8fa189'], // Earth Cocoa & Soft Sage
+  ['#465842', '#d8bc88'], // Forest Sage & Warm Wheat
+  ['#a0523e', '#e6c89c'], // Terracotta Rust & Pale Ochre
+  ['#3e4a2e', '#cf9b82'], // Deep Olive & Terracotta
+  ['#546574', '#d8bc88'], // Muted Slate & Warm Wheat
+  ['#4a5840', '#b8a67c'], // Moss & Sandstone
+  ['#3e4a2e', '#8fa189'], // Olive & Soft Sage
+  ['#6e5445', '#d8bc88']  // Warm Bark & Warm Wheat
+];
+
+function ComparisonDistributionChart({ first, second, dimension, firstLabel, secondLabel, colorPair = ['#1f5f52', '#c28a35'] }: { first: Student[]; second: Student[]; dimension: DistributionDimension; firstLabel: string; secondLabel: string; colorPair?: [string, string] }) {
   const firstCounts = countsFor(first, dimension.select);
   const secondCounts = countsFor(second, dimension.select);
   const labels = [...new Set([...Object.keys(firstCounts), ...Object.keys(secondCounts)])].sort((left, right) => (firstCounts[right] ?? 0) + (secondCounts[right] ?? 0) - (firstCounts[left] ?? 0) - (secondCounts[left] ?? 0));
   const visibleLabels = dimension.key === 'district' ? labels.slice(0, 8) : labels;
-  return <AdminBarChart horizontal={dimension.key === 'district' || dimension.key === 'quota'} showLegend data={{ labels: visibleLabels, datasets: [{ label: firstLabel, data: visibleLabels.map(label => firstCounts[label] ?? 0), backgroundColor: palette[0], borderRadius: 3 }, { label: secondLabel, data: visibleLabels.map(label => secondCounts[label] ?? 0), backgroundColor: palette[1], borderRadius: 3 }] }} />;
+  return <AdminBarChart horizontal={dimension.key === 'district' || dimension.key === 'quota'} showLegend data={{ labels: visibleLabels, datasets: [{ label: firstLabel, data: visibleLabels.map(label => firstCounts[label] ?? 0), backgroundColor: colorPair[0], borderRadius: 3 }, { label: secondLabel, data: visibleLabels.map(label => secondCounts[label] ?? 0), backgroundColor: colorPair[1], borderRadius: 3 }] }} />;
 }
 
 function TrendDistributionChart({ batches, years, dimension }: { batches: Student[][]; years: string[]; dimension: DistributionDimension }) {
@@ -68,7 +91,7 @@ function CutoffHistogram({ students }: { students: Student[] }) {
   return <AdminBarChart data={{ labels: cutoffBands.map(band => band.label), datasets: [{ label: 'Students', data: cutoffBands.map(band => students.filter(student => student.cutoffScore >= band.min && student.cutoffScore < band.max).length), backgroundColor: palette[5], borderRadius: 4 }] }} />;
 }
 
-function CutoffComparisonChart({ first, second, firstLabel, secondLabel }: { first: Student[]; second: Student[]; firstLabel: string; secondLabel: string }) {
+function CutoffComparisonChart({ first, second, firstLabel, secondLabel, colorPair = ['#d97706', '#fcd34d'] }: { first: Student[]; second: Student[]; firstLabel: string; secondLabel: string; colorPair?: [string, string] }) {
   const stats = (data: Student[]) => ({
     maximum: Math.max(0, ...data.map(student => student.cutoffScore)),
     average: mean(data.map(student => student.cutoffScore)),
@@ -76,7 +99,7 @@ function CutoffComparisonChart({ first, second, firstLabel, secondLabel }: { fir
   });
   const firstStats = stats(first);
   const secondStats = stats(second);
-  return <AdminBarChart showLegend data={{ labels: ['Maximum', 'Average', 'Minimum'], datasets: [{ label: firstLabel, data: [firstStats.maximum, firstStats.average, firstStats.minimum], backgroundColor: palette[0], borderRadius: 3 }, { label: secondLabel, data: [secondStats.maximum, secondStats.average, secondStats.minimum], backgroundColor: palette[1], borderRadius: 3 }] }} />;
+  return <AdminBarChart showLegend data={{ labels: ['Maximum', 'Average', 'Minimum'], datasets: [{ label: firstLabel, data: [firstStats.maximum, firstStats.average, firstStats.minimum], backgroundColor: colorPair[0], borderRadius: 3 }, { label: secondLabel, data: [secondStats.maximum, secondStats.average, secondStats.minimum], backgroundColor: colorPair[1], borderRadius: 3 }] }} />;
 }
 
 function CutoffTrendChart({ batches, years }: { batches: Student[][]; years: string[] }) {
@@ -137,7 +160,7 @@ export function AnalyticsPage({
     <div className="admin-comparison-controls"><label>First Batch<select value={firstBatch} onChange={event => setFirstBatch(event.target.value)}>{availableBatches.map(year => <option key={year} value={year}>{year}</option>)}</select></label><span className="admin-versus">VS</span><label>Second Batch<select value={secondBatch} onChange={event => setSecondBatch(event.target.value)}>{availableBatches.filter(year => year !== firstBatch).map(year => <option key={year} value={year}>{year}</option>)}</select></label></div>
     <div className="admin-comparison-grid">{[['Student Strength', compareFirst.length, compareSecond.length], ['Average CGPA', mean(compareFirst.map(student => student.cgpa)).toFixed(2), mean(compareSecond.map(student => student.cgpa)).toFixed(2)], ['Attendance', `${mean(compareFirst.map(student => student.attendance)).toFixed(1)}%`, `${mean(compareSecond.map(student => student.attendance)).toFixed(1)}%`], ['Pass Percentage', `${comparePassRate(compareFirst).toFixed(1)}%`, `${comparePassRate(compareSecond).toFixed(1)}%`]].map(([label, left, right]) => <article className="admin-comparison-card" key={String(label)}><span>{label}</span><div><strong>{left}</strong><strong>{right}</strong></div></article>)}</div>
     <div className="admin-section-title-row"><div><span className="admin-section-label">BATCH COMPARISON</span><h3>Academic and Student Profile Comparisons</h3></div></div>
-    <div className="admin-analytics-chart-grid">{dimensions.map(dimension => <ChartPanel key={dimension.key} eyebrow="BATCH COMPARISON" title={dimension.label}><ComparisonDistributionChart first={compareFirst} second={compareSecond} dimension={dimension} firstLabel={firstBatch} secondLabel={secondBatch} /></ChartPanel>)}<ChartPanel eyebrow="ADMISSION PERFORMANCE" title="Cut-off Score Comparison"><CutoffComparisonChart first={compareFirst} second={compareSecond} firstLabel={firstBatch} secondLabel={secondBatch} /></ChartPanel><ChartPanel eyebrow="ACADEMIC PERFORMANCE" title="Academic Indicators"><AdminBarChart showLegend data={{ labels: ['Average CGPA (x10)', 'Attendance %', 'Pass %', 'Arrear %'], datasets: [{ label: firstBatch, data: [mean(compareFirst.map(student => student.cgpa)) * 10, mean(compareFirst.map(student => student.attendance)), comparePassRate(compareFirst), compareArrearRate(compareFirst)], backgroundColor: palette[0], borderRadius: 4 }, { label: secondBatch, data: [mean(compareSecond.map(student => student.cgpa)) * 10, mean(compareSecond.map(student => student.attendance)), comparePassRate(compareSecond), compareArrearRate(compareSecond)], backgroundColor: palette[1], borderRadius: 4 }] }} /></ChartPanel></div>
+    <div className="admin-analytics-chart-grid">{dimensions.map((dimension, index) => <ChartPanel key={dimension.key} eyebrow="BATCH COMPARISON" title={dimension.label}><ComparisonDistributionChart first={compareFirst} second={compareSecond} dimension={dimension} firstLabel={firstBatch} secondLabel={secondBatch} colorPair={comparisonColorPairs[index % comparisonColorPairs.length]} /></ChartPanel>)}<ChartPanel eyebrow="ADMISSION PERFORMANCE" title="Cut-off Score Comparison"><CutoffComparisonChart first={compareFirst} second={compareSecond} firstLabel={firstBatch} secondLabel={secondBatch} colorPair={['#3e4a2e', '#d8bc88']} /></ChartPanel><ChartPanel eyebrow="ACADEMIC PERFORMANCE" title="Academic Indicators"><AdminBarChart showLegend data={{ labels: ['Average CGPA (x10)', 'Attendance %', 'Pass %', 'Arrear %'], datasets: [{ label: firstBatch, data: [mean(compareFirst.map(student => student.cgpa)) * 10, mean(compareFirst.map(student => student.attendance)), comparePassRate(compareFirst), compareArrearRate(compareFirst)], backgroundColor: '#5a738e', borderRadius: 4 }, { label: secondBatch, data: [mean(compareSecond.map(student => student.cgpa)) * 10, mean(compareSecond.map(student => student.attendance)), comparePassRate(compareSecond), compareArrearRate(compareSecond)], backgroundColor: '#d8bc88', borderRadius: 4 }] }} /></ChartPanel></div>
     </>}
     {activeTab === 'trend' && <>
     <div className="admin-trend-header"><div><span className="admin-section-label">{years[0]} – {years[years.length - 1]}</span><h3>Six-Year Institutional Trend</h3></div><select aria-label="Trend metric" value={metric} onChange={event => setMetric(event.target.value as typeof metric)}><option value="strength">Student Strength</option><option value="cgpa">Average CGPA</option><option value="pass">Pass Percentage</option><option value="attendance">Attendance</option><option value="arrears">Arrear Percentage</option><option value="hostel">Hostel Residents</option></select></div>
