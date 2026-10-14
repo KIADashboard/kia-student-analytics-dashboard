@@ -1313,6 +1313,431 @@
   background: #f8faf8 !important;
 }
 
+/* Admin-style collapsed rail and hover expansion for the student portal. */
+.student-sidebar {
+  width: 68px;
+  transform: translateX(0);
+  overflow-x: hidden;
+  box-shadow: 2px 0 12px rgba(20, 35, 30, 0.04);
+  transition: width 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.student-sidebar-brand {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 10px;
+  border-bottom: 1px solid #e5e9e6;
+  background: #ffffff;
+  flex: 0 0 auto;
+}
+
+.student-sidebar-mark {
+  display: block;
+  width: 36px;
+  height: 40px;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.student-sidebar-logo {
+  display: none;
+  height: 44px;
+  width: auto;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.student-portal:not(.sidebar-open) .student-sidebar-context,
+.student-portal:not(.sidebar-open) .student-nav-label,
+.student-portal:not(.sidebar-open) .student-sidebar-user,
+.student-portal:not(.sidebar-open) .student-sidebar-logout {
+  display: none;
+}
+
+.student-sidebar nav {
+  padding: 8px;
+}
+
+.student-sidebar nav button {
+  justify-content: center;
+  gap: 0;
+  padding: 8px 0;
+  border-radius: 9px;
+  white-space: nowrap;
+}
+
+.student-sidebar nav button > svg {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+
+.student-portal:not(.sidebar-open) .student-sidebar nav button > span {
+  display: none;
+}
+
+.student-sidebar-footer {
+  justify-content: center;
+  gap: 0;
+  margin: 0;
+  padding: 10px 0;
+  border-top: 1px solid #e5e9e6;
+}
+
+.student-sidebar-footer .mini-avatar {
+  flex: 0 0 auto;
+}
+
+.student-main {
+  width: calc(100% - 68px);
+  margin-left: 68px;
+  transition: margin-left 0.25s ease, width 0.25s ease;
+}
+
+.student-portal.sidebar-open .student-sidebar {
+  width: 264px;
+  transform: translateX(0);
+  box-shadow: 6px 0 24px rgba(20, 35, 30, 0.08);
+}
+
+.student-portal.sidebar-open .student-sidebar-brand {
+  min-height: 68px;
+  justify-content: flex-start;
+  padding: 0 16px 0 20px;
+}
+
+.student-portal.sidebar-open .student-sidebar-mark {
+  display: none;
+}
+
+.student-portal.sidebar-open .student-sidebar-logo {
+  display: block;
+}
+
+.student-portal.sidebar-open .student-sidebar-context {
+  display: flex;
+}
+
+.student-portal.sidebar-open .student-sidebar-user {
+  display: block;
+}
+
+.student-portal.sidebar-open .student-nav-label {
+  display: block;
+}
+
+.student-portal.sidebar-open .student-sidebar nav {
+  padding: 18px 12px;
+}
+
+.student-portal.sidebar-open .student-sidebar nav button {
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 8px 12px;
+}
+
+.student-portal.sidebar-open .student-sidebar nav button > span {
+  display: inline;
+}
+
+.student-portal.sidebar-open .student-sidebar-footer {
+  justify-content: flex-start;
+  gap: 10px;
+  margin: 12px;
+  padding: 14px 10px 8px;
+}
+
+.student-portal.sidebar-open .student-sidebar-logout {
+  display: inline-flex;
+  margin-left: auto;
+}
+
+.student-portal.sidebar-open .student-main {
+  width: calc(100% - 264px);
+  margin-left: 264px;
+}
+
+@media (max-width: 899px) {
+  .student-sidebar {
+    width: 68px;
+    transform: translateX(0);
+    box-shadow: 2px 0 12px rgba(20, 35, 30, 0.04);
+  }
+
+  .student-main,
+  .student-portal.sidebar-open .student-main {
+    width: calc(100% - 68px);
+    margin-left: 68px;
+  }
+
+  .student-header {
+    padding: 0 12px;
+  }
+
+  .header-user {
+    gap: 6px;
+  }
+
+  .student-header .flex.items-center.gap-2\.5 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .student-content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+.student-theme-toggle {
+  width: 37px;
+  height: 37px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.admin-theme-toggle {
+  width: 37px;
+  height: 37px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.admin-theme-toggle:hover {
+  background: var(--admin-primary-light);
+  border-color: var(--admin-primary);
+}
+
+.kia-admin.dark-theme {
+  --admin-bg: #111916;
+  --admin-surface: #1b2420;
+  --admin-surface-soft: #222e29;
+  --admin-primary: #80b9a5;
+  --admin-primary-dark: #5f9b84;
+  --admin-primary-light: #263b33;
+  --admin-text: #e3ebe7;
+  --admin-muted: #a0afa8;
+  --admin-border: #34443c;
+  --admin-success: #80b9a5;
+  color-scheme: dark;
+}
+
+.kia-admin.dark-theme .admin-sidebar,
+.kia-admin.dark-theme .admin-sidebar-bottom,
+.kia-admin.dark-theme .admin-brand,
+.kia-admin.dark-theme .admin-panel,
+.kia-admin.dark-theme .admin-kpi-card,
+.kia-admin.dark-theme .admin-metric-card,
+.kia-admin.dark-theme .admin-performance-card,
+.kia-admin.dark-theme .admin-filter-panel,
+.kia-admin.dark-theme .admin-search-field,
+.kia-admin.dark-theme .admin-student-directory-row,
+.kia-admin.dark-theme .admin-analytics-stat,
+.kia-admin.dark-theme .admin-comparison-controls,
+.kia-admin.dark-theme .admin-comparison-card,
+.kia-admin.dark-theme .admin-course-card,
+.kia-admin.dark-theme .admin-course-modal,
+.kia-admin.dark-theme .admin-report-type,
+.kia-admin.dark-theme .admin-report-builder,
+.kia-admin.dark-theme .admin-student-modal,
+.kia-admin.dark-theme .admin-pf-kpi,
+.kia-admin.dark-theme .admin-profiles-table-card,
+.kia-admin.dark-theme .admin-profiles-table th,
+.kia-admin.dark-theme .admin-ov-card {
+  background-color: var(--admin-surface);
+  color: var(--admin-text);
+}
+
+.kia-admin.dark-theme .admin-brand {
+  background: var(--admin-surface);
+}
+
+.kia-admin.dark-theme .admin-topbar {
+  background: rgba(27, 36, 32, .96);
+}
+
+.kia-admin.dark-theme .admin-data-table th,
+.kia-admin.dark-theme .admin-profiles-table th,
+.kia-admin.dark-theme .admin-district-item,
+.kia-admin.dark-theme .admin-comparison-card strong,
+.kia-admin.dark-theme .admin-reset-button,
+.kia-admin.dark-theme .admin-row-action,
+.kia-admin.dark-theme .admin-analytics-tabs,
+.kia-admin.dark-theme .admin-curriculum-semesters {
+  background-color: var(--admin-surface-soft);
+}
+
+.kia-admin.dark-theme .admin-profiles-row:hover,
+.kia-admin.dark-theme .admin-data-table tbody tr:hover {
+  background-color: #26332d;
+}
+
+.kia-admin.dark-theme .admin-profiles-table td,
+.kia-admin.dark-theme .admin-data-table td,
+.kia-admin.dark-theme .admin-profiles-roll,
+.kia-admin.dark-theme .admin-ov-pair span,
+.kia-admin.dark-theme .admin-ov-donut-legend span,
+.kia-admin.dark-theme .admin-district-item span,
+.kia-admin.dark-theme .admin-subject-row span {
+  color: #c0ccc6;
+}
+
+.kia-admin.dark-theme .admin-content-area h1,
+.kia-admin.dark-theme .admin-content-area h2,
+.kia-admin.dark-theme .admin-content-area h3,
+.kia-admin.dark-theme .admin-content-area h4,
+.kia-admin.dark-theme .admin-content-area strong,
+.kia-admin.dark-theme .admin-heading h1 {
+  color: var(--admin-text);
+}
+
+.kia-admin.dark-theme .admin-heading p,
+.kia-admin.dark-theme .admin-section-label,
+.kia-admin.dark-theme .admin-breadcrumb,
+.kia-admin.dark-theme .admin-breadcrumb strong {
+  color: var(--admin-muted);
+}
+
+.kia-admin.dark-theme .admin-heading h1,
+.kia-admin.dark-theme .admin-panel-header h3 {
+  color: var(--admin-text) !important;
+}
+
+.kia-admin.dark-theme select,
+.kia-admin.dark-theme input:not([type='checkbox']),
+.kia-admin.dark-theme textarea {
+  background-color: #222e29;
+  border-color: var(--admin-border);
+  color: var(--admin-text);
+}
+
+.kia-admin.dark-theme .admin-secondary-button,
+.kia-admin.dark-theme .admin-pf-toggle,
+.kia-admin.dark-theme .admin-analytics-tabs button.active,
+.kia-admin.dark-theme .admin-curriculum-semesters button.active {
+  background-color: var(--admin-surface-soft);
+  color: var(--admin-text);
+  border-color: var(--admin-border);
+}
+
+.student-portal.dark-theme {
+  color-scheme: dark;
+  background-color: #111916 !important;
+  color: #e3ebe7 !important;
+}
+
+.student-portal.dark-theme .student-main {
+  background-color: #111916 !important;
+}
+
+.student-portal.dark-theme .student-sidebar,
+.student-portal.dark-theme .student-sidebar-brand,
+.student-portal.dark-theme .student-sidebar-footer,
+.student-portal.dark-theme .student-header,
+.student-portal.dark-theme .student-content .portal-section,
+.student-portal.dark-theme .student-content .summary-item,
+.student-portal.dark-theme .student-content .portal-status,
+.student-portal.dark-theme .student-content .portal-action,
+.student-portal.dark-theme .student-content .portal-list,
+.student-portal.dark-theme .student-content [class*="bg-white"],
+.student-portal.dark-theme .student-content [class*="bg-[#FFFDEE]"] {
+  background-color: #1b2420 !important;
+  border-color: #34443c !important;
+  color: #e3ebe7 !important;
+}
+
+.student-portal.dark-theme .student-content .portal-hero {
+  background-color: #1b3a30 !important;
+  border-color: #35594b !important;
+}
+
+.student-portal.dark-theme .student-content h1,
+.student-portal.dark-theme .student-content h2,
+.student-portal.dark-theme .student-content h3,
+.student-portal.dark-theme .student-content p,
+.student-portal.dark-theme .student-content strong,
+.student-portal.dark-theme .student-content [class*="text-[#0C342C]"],
+.student-portal.dark-theme .student-content [class*="text-[#06231D]"] {
+  color: #e3ebe7 !important;
+}
+
+.student-portal.dark-theme .student-content .portal-hero h1,
+.student-portal.dark-theme .student-content .portal-hero h2,
+.student-portal.dark-theme .student-content .portal-hero p,
+.student-portal.dark-theme .student-content .portal-hero strong,
+.student-portal.dark-theme .student-content .portal-hero span {
+  color: #ffffff !important;
+}
+
+.student-portal.dark-theme .student-content .portal-label,
+.student-portal.dark-theme .student-content .portal-kicker,
+.student-portal.dark-theme .student-content [class*="text-[#076653]"] {
+  color: #91c6b0 !important;
+}
+
+.student-portal.dark-theme .student-content .portal-badge,
+.student-portal.dark-theme .student-content .portal-choice,
+.student-portal.dark-theme .student-content .portal-input,
+.student-portal.dark-theme .student-content input,
+.student-portal.dark-theme .student-content textarea,
+.student-portal.dark-theme .student-content select {
+  background-color: #222e29 !important;
+  border-color: #40534a !important;
+  color: #e3ebe7 !important;
+}
+
+.student-portal.dark-theme .student-content .portal-hero .portal-verification-card,
+.student-portal.dark-theme .student-content .portal-hero .portal-verification-card span,
+.student-portal.dark-theme .student-content .portal-hero .portal-verification-card strong {
+  background-color: #222e29 !important;
+  color: #e3ebe7 !important;
+}
+
+.student-portal.dark-theme .student-sidebar-context,
+.student-portal.dark-theme .student-nav-label,
+.student-portal.dark-theme .student-sidebar-footer strong,
+.student-portal.dark-theme .student-header p,
+.student-portal.dark-theme .header-user {
+  color: #e3ebe7 !important;
+}
+
+.student-portal.dark-theme .student-sidebar-context,
+.student-portal.dark-theme .student-sidebar nav button {
+  border-color: #34443c !important;
+}
+
+.student-portal.dark-theme .student-sidebar nav button {
+  color: #a0afa8 !important;
+}
+
+.student-portal.dark-theme .student-sidebar nav button:hover,
+.student-portal.dark-theme .student-sidebar nav button.active {
+  background-color: #263b33 !important;
+  color: #b4dfca !important;
+}
+
+.student-portal.dark-theme .student-icon-button {
+  background-color: #222e29 !important;
+  border-color: #34443c !important;
+  color: #e3ebe7 !important;
+}
+
+.student-portal.dark-theme .student-sidebar-footer small,
+.student-portal.dark-theme .student-content small,
+.student-portal.dark-theme .student-content [class*="text-[#06231D]/"] {
+  color: #a0afa8 !important;
+}
+
 
 /* ==========================================================================
    FINAL CONTRAST + BRAND ALIGNMENT FIXES
@@ -1384,112 +1809,4 @@
 
 .student-portal .portal-hero .portal-hero-pill-dot {
   color: transparent !important;
-}
-
-/* ==========================================================================
-   Admin top-left brand: same alignment/lockup proportions as Student Portal.
-   ========================================================================== */
-
-.kia-admin .admin-brand {
-  min-height: 96px;
-  padding: 14px 18px;
-  display: flex;
-  align-items: center;
-  background: var(--admin-primary-dark);
-  border-bottom: 1px solid rgba(255, 253, 238, 0.12);
-}
-
-.kia-admin .admin-brand-lockup-wrap {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-  width: 100%;
-}
-
-.kia-admin .admin-brand-logo-img {
-  width: 44px;
-  height: 44px;
-  flex: 0 0 44px;
-  object-fit: contain;
-  display: block;
-  filter: none;
-}
-
-.kia-admin .admin-brand-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 0;
-}
-
-.kia-admin .admin-brand-lockup {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
-.kia-admin .admin-brand-primary {
-  font-family: 'DM Sans', Inter, system-ui, sans-serif;
-  font-size: 12.5px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: #ffffff !important;
-  text-transform: uppercase;
-  line-height: 1.1;
-}
-
-.kia-admin .admin-brand-rule {
-  width: 100%;
-  max-width: 112px;
-  height: 2px;
-  margin: 3px 0 2px;
-  background: #c8953e !important;
-  border-radius: 1px;
-}
-
-.kia-admin .admin-brand-line2 {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.kia-admin .admin-brand-sub {
-  font-family: 'DM Sans', Inter, system-ui, sans-serif;
-  font-size: 7.5px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  color: #e8f2ef !important;
-  text-transform: uppercase;
-  line-height: 1.1;
-}
-
-.kia-admin .admin-brand-focus {
-  font-family: 'DM Sans', Inter, system-ui, sans-serif;
-  font-size: 9.5px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: #ffffff !important;
-  text-transform: uppercase;
-  line-height: 1.1;
-}
-
-.kia-admin .admin-brand-subtitle {
-  display: none !important;
-}
-
-@media (max-width: 1100px) {
-  .kia-admin .admin-brand {
-    padding: 14px 16px;
-  }
-
-  .kia-admin .admin-brand-lockup-wrap {
-    gap: 10px;
-  }
-
-  .kia-admin .admin-brand-logo-img {
-    width: 42px;
-    height: 42px;
-    flex-basis: 42px;
-  }
 }

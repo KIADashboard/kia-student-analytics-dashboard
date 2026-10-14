@@ -1013,3 +1013,37 @@ body.admin-overview-active .admin-heading h1, body.admin-overview-active .admin-
   color: #27312d;
   background: #ffffff;
 }
+
+.kia-admin.dark-theme .admin-setting-toggle {
+  background: #222e29;
+  border-color: #3b4b43;
+  color: #d3e0da;
+}
+
+.kia-admin.dark-theme .admin-setting-toggle span,
+.kia-admin.dark-theme .admin-setting-status strong {
+  color: #e3ebe7;
+}
+
+.kia-admin.dark-theme .admin-setting-toggle input {
+  accent-color: #80b9a5;
+}
+
+.kia-admin.dark-theme .admin-setting-status {
+  background: #263b33;
+  border-color: #3b594b;
+  color: #e3ebe7;
+}
+
+.kia-admin.dark-theme .admin-setting-status span {
+  color: #a9c3b7;
+}
+
+.kia-admin.dark-theme .admin-setting-heading > span {
+  background: #263b33;
+  color: #91c6b0;
+}
+
+.kia-admin.dark-theme .admin-setting-readonly {
+  border-color: #34443c;
+}

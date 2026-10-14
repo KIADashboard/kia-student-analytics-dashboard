@@ -49,17 +49,6 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
         {/* Subtle Bottom Ambient Gradient for Text Contrast */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
 
-        {/* ── Top-Left Corner: Elevated KIA Logo & Institutional Name ── */}
-        <div className="relative z-10 flex items-center">
-          <div className="inline-flex items-center p-3 sm:px-4 sm:py-3 bg-white/95 backdrop-blur-md rounded-2xl shadow-[0_12px_30px_-6px_rgba(0,0,0,0.3)] border border-white/80">
-            <img
-              src={kiaLogo}
-              alt="Kumaraguru Institute of Agriculture"
-              className="h-10 lg:h-12 w-auto object-contain"
-            />
-          </div>
-        </div>
-
         {/* ── Bottom-Left: Slogan ── */}
         <div className="relative z-10 mt-auto">
           <div className="w-10 h-1 bg-[#c5a059] mb-3 rounded-full shadow-sm" />
@@ -78,18 +67,16 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
       ══════════════════════════════════════════════════════ */}
       <div className="kia-login-right relative flex flex-col justify-center items-center w-full md:w-[46%] lg:w-[42%] h-full bg-white px-8 sm:px-12 lg:px-14 xl:px-16 overflow-hidden">
 
-        {/* Mobile top branding (visible only on small mobile viewports) */}
-        <div className="md:hidden flex items-center justify-center mb-6">
-          <div className="p-3 bg-white rounded-xl shadow-md border border-slate-100">
+        <div className="w-full max-w-sm">
+
+          {/* Institution wordmark */}
+          <div className="flex justify-start mb-8">
             <img
               src={kiaLogo}
               alt="Kumaraguru Institute of Agriculture"
-              className="h-10 w-auto object-contain"
+              className="w-44 max-w-full h-auto object-contain object-left"
             />
           </div>
-        </div>
-
-        <div className="w-full max-w-sm">
 
           {/* Title */}
           <div className="mb-6">

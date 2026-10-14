@@ -7,9 +7,18 @@ import { AnalyticsPage } from './AnalyticsPage';
 import { OverviewPage } from './OverviewPage';
 import { SettingsPage } from './SettingsPage';
 import { StudentProfilesPage } from './StudentProfilesPage';
+import { ThemeMode } from '../../types';
 import './admin.css';
 
-export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
+export function AdminDashboard({
+  onLogout,
+  theme,
+  onToggleTheme
+}: {
+  onLogout: () => void;
+  theme: ThemeMode;
+  onToggleTheme: () => void;
+}) {
   const [activePage, setActivePage] = useState<AdminPage>('overview');
   const [activeAnalyticsTab, setActiveAnalyticsTab] = useState<AnalyticsSubTab>('profile');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -64,7 +73,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   }[activePage];
 
   return (
-    <div className={`kia-admin${sidebarVisible ? ' sidebar-expanded' : ''}`}>
+    <div className={`kia-admin${sidebarVisible ? ' sidebar-expanded' : ''}${theme === 'dark' ? ' dark-theme' : ''}`}>
       <AdminSidebar
         activePage={activePage}
         activeAnalyticsTab={activeAnalyticsTab}
@@ -83,6 +92,8 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
           onMenuPointerEnter={openOnHover}
           onMenuPointerLeave={scheduleHoverClose}
           menuOpen={sidebarVisible}
+          theme={theme}
+          onToggleTheme={onToggleTheme}
         />
         <div className="admin-content-area">{pageContent}</div>
       </main>

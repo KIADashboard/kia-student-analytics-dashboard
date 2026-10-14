@@ -68,7 +68,7 @@ export function AdminSidebar({
         onPointerEnter={onPointerEnter}
         onPointerLeave={onPointerLeave}
       >
-        <div className="admin-brand" style={{ background: '#ffffff' }}>
+        <div className="admin-brand">
           <img className="admin-brand-mark" src={kiaShield} alt="Kumaraguru Institute of Agriculture" />
           <img className="admin-brand-logo" src={kiaLogo} alt="Kumaraguru Institute of Agriculture" />
           {showBrandText && <div><div className="admin-brand-name">KIA</div><div className="admin-brand-subtitle">Student Administration</div></div>}

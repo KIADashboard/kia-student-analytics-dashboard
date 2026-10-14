@@ -1,19 +1,24 @@
 import React from 'react';
-import { Bell } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import { AdminPage } from './AdminSidebar';
+import { ThemeMode } from '../../types';
 
 export function AdminTopbar({
   activePage,
   onMenuClick,
   onMenuPointerEnter,
   onMenuPointerLeave,
-  menuOpen
+  menuOpen,
+  theme,
+  onToggleTheme
 }: {
   activePage: AdminPage;
   onMenuClick?: () => void;
   onMenuPointerEnter?: (event: React.PointerEvent) => void;
   onMenuPointerLeave?: (event: React.PointerEvent) => void;
   menuOpen?: boolean;
+  theme: ThemeMode;
+  onToggleTheme: () => void;
 }) {
   const pageHeadings: Record<AdminPage, { section: string; title: string; description: string }> = {
     overview: { section: '', title: 'Overview', description: 'Student strength and academic insights' },
@@ -36,7 +41,15 @@ export function AdminTopbar({
       </div>
       <div className="admin-topbar-actions">
         <div className="admin-academic-session"><span>Academic Session</span><strong>2026 – 27</strong></div>
-        <button className="admin-notification-button" aria-label="Notifications" title="Notifications"><Bell size={16} /><i /></button>
+        <button
+          className="admin-theme-toggle"
+          onClick={onToggleTheme}
+          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+          aria-pressed={theme === 'dark'}
+          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+        >
+          {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+        </button>
       </div>
     </header>
   );

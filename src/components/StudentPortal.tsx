@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   BarChart3,
-  Bell,
   LogOut,
-  Menu,
+  Moon,
   Pencil,
   Save,
   ShieldCheck,
+  Sun,
   UserRound,
   X
 } from 'lucide-react';
-import { Student, StudentPortalTab, StudentProfile } from '../types';
+import { Student, StudentPortalTab, StudentProfile, ThemeMode } from '../types';
 import kiaLogo from '../assets/kia-logo.png';
+import kiaShield from '../assets/kiwal.png';
 
 interface StudentPortalProps {
   student: Student;
   profile: StudentProfile;
   onLogout: () => void;
+  theme: ThemeMode;
+  onToggleTheme: () => void;
 }
 
 const navItems: { id: StudentPortalTab; label: string; icon: React.ElementType }[] = [
@@ -25,6 +28,107 @@ const navItems: { id: StudentPortalTab; label: string; icon: React.ElementType }
 ];
 
 const DEFAULT_TAB: StudentPortalTab = 'profile';
+
+type EditableProfileData = {
+  studentName: string;
+  studentId: string;
+  registrationNumber: string;
+  dateOfBirth: string;
+  gender: string;
+  bloodGroup: string;
+  nationality: string;
+  religion: string;
+  community: string;
+  caste: string;
+  motherTongue: string;
+  residentialStatus: string;
+  studentStatus: string;
+  batch: string;
+  academicYear: string;
+  admissionType: string;
+  admissionQuota: string;
+  firstGraduate: string;
+  department: string;
+  phone: string;
+  email: string;
+  whatsapp: string;
+  address: string;
+  guardianName: string;
+  guardianPhone: string;
+  fatherQualification: string;
+  fatherOccupation: string;
+  motherName: string;
+  annualIncome: string;
+  boardOfStudy: string;
+  mediumOfStudy: string;
+  schoolType: string;
+  familyBackground: string;
+  agriculturalLandAvailability: string;
+  areaOfResidence: string;
+};
+
+const createEditableProfileData = (student: Student, profile: StudentProfile): EditableProfileData => ({
+  studentName: student.name,
+  studentId: student.id,
+  registrationNumber: profile.registrationNumber,
+  dateOfBirth: student.dob,
+  gender: student.gender,
+  bloodGroup: student.bloodGroup,
+  nationality: profile.nationality,
+  religion: profile.religion,
+  community: profile.community,
+  caste: profile.caste,
+  motherTongue: profile.motherTongue,
+  residentialStatus: student.residentialType,
+  studentStatus: student.status,
+  batch: student.batch,
+  academicYear: String(student.academicYear),
+  admissionType: profile.admissionType,
+  admissionQuota: profile.admissionQuota,
+  firstGraduate: profile.firstGraduate,
+  department: student.department,
+  phone: student.phone,
+  email: student.email,
+  whatsapp: profile.whatsappNumber || student.phone,
+  address: profile.communicationAddress,
+  guardianName: student.guardianName,
+  guardianPhone: student.guardianPhone,
+  fatherQualification: profile.fatherQualification,
+  fatherOccupation: profile.fatherOccupation,
+  motherName: profile.motherName,
+  annualIncome: student.annualIncome,
+  boardOfStudy: profile.boardOfStudy,
+  mediumOfStudy: profile.mediumOfStudy,
+  schoolType: student.schoolType,
+  familyBackground: profile.familyBackground,
+  agriculturalLandAvailability: profile.agriculturalLandAvailability,
+  areaOfResidence: profile.areaOfResidence
+});
+
+const isEditableProfileData = (value: unknown, initialData: EditableProfileData): value is EditableProfileData => (
+  typeof value === 'object'
+  && value !== null
+  && Object.keys(initialData).every(key => typeof (value as Record<string, unknown>)[key] === 'string')
+);
+
+const loadEditableProfileData = (student: Student, profile: StudentProfile): EditableProfileData => {
+  const initialData = createEditableProfileData(student, profile);
+  try {
+    const savedData = window.localStorage.getItem(`kia-student-profile:${student.id}`);
+    if (!savedData) return initialData;
+
+    const parsedData: unknown = JSON.parse(savedData);
+    if (!isEditableProfileData(parsedData, initialData)) {
+      console.error(`Saved student profile data for ${student.id} has an invalid format.`);
+      return initialData;
+    }
+
+    return parsedData;
+  } catch (error) {
+    console.error(`Could not load saved student profile data for ${student.id}.`, error);
+    return initialData;
+  }
+};
 
 const parseTabFromUrl = (): StudentPortalTab => {
   if (typeof window === 'undefined') return DEFAULT_TAB;
@@ -99,16 +203,41 @@ const Field = ({
   </div>
 );
 
-export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, onLogout }) => {
+export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, onLogout, theme, onToggleTheme }) => {
   const [activeTab, setActiveTab] = useState<StudentPortalTab>(() => parseTabFromUrl());
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarHoverOpen, setSidebarHoverOpen] = useState(false);
+  const hoverCloseTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [contact, setContact] = useState({
-    phone: student.phone,
-    email: student.email,
-    address: profile.communicationAddress,
-    whatsapp: profile.whatsappNumber || student.phone
-  });
+  const [profileData, setProfileData] = useState(() => loadEditableProfileData(student, profile));
+  const [draftProfile, setDraftProfile] = useState(() => loadEditableProfileData(student, profile));
+  const [profileSaveError, setProfileSaveError] = useState('');
+
+  useEffect(() => () => {
+    if (hoverCloseTimeout.current !== null) {
+      clearTimeout(hoverCloseTimeout.current);
+    }
+  }, []);
+
+  const cancelHoverClose = () => {
+    if (hoverCloseTimeout.current !== null) {
+      clearTimeout(hoverCloseTimeout.current);
+      hoverCloseTimeout.current = null;
+    }
+  };
+  const openSidebarOnHover = (event: React.PointerEvent<HTMLElement>) => {
+    if (event.pointerType !== 'mouse') return;
+    cancelHoverClose();
+    setSidebarHoverOpen(true);
+  };
+  const scheduleSidebarHoverClose = (event: React.PointerEvent<HTMLElement>) => {
+    if (event.pointerType !== 'mouse') return;
+    cancelHoverClose();
+    hoverCloseTimeout.current = setTimeout(() => setSidebarHoverOpen(false), 160);
+  };
+  const closeSidebar = () => {
+    cancelHoverClose();
+    setSidebarHoverOpen(false);
+  };
 
   // URL handling & protection: prevent access to removed pages if manually entered in URL
   useEffect(() => {
@@ -139,9 +268,36 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
 
   const go = (tab: StudentPortalTab) => {
     setActiveTab(tab);
-    setSidebarOpen(false);
+    closeSidebar();
     window.history.replaceState(null, '', `#${tab}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const beginEditing = () => {
+    setDraftProfile(profileData);
+    setProfileSaveError('');
+    setIsEditing(true);
+  };
+  const cancelEditing = () => {
+    setDraftProfile(profileData);
+    setProfileSaveError('');
+    setIsEditing(false);
+  };
+  const saveProfile = () => {
+    try {
+      window.localStorage.setItem(`kia-student-profile:${student.id}`, JSON.stringify(draftProfile));
+    } catch (error) {
+      console.error(`Could not save student profile data for ${student.id}.`, error);
+      setProfileSaveError('Your changes could not be saved in this browser. Please try again.');
+      return;
+    }
+
+    setProfileData(draftProfile);
+    setProfileSaveError('');
+    setIsEditing(false);
+  };
+  const updateDraft = (field: keyof EditableProfileData, value: string) => {
+    setDraftProfile(current => ({ ...current, [field]: value }));
   };
 
   const title = navItems.find(item => item.id === activeTab)?.label || 'My Profile';
@@ -209,10 +365,10 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
         action={
           <button
             className="portal-primary"
-            onClick={() => setIsEditing(!isEditing)}
+            onClick={isEditing ? cancelEditing : beginEditing}
           >
             {isEditing ? <X className="w-4 h-4" /> : <Pencil className="w-4 h-4" />}
-            {isEditing ? 'Cancel Edit' : 'Edit Contact Info'}
+            {isEditing ? 'Cancel Editing' : 'Edit Profile'}
           </button>
         }
       />
@@ -221,53 +377,92 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
         <div className="portal-notice">
           <ShieldCheck className="w-5 h-5 text-[#076653] shrink-0 mt-0.5" />
           <span>
-            Only contact details can be modified directly. Official academic and admission records are managed by the Dean's Office.
+            Profile details can be edited for this session. Changes are not submitted to the college record system.
           </span>
         </div>
       )}
 
+      {profileSaveError && (
+        <div className="portal-notice" role="alert">
+          <ShieldCheck className="w-5 h-5 shrink-0 mt-0.5" />
+          <span>{profileSaveError}</span>
+        </div>
+      )}
+
       <Section title="Personal Information">
-        <InfoGrid fields={[
-          ["Student Name", student.name],
-          ["Student ID", student.id],
-          ["Registration Number", profile.registrationNumber],
-          ["Date of Birth", student.dob],
-          ["Gender", student.gender],
-          ["Blood Group", student.bloodGroup],
-          ["Nationality", profile.nationality],
-          ["Religion", profile.religion],
-          ["Community", profile.community],
-          ["Caste", profile.caste],
-          ["Mother Tongue", profile.motherTongue],
-          ["Residential Status", student.residentialType]
-        ]} />
+        {isEditing ? (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <Field label="Student Name" value={draftProfile.studentName} onChange={v => updateDraft('studentName', v)} />
+            <Field label="Student ID" value={draftProfile.studentId} onChange={v => updateDraft('studentId', v)} />
+            <Field label="Registration Number" value={draftProfile.registrationNumber} onChange={v => updateDraft('registrationNumber', v)} />
+            <Field label="Date of Birth" value={draftProfile.dateOfBirth} onChange={v => updateDraft('dateOfBirth', v)} />
+            <Field label="Gender" value={draftProfile.gender} onChange={v => updateDraft('gender', v)} />
+            <Field label="Blood Group" value={draftProfile.bloodGroup} onChange={v => updateDraft('bloodGroup', v)} />
+            <Field label="Nationality" value={draftProfile.nationality} onChange={v => updateDraft('nationality', v)} />
+            <Field label="Religion" value={draftProfile.religion} onChange={v => updateDraft('religion', v)} />
+            <Field label="Community" value={draftProfile.community} onChange={v => updateDraft('community', v)} />
+            <Field label="Caste" value={draftProfile.caste} onChange={v => updateDraft('caste', v)} />
+            <Field label="Mother Tongue" value={draftProfile.motherTongue} onChange={v => updateDraft('motherTongue', v)} />
+            <Field label="Residential Status" value={draftProfile.residentialStatus} onChange={v => updateDraft('residentialStatus', v)} />
+          </div>
+        ) : (
+          <InfoGrid fields={[
+            ["Student Name", profileData.studentName],
+            ["Student ID", profileData.studentId],
+            ["Registration Number", profileData.registrationNumber],
+            ["Date of Birth", profileData.dateOfBirth],
+            ["Gender", profileData.gender],
+            ["Blood Group", profileData.bloodGroup],
+            ["Nationality", profileData.nationality],
+            ["Religion", profileData.religion],
+            ["Community", profileData.community],
+            ["Caste", profileData.caste],
+            ["Mother Tongue", profileData.motherTongue],
+            ["Residential Status", profileData.residentialStatus]
+          ]} />
+        )}
       </Section>
 
       <Section title="Academic & Institutional Status">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="p-4 bg-[#FFFDEE]/60 border border-[#0C342C]/10 rounded-xl">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#076653] block">Status</span>
-            <span className="portal-badge green mt-2">Active Student</span>
+        {isEditing ? (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <Field label="Status" value={draftProfile.studentStatus} onChange={v => updateDraft('studentStatus', v)} />
+            <Field label="Residential Type" value={draftProfile.residentialStatus} onChange={v => updateDraft('residentialStatus', v)} />
+            <Field label="Batch Year" value={draftProfile.batch} onChange={v => updateDraft('batch', v)} />
+            <Field label="Academic Year" value={draftProfile.academicYear} onChange={v => updateDraft('academicYear', v)} />
+            <Field label="Admission Type" value={draftProfile.admissionType} onChange={v => updateDraft('admissionType', v)} />
+            <Field label="Admission Quota" value={draftProfile.admissionQuota} onChange={v => updateDraft('admissionQuota', v)} />
+            <Field label="First Graduate Status" value={draftProfile.firstGraduate} onChange={v => updateDraft('firstGraduate', v)} />
+            <Field label="Department" value={draftProfile.department} onChange={v => updateDraft('department', v)} />
           </div>
-          <div className="p-4 bg-[#FFFDEE]/60 border border-[#0C342C]/10 rounded-xl">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#076653] block">Residential Type</span>
-            <span className="portal-badge mt-2 font-semibold text-[#0C342C]">{student.residentialType}</span>
-          </div>
-          <div className="p-4 bg-[#FFFDEE]/60 border border-[#0C342C]/10 rounded-xl">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#076653] block">Batch Year</span>
-            <span className="font-serif text-lg font-bold text-[#0C342C] mt-1 block">{student.batch}</span>
-          </div>
-          <div className="p-4 bg-[#FFFDEE]/60 border border-[#0C342C]/10 rounded-xl">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#076653] block">Academic Year</span>
-            <span className="font-serif text-lg font-bold text-[#0C342C] mt-1 block">{student.academicYear}</span>
-          </div>
-        </div>
-        <InfoGrid fields={[
-          ["Admission Type", profile.admissionType],
-          ["Admission Quota", profile.admissionQuota],
-          ["First Graduate Status", profile.firstGraduate],
-          ["Department", student.department]
-        ]} />
+        ) : (
+          <>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <div className="p-4 bg-[#FFFDEE]/60 border border-[#0C342C]/10 rounded-xl">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#076653] block">Status</span>
+                <span className="portal-badge green mt-2">{profileData.studentStatus}</span>
+              </div>
+              <div className="p-4 bg-[#FFFDEE]/60 border border-[#0C342C]/10 rounded-xl">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#076653] block">Residential Type</span>
+                <span className="portal-badge mt-2 font-semibold text-[#0C342C]">{profileData.residentialStatus}</span>
+              </div>
+              <div className="p-4 bg-[#FFFDEE]/60 border border-[#0C342C]/10 rounded-xl">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#076653] block">Batch Year</span>
+                <span className="font-serif text-lg font-bold text-[#0C342C] mt-1 block">{profileData.batch}</span>
+              </div>
+              <div className="p-4 bg-[#FFFDEE]/60 border border-[#0C342C]/10 rounded-xl">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#076653] block">Academic Year</span>
+                <span className="font-serif text-lg font-bold text-[#0C342C] mt-1 block">{profileData.academicYear}</span>
+              </div>
+            </div>
+            <InfoGrid fields={[
+              ["Admission Type", profileData.admissionType],
+              ["Admission Quota", profileData.admissionQuota],
+              ["First Graduate Status", profileData.firstGraduate],
+              ["Department", profileData.department]
+            ]} />
+          </>
+        )}
       </Section>
 
       <Section title="Contact Information">
@@ -276,62 +471,77 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
             <>
               <Field
                 label="Mobile Number"
-                value={contact.phone}
-                onChange={v => setContact({ ...contact, phone: v })}
+                value={draftProfile.phone}
+                onChange={v => updateDraft('phone', v)}
               />
               <Field
                 label="WhatsApp Number"
-                value={contact.whatsapp}
-                onChange={v => setContact({ ...contact, whatsapp: v })}
+                value={draftProfile.whatsapp}
+                onChange={v => updateDraft('whatsapp', v)}
               />
               <Field
                 label="Email Address"
-                value={contact.email}
-                onChange={v => setContact({ ...contact, email: v })}
+                value={draftProfile.email}
+                onChange={v => updateDraft('email', v)}
               />
               <Field
                 label="Address for Communication"
-                value={contact.address}
-                onChange={v => setContact({ ...contact, address: v })}
+                value={draftProfile.address}
+                onChange={v => updateDraft('address', v)}
                 multiline
               />
             </>
           ) : (
             <>
-              <Field label="Mobile Number" value={contact.phone} badge="neutral" />
-              <Field label="WhatsApp Number" value={contact.whatsapp} badge="neutral" />
-              <Field label="Official Email" value={contact.email} badge="neutral" />
-              <Field label="Address for Communication" value={contact.address} />
+              <Field label="Mobile Number" value={profileData.phone} badge="neutral" />
+              <Field label="WhatsApp Number" value={profileData.whatsapp} badge="neutral" />
+              <Field label="Official Email" value={profileData.email} badge="neutral" />
+              <Field label="Address for Communication" value={profileData.address} />
             </>
           )}
         </div>
-        {isEditing && (
-          <button
-            className="portal-primary mt-6"
-            onClick={() => setIsEditing(false)}
-          >
-            <Save className="w-4 h-4" />
-            Save Changes
-          </button>
-        )}
       </Section>
 
       <Section title="Family & Background Information">
-        <InfoGrid fields={[
-          ["Father / Guardian", student.guardianName],
-          ["Father's Contact", student.guardianPhone],
-          ["Father's Qualification", profile.fatherQualification],
-          ["Father's Occupation", profile.fatherOccupation],
-          ["Mother's Name", profile.motherName],
-          ["Annual Family Income", student.annualIncome],
-          ["Board of Study", profile.boardOfStudy],
-          ["Medium of Study", profile.mediumOfStudy],
-          ["School Type", student.schoolType],
-          ["Family Background", profile.familyBackground],
-          ["Agricultural Land Availability", profile.agriculturalLandAvailability],
-          ["Area of Residence", profile.areaOfResidence]
-        ]} />
+        {isEditing ? (
+          <div className="grid sm:grid-cols-2 gap-5">
+            <Field label="Father / Guardian" value={draftProfile.guardianName} onChange={v => updateDraft('guardianName', v)} />
+            <Field label="Father's Contact" value={draftProfile.guardianPhone} onChange={v => updateDraft('guardianPhone', v)} />
+            <Field label="Father's Qualification" value={draftProfile.fatherQualification} onChange={v => updateDraft('fatherQualification', v)} />
+            <Field label="Father's Occupation" value={draftProfile.fatherOccupation} onChange={v => updateDraft('fatherOccupation', v)} />
+            <Field label="Mother's Name" value={draftProfile.motherName} onChange={v => updateDraft('motherName', v)} />
+            <Field label="Annual Family Income" value={draftProfile.annualIncome} onChange={v => updateDraft('annualIncome', v)} />
+            <Field label="Board of Study" value={draftProfile.boardOfStudy} onChange={v => updateDraft('boardOfStudy', v)} />
+            <Field label="Medium of Study" value={draftProfile.mediumOfStudy} onChange={v => updateDraft('mediumOfStudy', v)} />
+            <Field label="School Type" value={draftProfile.schoolType} onChange={v => updateDraft('schoolType', v)} />
+            <Field label="Family Background" value={draftProfile.familyBackground} onChange={v => updateDraft('familyBackground', v)} />
+            <Field label="Agricultural Land Availability" value={draftProfile.agriculturalLandAvailability} onChange={v => updateDraft('agriculturalLandAvailability', v)} />
+            <Field label="Area of Residence" value={draftProfile.areaOfResidence} onChange={v => updateDraft('areaOfResidence', v)} />
+          </div>
+        ) : (
+          <InfoGrid fields={[
+            ["Father / Guardian", profileData.guardianName],
+            ["Father's Contact", profileData.guardianPhone],
+            ["Father's Qualification", profileData.fatherQualification],
+            ["Father's Occupation", profileData.fatherOccupation],
+            ["Mother's Name", profileData.motherName],
+            ["Annual Family Income", profileData.annualIncome],
+            ["Board of Study", profileData.boardOfStudy],
+            ["Medium of Study", profileData.mediumOfStudy],
+            ["School Type", profileData.schoolType],
+            ["Family Background", profileData.familyBackground],
+            ["Agricultural Land Availability", profileData.agriculturalLandAvailability],
+            ["Area of Residence", profileData.areaOfResidence]
+          ]} />
+        )}
       </Section>
+
+      {isEditing && (
+        <button className="portal-primary" onClick={saveProfile}>
+          <Save className="w-4 h-4" />
+          Save Changes
+        </button>
+      )}
 
       <p className="text-xs text-[#06231D]/50 italic">
         Restricted banking, Aadhaar, and identity verification credentials are protected and handled securely via institutional compliance.
@@ -340,36 +550,18 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
   );
 
   return (
-    <div className={`student-portal min-h-screen ${sidebarOpen ? 'sidebar-open' : ''}`}>
-      {/* Mobile/Tablet Drawer Backdrop */}
-      {sidebarOpen && (
-        <button
-          className="student-drawer-backdrop"
-          aria-label="Close navigation"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
+    <div className={`student-portal min-h-screen ${sidebarHoverOpen ? 'sidebar-open' : ''}${theme === 'dark' ? ' dark-theme' : ''}`}>
       {/* Sidebar Navigation */}
-      <aside className={`student-sidebar ${sidebarOpen ? 'open' : ''}`}>
+      <aside
+        id="student-navigation"
+        className={`student-sidebar ${sidebarHoverOpen ? 'open' : ''}`}
+        onPointerEnter={openSidebarOnHover}
+        onPointerLeave={scheduleSidebarHoverClose}
+      >
         {/* Brand Header with Official KIA Logo */}
-        <div className="p-4 border-b border-white/10 bg-white flex items-center justify-between">
-          <img src={kiaLogo} alt="Kumaraguru Institute of Agriculture" className="h-9 w-auto object-contain" />
-          <button
-            className="icon-button mobile-close text-slate-600 hover:text-slate-900"
-            onClick={() => setSidebarOpen(false)}
-            aria-label="Close navigation"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Sidebar Context */}
-        <div className="student-sidebar-context">
-          <span className="text-white/70">Student Workspace</span>
-          <span className="px-2 py-0.5 rounded-full bg-[#E2FBCE]/15 text-[#E2FBCE] text-[9px] font-bold border border-[#E2FBCE]/25">
-            TNAU AFFILIATED
-          </span>
+        <div className="student-sidebar-brand">
+          <img src={kiaShield} alt="Kumaraguru Institute of Agriculture" className="student-sidebar-mark" />
+          <img src={kiaLogo} alt="Kumaraguru Institute of Agriculture" className="student-sidebar-logo" />
         </div>
 
         {/* Navigation Items */}
@@ -382,6 +574,8 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
                 key={item.id}
                 className={activeTab === item.id ? 'active' : ''}
                 onClick={() => go(item.id)}
+                title={item.label}
+                aria-current={activeTab === item.id ? 'page' : undefined}
               >
                 <Icon className="w-4 h-4" />
                 <span>{item.label}</span>
@@ -395,14 +589,15 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
           <div className="mini-avatar">
             {student.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
           </div>
-          <div className="min-w-0 flex-1">
+          <div className="student-sidebar-user min-w-0 flex-1">
             <strong>{student.name}</strong>
             <small>{student.id} · {student.rollNo}</small>
           </div>
           <button
             title="Log out"
-            className="icon-button"
+            className="icon-button student-sidebar-logout"
             onClick={onLogout}
+            aria-label="Log out"
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -413,15 +608,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
       <div className="student-main">
         {/* Sticky Header Top Bar */}
         <header className="student-header">
-          <div className="flex items-center gap-3">
-            <button
-              className="icon-button mobile-menu"
-              onClick={() => setSidebarOpen(prev => !prev)}
-              aria-label="Toggle navigation menu"
-              title="Toggle navigation"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
+          <div className="flex items-center">
             <div>
               <div className="flex items-center gap-2">
                 <span className="portal-kicker">KIA Student Portal</span>
@@ -437,10 +624,15 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
               Sakthi Nagar Campus
             </div>
 
-            {/* Notification Button */}
-            <button className="student-icon-button" title="Notifications">
-              <Bell className="w-4 h-4" />
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#076653] ring-2 ring-white"></span>
+            {/* Theme Toggle */}
+            <button
+              className="student-icon-button theme-toggle-button"
+              onClick={onToggleTheme}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+              aria-pressed={theme === 'dark'}
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
 
             {/* User Badge */}

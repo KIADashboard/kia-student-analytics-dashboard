@@ -1,5 +1,7 @@
 export type Gender = 'Male' | 'Female' | 'Other';
 
+export type ThemeMode = 'light' | 'dark';
+
 export type Category = 'General' | 'OBC/BC' | 'MBC' | 'SC/ST' | 'Management/NRI';
 
 export type SchoolType = 'Government' | 'Govt-Aided' | 'Private Matric' | 'CBSE/ICSE';
@@ -169,5 +171,4 @@ export interface StudentDocument {
   uploadedAt: string;
   status: 'Verified' | 'Pending review';
 }
-
 
