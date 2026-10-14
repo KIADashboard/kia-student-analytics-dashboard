@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronRight as ChevronRightIcon, Download, Search, X } from 'lucide-react';
 import { Student } from '../../types';
 import { AdminHeaderAction } from './AdminHeaderAction';
@@ -18,6 +18,15 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [pdfExportError, setPdfExportError] = useState('');
+
+  useEffect(() => {
+    if (!selectedStudent) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [selectedStudent]);
 
   const filtered = useMemo(() => {
     const search = query.trim().toLowerCase();
@@ -263,14 +272,6 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
                 <div>
                   <span>CGPA</span>
                   <strong>{selectedStudent.cgpa.toFixed(2)}</strong>
-                </div>
-                <div>
-                  <span>Attendance</span>
-                  <strong>{selectedStudent.attendance.toFixed(1)}%</strong>
-                </div>
-                <div>
-                  <span>Cut-off</span>
-                  <strong>{selectedStudent.cutoffScore.toFixed(1)}</strong>
                 </div>
                 <div>
                   <span>Arrears</span>

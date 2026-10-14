@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { BookOpen, FileUp, Search, Users, X } from 'lucide-react';
+import { BookOpen, Download, FileUp, Search, Trash2, Users, X } from 'lucide-react';
 import { Student } from '../../types';
 import { AdminBarChart, AdminLineChart } from './AdminChart';
 import { AdminHeaderAction } from './AdminHeaderAction';
 import { batchOptions, mean, studentsForBatch } from './adminData';
 import { CurriculumCourse, curriculumSemesters } from './courseCurriculum';
-import { getCourseSyllabus, listCourseSyllabi, saveCourseSyllabus } from './courseSyllabusStorage';
+import { deleteCourseSyllabus, getCourseSyllabus, listCourseSyllabi, saveCourseSyllabus } from './courseSyllabusStorage';
 
 const chartPalette = ['#1f5f52', '#c28a35', '#527aa5', '#75679a', '#b65d5d'];
 const courseKey = (course: CurriculumCourse) => `${course.semester}:${course.code}:${course.title}`;
@@ -54,6 +54,15 @@ export function AcademicPerformancePage({ students }: { students: Student[] }) {
       });
     return () => { active = false; };
   }, []);
+
+  useEffect(() => {
+    if (!selectedCourse && !selectedArrearCourse) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [selectedCourse, selectedArrearCourse]);
 
   useEffect(() => {
     if (!selectedCourse) {
@@ -123,6 +132,23 @@ export function AcademicPerformancePage({ students }: { students: Student[] }) {
     }
   };
 
+  const handleRemoveSyllabus = async (course: CurriculumCourse) => {
+    const key = courseKey(course);
+    try {
+      await deleteCourseSyllabus(key);
+      setSyllabusFiles(previous => {
+        const next = { ...previous };
+        delete next[key];
+        return next;
+      });
+      setLoadedSyllabus(null);
+      setSyllabusUrl('');
+      setSyllabusRevision(revision => revision + 1);
+    } catch (error) {
+      setSyllabusErrors(previous => ({ ...previous, [key]: errorMessage(error) }));
+    }
+  };
+
   const semesterRows = Array.from({ length: 8 }, (_, index) => {
     const values = data.flatMap(student => student.semesterGrades.filter(grade => grade.semester === `Sem ${index + 1}`).map(grade => grade.gpa));
     return { label: `Sem ${index + 1}`, average: mean(values), count: values.length };
@@ -151,15 +177,17 @@ export function AcademicPerformancePage({ students }: { students: Student[] }) {
         const arrearStudents = arrearStudentsForCourse(course);
         return <article className="admin-course-card" key={key}>
           <button type="button" className="admin-course-card-main" onClick={() => setSelectedCourse(course)}>
-            <span className="admin-course-card-top"><strong>{course.code}</strong><span>{course.credits} Credits</span></span>
+            <span className="admin-course-card-top"><strong>{course.code}</strong></span>
             <strong className="admin-course-title">{course.title}</strong>
-            <span className="admin-course-card-bottom"><span>Pass Rate: <strong>{course.passRate}%</strong></span><span>Dept: <strong>{course.department}</strong></span></span>
           </button>
           <div className="admin-course-card-actions">
             <span className="admin-course-arrear-count">{arrearStudents.length} students with arrears</span>
             <button type="button" className="admin-course-action" onClick={() => setSelectedArrearCourse(course)} aria-label={`View ${arrearStudents.length} students with arrears in ${course.title}`}><Users size={14} /> View students</button>
-            <button type="button" className="admin-course-action" onClick={() => startSyllabusUpload(course)}><FileUp size={14} /> {syllabusFiles[key] ? 'Replace syllabus' : 'Upload syllabus'}</button>
-            {syllabusFiles[key] && <button type="button" className="admin-course-action" onClick={() => setSelectedCourse(course)}>View syllabus</button>}
+            {syllabusFiles[key] ? (
+              <button type="button" className="admin-course-action" onClick={() => setSelectedCourse(course)}><BookOpen size={14} /> View syllabus</button>
+            ) : (
+              <button type="button" className="admin-course-action" onClick={() => startSyllabusUpload(course)}><FileUp size={14} /> Upload syllabus</button>
+            )}
           </div>
           {syllabusErrors[key] && <p className="admin-course-inline-error" role="alert">{syllabusErrors[key]}</p>}
         </article>;
@@ -167,7 +195,7 @@ export function AcademicPerformancePage({ students }: { students: Student[] }) {
       {filteredSemesterCourses.length === 0 && <div className="admin-empty-state">{semesterCourses.length ? 'No subjects match your search.' : 'No subjects are listed for this semester.'}</div>}</div>
       <input ref={syllabusInputRef} className="admin-visually-hidden" type="file" accept="application/pdf,.pdf" onChange={handleSyllabusUpload} aria-label="Upload subject syllabus PDF" />
     </section>
-    {selectedCourse && <div className="admin-modal-overlay" role="presentation" onClick={event => { if (event.target === event.currentTarget) setSelectedCourse(null); }}><section className="admin-course-modal" role="dialog" aria-modal="true" aria-label={`${selectedCourse.title} course details`}><button className="admin-modal-close" onClick={() => setSelectedCourse(null)} aria-label="Close course details"><X size={18} /></button><span className="admin-section-label">COURSE DETAILS · SEMESTER {selectedCourse.semester}</span><h2>{selectedCourse.title}</h2><p className="admin-course-modal-code">{selectedCourse.code}</p><div className="admin-course-detail-grid"><div><span>Department</span><strong>{selectedCourse.department}</strong></div><div><span>Credit Load</span><strong>{selectedCourse.credits}</strong></div><div><span>Pass Rate</span><strong>{selectedCourse.passRate}%</strong></div><div><span>Average Grade Point</span><strong>{selectedCourse.averageGradePoint}</strong></div></div><section className="admin-course-syllabus"><div className="admin-course-syllabus-heading"><h3><BookOpen size={16} /> Subject Syllabus</h3><button type="button" className="admin-secondary-button" onClick={() => startSyllabusUpload(selectedCourse)}><FileUp size={14} /> {syllabusFiles[courseKey(selectedCourse)] ? 'Replace PDF' : 'Upload PDF'}</button></div>{syllabusLoading ? <p className="admin-course-syllabus-empty">Loading syllabus...</p> : loadedSyllabus && syllabusUrl ? <><p className="admin-course-syllabus-file">{loadedSyllabus.fileName}</p><iframe className="admin-course-syllabus-viewer" src={syllabusUrl} title={`${selectedCourse.title} syllabus`} /></> : <p className="admin-course-syllabus-empty">No syllabus has been uploaded for this subject.</p>}{syllabusErrors[courseKey(selectedCourse)] && <p className="admin-course-inline-error" role="alert">{syllabusErrors[courseKey(selectedCourse)]}</p>}</section></section></div>}
+    {selectedCourse && <div className="admin-modal-overlay" role="presentation" onClick={event => { if (event.target === event.currentTarget) setSelectedCourse(null); }}><section className="admin-course-modal" role="dialog" aria-modal="true" aria-label={`${selectedCourse.title} course details`}><button className="admin-modal-close" onClick={() => setSelectedCourse(null)} aria-label="Close course details"><X size={18} /></button><span className="admin-section-label">SEMESTER {selectedCourse.semester}</span><h2>{selectedCourse.title}</h2><p className="admin-course-modal-code">{selectedCourse.code}</p><div className="admin-course-detail-grid"><div><span>Department</span><strong>{selectedCourse.department}</strong></div><div><span>Credit Load</span><strong>{selectedCourse.credits}</strong></div><div><span>Pass Rate</span><strong>{selectedCourse.passRate}%</strong></div><div><span>Average Grade Point</span><strong>{selectedCourse.averageGradePoint}</strong></div></div><section className="admin-course-syllabus"><div className="admin-course-syllabus-heading"><h3><BookOpen size={16} /> Subject Syllabus</h3>{loadedSyllabus && syllabusUrl ? <div className="admin-course-syllabus-actions"><a className="admin-secondary-button" href={syllabusUrl} download={loadedSyllabus.fileName} role="button"><Download size={14} /> Download PDF</a><button type="button" className="admin-danger-button" onClick={() => handleRemoveSyllabus(selectedCourse)} title="Remove uploaded syllabus"><Trash2 size={14} /> Remove PDF</button></div> : <button type="button" className="admin-secondary-button" onClick={() => startSyllabusUpload(selectedCourse)}><FileUp size={14} /> Upload PDF</button>}</div>{syllabusLoading ? <p className="admin-course-syllabus-empty">Loading syllabus...</p> : loadedSyllabus && syllabusUrl ? <><p className="admin-course-syllabus-file">{loadedSyllabus.fileName}</p><iframe className="admin-course-syllabus-viewer" src={syllabusUrl} title={`${selectedCourse.title} syllabus`} /></> : <p className="admin-course-syllabus-empty">No syllabus has been uploaded for this subject.</p>}{syllabusErrors[courseKey(selectedCourse)] && <p className="admin-course-inline-error" role="alert">{syllabusErrors[courseKey(selectedCourse)]}</p>}</section></section></div>}
     {selectedArrearCourse && <div className="admin-modal-overlay" role="presentation" onClick={event => { if (event.target === event.currentTarget) setSelectedArrearCourse(null); }}><section className="admin-course-modal" role="dialog" aria-modal="true" aria-label={`Students with arrears in ${selectedArrearCourse.title}`}><button className="admin-modal-close" onClick={() => setSelectedArrearCourse(null)} aria-label="Close arrear student list"><X size={18} /></button><span className="admin-section-label">SUBJECT ARREARS · SEMESTER {selectedArrearCourse.semester}</span><h2>{selectedArrearCourse.title}</h2><p className="admin-course-modal-code">{arrearStudentsForCourse(selectedArrearCourse).length} students with arrears</p><div className="admin-course-arrear-list">{arrearStudentsForCourse(selectedArrearCourse).map(student => <article key={student.id}><div><strong>{student.name}</strong><span>{student.rollNo}</span></div><span>Batch {student.academicYear}</span></article>)}{arrearStudentsForCourse(selectedArrearCourse).length === 0 && <p className="admin-course-syllabus-empty">No matching student subject records currently show an arrear in this subject.</p>}</div></section></div>}
   </>;
 }

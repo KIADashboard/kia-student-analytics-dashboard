@@ -65,3 +65,16 @@ export async function listCourseSyllabi() {
     request.onerror = () => reject(request.error ?? new Error('Could not load saved syllabus files.'));
   });
 }
+
+export async function deleteCourseSyllabus(courseKey: string) {
+  const database = await openDatabase();
+
+  return new Promise<void>((resolve, reject) => {
+    const transaction = database.transaction('syllabi', 'readwrite');
+    transaction.objectStore('syllabi').delete(courseKey);
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error ?? new Error('Could not remove the syllabus.'));
+    transaction.onabort = () => reject(transaction.error ?? new Error('Syllabus removal was interrupted.'));
+  });
+}
+

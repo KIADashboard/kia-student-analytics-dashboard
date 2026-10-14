@@ -1,7 +1,7 @@
 import React from 'react';
 import kiaLogo from '../../assets/kia-logo.png';
 import kiaShield from '../../assets/kiwal.png';
-import { Activity, BookOpenCheck, ChartNoAxesCombined, Gauge, GraduationCap, Settings, UsersRound, X } from 'lucide-react';
+import { Activity, BookOpenCheck, ChartNoAxesCombined, Gauge, GraduationCap, LogOut, Settings, UsersRound } from 'lucide-react';
 
 // Set to true to show the text "KIA / Student Administration" next to the logo.
 const showBrandText = false;
@@ -72,7 +72,6 @@ export function AdminSidebar({
           <img className="admin-brand-mark" src={kiaShield} alt="Kumaraguru Institute of Agriculture" />
           <img className="admin-brand-logo" src={kiaLogo} alt="Kumaraguru Institute of Agriculture" />
           {showBrandText && <div><div className="admin-brand-name">KIA</div><div className="admin-brand-subtitle">Student Administration</div></div>}
-          <button className="admin-sidebar-close" onClick={onClose} aria-label="Close navigation" title="Close"><X size={18} /></button>
         </div>
         <div className="admin-sidebar-section-title">MAIN MENU</div>
         <nav className="admin-sidebar-nav" aria-label="Administration pages">
@@ -111,7 +110,7 @@ export function AdminSidebar({
           })}
         </nav>
         <button className="admin-sidebar-bottom" onClick={onLogout} title="Sign out of administration">
-          <span className="admin-avatar">A</span><span className="admin-info"><strong>Administrator</strong><span>College Office</span></span><span className="admin-more">↗</span>
+          <span className="admin-avatar">A</span><span className="admin-info"><strong>Administrator</strong><span>College Office</span></span><span className="admin-more"><LogOut size={16} strokeWidth={1.8} /></span>
         </button>
       </aside>
     </>

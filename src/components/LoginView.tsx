@@ -67,16 +67,16 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
       ══════════════════════════════════════════════════════ */}
       <div className="kia-login-right relative flex flex-col justify-center items-center w-full md:w-[46%] lg:w-[42%] h-full bg-white px-8 sm:px-12 lg:px-14 xl:px-16 overflow-hidden">
 
-        <div className="w-full max-w-sm">
+        {/* Institution wordmark placed near the picture border without touching it */}
+        <div className="md:absolute md:top-4 lg:top-5 md:left-6 lg:left-8 mb-6 md:mb-0 w-full max-w-sm md:max-w-none">
+          <img
+            src={kiaLogo}
+            alt="Kumaraguru Institute of Agriculture"
+            className="w-44 max-w-full h-auto object-contain object-left"
+          />
+        </div>
 
-          {/* Institution wordmark */}
-          <div className="flex justify-start mb-8">
-            <img
-              src={kiaLogo}
-              alt="Kumaraguru Institute of Agriculture"
-              className="w-44 max-w-full h-auto object-contain object-left"
-            />
-          </div>
+        <div className="w-full max-w-sm md:pt-28 lg:pt-32">
 
           {/* Title */}
           <div className="mb-6">
