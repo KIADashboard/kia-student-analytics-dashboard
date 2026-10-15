@@ -183,7 +183,7 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
               {displayedStudents.length === 0 && (
                 <tr>
                   <td colSpan={4} className="admin-empty-state">
-                    No students match these filters.
+                    {students.length === 0 ? 'No student records available.' : 'No students match these filters.'}
                   </td>
                 </tr>
               )}
@@ -368,4 +368,3 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
     </>
   );
 }
-

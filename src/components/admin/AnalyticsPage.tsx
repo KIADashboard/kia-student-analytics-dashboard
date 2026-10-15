@@ -154,6 +154,10 @@ export function AnalyticsPage({
   const compareArrearRate = (data: Student[]) => data.filter(student => student.backlogs > 0).length / Math.max(1, data.length) * 100;
   const metricLabels = { strength: 'Student Strength', cgpa: 'Average CGPA', attendance: 'Attendance', pass: 'Pass Percentage', arrears: 'Arrear Percentage', hostel: 'Hostel Residents' };
 
+  if (students.length === 0 && activeTab !== 'profile') {
+    return <div className="admin-empty-state">No student records available.</div>;
+  }
+
   return <>
     {activeTab === 'profile' && <BatchProfileReport />}
     {activeTab === 'compare' && <>

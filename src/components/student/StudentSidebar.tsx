@@ -14,7 +14,7 @@ interface StudentSidebarProps {
   navItems: NavItem[];
   activeTab: StudentPortalTab;
   onNavigate: (tab: StudentPortalTab) => void;
-  student: Student;
+  student?: Student | null;
   onLogout: () => void;
   isOpen: boolean;
   onPointerEnter: (event: React.PointerEvent<HTMLElement>) => void;
@@ -67,11 +67,11 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
       {/* Sidebar Footer */}
       <div className="student-sidebar-footer">
         <div className="mini-avatar">
-          {student.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+          {student ? student.name.split(' ').map(n => n[0]).join('').slice(0, 2) : '—'}
         </div>
         <div className="student-sidebar-user min-w-0 flex-1">
-          <strong>{student.name}</strong>
-          <small>{student.id} · {student.rollNo}</small>
+          <strong>{student?.name ?? 'Student record unavailable'}</strong>
+          {student && <small>{student.id} · {student.rollNo}</small>}
         </div>
         <button
           title="Log out"

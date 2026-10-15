@@ -60,7 +60,7 @@ export const createEditableProfileData = (student: Student, profile: StudentProf
   department: student.department,
   phone: student.phone,
   email: student.email,
-  whatsapp: profile.whatsappNumber || student.phone,
+  whatsapp: profile.whatsappNumber,
   address: profile.communicationAddress,
   guardianName: student.guardianName,
   guardianPhone: student.guardianPhone,

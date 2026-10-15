@@ -2,10 +2,10 @@ import React from 'react';
 
 export const InstitutionHighlights: React.FC = () => {
   const highlights = [
-    { label: 'Established', value: '2014' },
-    { label: 'Campus Area', value: '131', suffix: 'Acres' },
-    { label: 'Faculty & Scientists', value: '30+' },
-    { label: 'Laboratories', value: '18' },
+    { label: 'Established' },
+    { label: 'Campus Area' },
+    { label: 'Faculty & Scientists' },
+    { label: 'Laboratories' },
   ];
 
   return (
@@ -41,12 +41,7 @@ export const InstitutionHighlights: React.FC = () => {
                 }`}
               >
                 <div className="text-5xl lg:text-6xl font-serif text-[#0C342C] tracking-tight">
-                  {highlight.value}
-                  {highlight.suffix && (
-                    <span className="text-xl lg:text-2xl font-light text-[#06231D]/50 ml-2">
-                      {highlight.suffix}
-                    </span>
-                  )}
+                  —
                 </div>
                 <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#076653]">
                   {highlight.label}

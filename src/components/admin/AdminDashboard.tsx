@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { MOCK_STUDENTS } from '../../data/mockStudents';
+import { Student } from '../../types';
 import { AdminSidebar, AdminPage, AnalyticsSubTab } from './AdminSidebar';
 import { AdminTopbar } from './AdminTopbar';
 import { AcademicPerformancePage } from './AcademicPerformancePage';
@@ -12,10 +12,12 @@ import './admin.css';
 
 export function AdminDashboard({
   onLogout,
+  students,
   theme,
   onToggleTheme
 }: {
   onLogout: () => void;
+  students: Student[];
   theme: ThemeMode;
   onToggleTheme: () => void;
 }) {
@@ -65,10 +67,10 @@ export function AdminDashboard({
   };
 
   const pageContent = {
-    overview: <OverviewPage students={MOCK_STUDENTS} onNavigate={navigate} />,
-    students: <StudentProfilesPage students={MOCK_STUDENTS} />,
-    academic: <AcademicPerformancePage students={MOCK_STUDENTS} />,
-    analytics: <AnalyticsPage students={MOCK_STUDENTS} activeTab={activeAnalyticsTab} />,
+    overview: <OverviewPage students={students} onNavigate={navigate} />,
+    students: <StudentProfilesPage students={students} />,
+    academic: <AcademicPerformancePage students={students} />,
+    analytics: <AnalyticsPage students={students} activeTab={activeAnalyticsTab} />,
     settings: <SettingsPage />
   }[activePage];
 

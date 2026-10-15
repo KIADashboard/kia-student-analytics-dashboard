@@ -5,10 +5,11 @@ import { StudentSidebar } from './student/StudentSidebar';
 import { StudentHeader } from './student/StudentHeader';
 import { StudentProfilePage } from './student/StudentProfilePage';
 import { StudentAcademicsPage } from './student/StudentAcademicsPage';
+import { PageIntro, Section } from './student/StudentPortalComponents';
 
 interface StudentPortalProps {
-  student: Student;
-  profile: StudentProfile;
+  student?: Student | null;
+  profile?: StudentProfile | null;
   onLogout: () => void;
   theme: ThemeMode;
   onToggleTheme: () => void;
@@ -130,7 +131,6 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
         {/* Sticky Header Top Bar */}
         <StudentHeader
           title={title}
-          student={student}
           theme={theme}
           onToggleTheme={onToggleTheme}
           onLogout={onLogout}
@@ -138,8 +138,23 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ student, profile, 
 
         {/* Dynamic Content */}
         <main className="student-content">
-          {activeTab === 'profile' && <StudentProfilePage student={student} profile={profile} />}
-          {activeTab === 'academics' && <StudentAcademicsPage student={student} profile={profile} />}
+          {student && profile ? (
+            <>
+              {activeTab === 'profile' && <StudentProfilePage student={student} profile={profile} />}
+              {activeTab === 'academics' && <StudentAcademicsPage student={student} profile={profile} />}
+            </>
+          ) : (
+            <div className="space-y-6">
+              <PageIntro
+                kicker={activeTab === 'profile' ? 'Personal Record' : 'Academic Record'}
+                title={title}
+                copy="Student records are not currently available."
+              />
+              <Section title="Student Record">
+                <p className="text-sm text-[#06231D]/70">No student record is available.</p>
+              </Section>
+            </div>
+          )}
         </main>
       </div>
     </div>

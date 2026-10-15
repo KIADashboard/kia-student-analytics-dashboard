@@ -4,9 +4,6 @@ export interface CurriculumCourse {
   title: string;
   credits: string;
   department: string;
-  passRate: number;
-  averageGradePoint: string;
-  activeBacklogs: number;
 }
 
 const courseRows: [string, string, string, string, string][] = [
@@ -114,15 +111,11 @@ const semesterOrder = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
 export const curriculumSemesters = semesterOrder.map(semester => ({
   semester,
-  courses: courseRows.filter(([courseSemester]) => courseSemester === semester).map(([, code, title, credits, department], index) => ({
+  courses: courseRows.filter(([courseSemester]) => courseSemester === semester).map(([, code, title, credits, department]) => ({
     semester,
     code,
     title,
     credits,
-    department,
-    passRate: 78 + ((index * 7 + semesterOrder.indexOf(semester) * 3) % 20),
-    averageGradePoint: (7.2 + ((index * 3 + semesterOrder.indexOf(semester)) % 19) / 10).toFixed(1),
-    activeBacklogs: 2 + ((index * 5 + semesterOrder.indexOf(semester) * 2) % 36)
+    department
   }))
 }));
-

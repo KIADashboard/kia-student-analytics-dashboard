@@ -123,32 +123,33 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
   // Students needing attention (current batch only)
   const withArrears = useMemo(() => data.filter(student => student.backlogs > 0), [data]);
   const attention = useMemo(() => [...withArrears].sort((left, right) => right.backlogs - left.backlogs || left.cgpa - right.cgpa).slice(0, 5), [withArrears]);
+  const hasStudentData = students.length > 0;
 
   return (
     <div className="admin-overview-page-wrapper">
       <div className="admin-ov-kpis">
         <article className="admin-ov-card">
           <span className="admin-ov-label">Total Students</span>
-          <strong className="admin-ov-value">{totalStudentsAll.toLocaleString()}</strong>
-          <span className="admin-ov-note">Current academic year</span>
+          <strong className="admin-ov-value">{hasStudentData ? totalStudentsAll.toLocaleString() : '—'}</strong>
+          <span className="admin-ov-note">{hasStudentData ? 'Current academic year' : 'No student records available'}</span>
         </article>
 
         <article className="admin-ov-card">
           <span className="admin-ov-label">Male Students</span>
-          <strong className="admin-ov-value">{maleStudentsAll.toLocaleString()}</strong>
-          <span className="admin-ov-note">Male students in current year</span>
+          <strong className="admin-ov-value">{hasStudentData ? maleStudentsAll.toLocaleString() : '—'}</strong>
+          <span className="admin-ov-note">{hasStudentData ? 'Male students in current year' : 'No student records available'}</span>
         </article>
 
         <article className="admin-ov-card">
           <span className="admin-ov-label">Female Students</span>
-          <strong className="admin-ov-value">{femaleStudentsAll.toLocaleString()}</strong>
-          <span className="admin-ov-note">Female students in current year</span>
+          <strong className="admin-ov-value">{hasStudentData ? femaleStudentsAll.toLocaleString() : '—'}</strong>
+          <span className="admin-ov-note">{hasStudentData ? 'Female students in current year' : 'No student records available'}</span>
         </article>
 
         <article className="admin-ov-card">
           <span className="admin-ov-label">Seven-Year Student Strength</span>
-          <strong className="admin-ov-value">{past6YearsStudents.toLocaleString()}</strong>
-          <span className="admin-ov-note">Total students over 7 years</span>
+          <strong className="admin-ov-value">{hasStudentData ? past6YearsStudents.toLocaleString() : '—'}</strong>
+          <span className="admin-ov-note">{hasStudentData ? 'Total students over 7 years' : 'No student records available'}</span>
         </article>
       </div>
 
@@ -156,6 +157,7 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
         <section className="admin-panel">
           <div className="admin-panel-header"><div><h3>Student Enrollment by Academic Year</h3></div></div>
           <div className="admin-chart-box large">
+            {!hasStudentData ? <div className="admin-empty-state">No student data available.</div> :
             <Bar
               plugins={[countLabels]}
               data={{ labels: enrollmentByYear.map(item => item.year), datasets: [{ label: 'Students', data: enrollmentByYear.map(item => item.count), backgroundColor: teal, borderRadius: 5, maxBarThickness: 40 }] }}
@@ -169,7 +171,7 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
                   y: { beginAtZero: true, grid: { color: '#edf0ee' }, border: { display: false }, ticks: { precision: 0, color: '#78817d', font: { size: 12 } } }
                 }
               }}
-            />
+            />}
           </div>
           <p className="admin-ov-caption">Enrollment trends across available academic years.</p>
         </section>
@@ -177,6 +179,7 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
         <section className="admin-panel">
           <div className="admin-panel-header"><div><h3>Batch-wise Student Distribution</h3></div></div>
           <div className="admin-chart-box large">
+            {!hasStudentData ? <div className="admin-empty-state">No student data available.</div> :
             <Bar
               plugins={[barEndLabels]}
               data={{ labels: distributionByBatch.map(item => item.batch), datasets: [{ label: 'Students', data: distributionByBatch.map(item => item.count), backgroundColor: oliveGreen, borderRadius: 5, maxBarThickness: 24 }] }}
@@ -191,7 +194,7 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
                   y: { grid: { display: false }, border: { display: false }, ticks: { autoSkip: false, color: '#3d4944', font: { size: 12 } } }
                 }
               }}
-            />
+            />}
           </div>
           <p className="admin-ov-caption">Comparison of student counts across batches.</p>
         </section>
@@ -201,6 +204,7 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
         <section className="admin-panel">
           <div className="admin-panel-header"><div><h3>CGPA Distribution</h3></div></div>
           <div className="admin-chart-box">
+            {!hasStudentData ? <div className="admin-empty-state">No student data available.</div> :
             <Bar
               plugins={[countLabels]}
               data={{ labels: bands.map(([label]) => label), datasets: [{ label: 'Students', data: bands.map(([, count]) => count), backgroundColor: deepTeal, borderRadius: 6, maxBarThickness: 54 }] }}
@@ -214,14 +218,14 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
                   y: { beginAtZero: true, grid: { color: '#edf0ee' }, border: { display: false }, ticks: { precision: 0, color: '#78817d', font: { size: 12 } } }
                 }
               }}
-            />
+            />}
           </div>
           <p className="admin-ov-caption">Number of students in each CGPA band.</p>
         </section>
 
         <section className="admin-panel">
           <div className="admin-panel-header"><div><h3>Students Needing Attention</h3></div><button className="admin-text-button" onClick={() => onNavigate('students')}>View all <ArrowRight size={13} /></button></div>
-          <ul className="admin-ov-list">{attention.length === 0 ? <li className="admin-ov-empty">No students have arrears.</li> : attention.map(student => <li key={student.id}><div><strong>{student.name}</strong><small>{student.rollNo}</small></div><span className="admin-ov-chip warn">{student.backlogs} {student.backlogs === 1 ? 'arrear' : 'arrears'}</span></li>)}</ul>
+          <ul className="admin-ov-list">{attention.length === 0 ? <li className="admin-ov-empty">{hasStudentData ? 'No students have arrears.' : 'No student records available.'}</li> : attention.map(student => <li key={student.id}><div><strong>{student.name}</strong><small>{student.rollNo}</small></div><span className="admin-ov-chip warn">{student.backlogs} {student.backlogs === 1 ? 'arrear' : 'arrears'}</span></li>)}</ul>
         </section>
       </div>
     </div>

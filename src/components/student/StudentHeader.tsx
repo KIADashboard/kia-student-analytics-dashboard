@@ -1,10 +1,9 @@
 import React from 'react';
 import { Moon, Sun } from 'lucide-react';
-import { Student, ThemeMode } from '../../types';
+import { ThemeMode } from '../../types';
 
 interface StudentHeaderProps {
   title: string;
-  student: Student;
   theme: ThemeMode;
   onToggleTheme: () => void;
   onLogout: () => void;
@@ -12,7 +11,6 @@ interface StudentHeaderProps {
 
 export const StudentHeader: React.FC<StudentHeaderProps> = ({
   title,
-  student,
   theme,
   onToggleTheme,
   onLogout
