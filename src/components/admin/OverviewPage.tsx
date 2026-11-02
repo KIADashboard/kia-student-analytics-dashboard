@@ -75,6 +75,8 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
   // The current batch is always the newest batch in the data, so this keeps working as new years are added
   const currentYear = useMemo(() => students.reduce((latest, student) => Math.max(latest, student.academicYear), 0), [students]);
   const data = useMemo(() => students.filter(student => student.academicYear === currentYear), [students, currentYear]);
+  const gpaData = useMemo(() => data.filter(student => student.cgpaAvailable), [data]);
+  const arrearData = useMemo(() => data.filter(student => student.arrearsAvailable), [data]);
   const batchLabel = data[0]?.batch ?? String(currentYear);
   const semester = data.reduce((latest, student) => Math.max(latest, student.currentSemester), 1);
 
@@ -113,17 +115,18 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
 
   // CGPA distribution
   const bands = [
-    ['Below 6', data.filter(student => student.cgpa < 6).length],
-    ['6 – 6.9', data.filter(student => student.cgpa >= 6 && student.cgpa < 7).length],
-    ['7 – 7.9', data.filter(student => student.cgpa >= 7 && student.cgpa < 8).length],
-    ['8 – 8.9', data.filter(student => student.cgpa >= 8 && student.cgpa < 9).length],
-    ['9 and above', data.filter(student => student.cgpa >= 9).length]
+    ['Below 6', gpaData.filter(student => student.cgpa < 6).length],
+    ['6 – 6.9', gpaData.filter(student => student.cgpa >= 6 && student.cgpa < 7).length],
+    ['7 – 7.9', gpaData.filter(student => student.cgpa >= 7 && student.cgpa < 8).length],
+    ['8 – 8.9', gpaData.filter(student => student.cgpa >= 8 && student.cgpa < 9).length],
+    ['9 and above', gpaData.filter(student => student.cgpa >= 9).length]
   ] as const;
 
   // Students needing attention (current batch only)
-  const withArrears = useMemo(() => data.filter(student => student.backlogs > 0), [data]);
+  const withArrears = useMemo(() => arrearData.filter(student => student.backlogs > 0), [arrearData]);
   const attention = useMemo(() => [...withArrears].sort((left, right) => right.backlogs - left.backlogs || left.cgpa - right.cgpa).slice(0, 5), [withArrears]);
   const hasStudentData = students.length > 0;
+  const hasGpaData = gpaData.length > 0;
 
   return (
     <div className="admin-overview-page-wrapper">
@@ -204,7 +207,7 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
         <section className="admin-panel">
           <div className="admin-panel-header"><div><h3>CGPA Distribution</h3></div></div>
           <div className="admin-chart-box">
-            {!hasStudentData ? <div className="admin-empty-state">No student data available.</div> :
+            {!hasGpaData ? <div className="admin-empty-state">No semester GPA records available.</div> :
             <Bar
               plugins={[countLabels]}
               data={{ labels: bands.map(([label]) => label), datasets: [{ label: 'Students', data: bands.map(([, count]) => count), backgroundColor: deepTeal, borderRadius: 6, maxBarThickness: 54 }] }}
@@ -220,12 +223,12 @@ export function OverviewPage({ students, onNavigate }: { students: Student[]; on
               }}
             />}
           </div>
-          <p className="admin-ov-caption">Number of students in each CGPA band.</p>
+          <p className="admin-ov-caption">Based on imported semester GPA records only.</p>
         </section>
 
         <section className="admin-panel">
           <div className="admin-panel-header"><div><h3>Students Needing Attention</h3></div><button className="admin-text-button" onClick={() => onNavigate('students')}>View all <ArrowRight size={13} /></button></div>
-          <ul className="admin-ov-list">{attention.length === 0 ? <li className="admin-ov-empty">{hasStudentData ? 'No students have arrears.' : 'No student records available.'}</li> : attention.map(student => <li key={student.id}><div><strong>{student.name}</strong><small>{student.rollNo}</small></div><span className="admin-ov-chip warn">{student.backlogs} {student.backlogs === 1 ? 'arrear' : 'arrears'}</span></li>)}</ul>
+          <ul className="admin-ov-list">{attention.length === 0 ? <li className="admin-ov-empty">{arrearData.length > 0 ? 'No recorded active arrears.' : 'Arrear records are unavailable.'}</li> : attention.map(student => <li key={student.id}><div><strong>{student.name}</strong><small>{student.rollNo}</small></div><span className="admin-ov-chip warn">{student.backlogs} {student.backlogs === 1 ? 'arrear' : 'arrears'}</span></li>)}</ul>
         </section>
       </div>
     </div>

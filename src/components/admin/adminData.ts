@@ -1,6 +1,10 @@
 import { Student } from '../../types';
 
-export const batchOptions = ['all', '2026', '2025', '2024', '2023', '2022', '2021'];
+export function batchOptionsFor(students: Student[]) {
+  const years = [...new Set(students.map(student => student.academicYear).filter(Boolean))]
+    .sort((left, right) => right - left);
+  return ['all', ...years.map(String)];
+}
 
 export function studentsForBatch(students: Student[], batch: string) {
   return batch === 'all' ? students : students.filter(student => String(student.academicYear) === batch);

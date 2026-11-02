@@ -2,12 +2,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronRight as ChevronRightIcon, Download, Search, X } from 'lucide-react';
 import { Student } from '../../types';
 import { AdminHeaderAction } from './AdminHeaderAction';
-import { batchOptions, downloadCsv, studentCsvRow, studentsForBatch } from './adminData';
-import { getStudentProfile } from '../../studentData';
+import { batchOptionsFor, studentsForBatch } from './adminData';
+import { exportStudentsCsv, getStudentDetails, importStudentsCsv, mapStudent, mapStudentProfile } from '../../api';
 
 const INITIAL_VISIBLE_COUNT = 8;
 
-export function StudentProfilesPage({ students }: { students: Student[] }) {
+export function StudentProfilesPage({
+  students,
+  onReloadStudents,
+}: {
+  students: Student[];
+  onReloadStudents: () => Promise<void>;
+}) {
   const [query, setQuery] = useState('');
   const [batch, setBatch] = useState('all');
   const [gender, setGender] = useState('all');
@@ -16,6 +22,16 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
   const [sort, setSort] = useState('name');
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<ReturnType<typeof mapStudentProfile> | null>(null);
+  const [profileError, setProfileError] = useState('');
+  const [isImporting, setIsImporting] = useState(false);
+  const [importMessage, setImportMessage] = useState('');
+  const [importError, setImportError] = useState('');
+  const [exportError, setExportError] = useState('');
+  const [isExporting, setIsExporting] = useState(false);
+  const importInputRef = React.useRef<HTMLInputElement>(null);
+  const batchOptions = useMemo(() => batchOptionsFor(students), [students]);
+  const hasArrearData = students.some(student => student.arrearsAvailable);
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [pdfExportError, setPdfExportError] = useState('');
 
@@ -32,10 +48,13 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
     const search = query.trim().toLowerCase();
     const rows = studentsForBatch(students, batch).filter(student => {
       const matchesSearch = !search || `${student.name} ${student.rollNo} ${student.id} ${student.phone} ${student.district}`.toLowerCase().includes(search);
-      return matchesSearch && (gender === 'all' || student.gender === gender) && (arrear === 'all' || (arrear === 'yes' ? student.backlogs > 0 : student.backlogs === 0)) && (residence === 'all' || (residence === 'hostel' ? student.residentialType !== 'Day Scholar' : student.residentialType === 'Day Scholar'));
+      const matchesArrear = arrear === 'all' || !hasArrearData || (
+        student.arrearsAvailable && (arrear === 'yes' ? student.backlogs > 0 : student.backlogs === 0)
+      );
+      return matchesSearch && (gender === 'all' || student.gender === gender) && matchesArrear && (residence === 'all' || (residence === 'hostel' ? student.residentialType !== 'Day Scholar' : student.residentialType === 'Day Scholar'));
     });
     return rows.sort((left, right) => sort === 'cgpa' ? right.cgpa - left.cgpa : sort === 'attendance' ? right.attendance - left.attendance : sort === 'arrears' ? right.backlogs - left.backlogs : left.name.localeCompare(right.name));
-  }, [students, query, batch, gender, arrear, residence, sort]);
+  }, [students, query, batch, gender, arrear, residence, sort, hasArrearData]);
 
   const displayedStudents = useMemo(() => {
     if (isExpanded) return filtered;
@@ -67,7 +86,49 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
     }
   };
 
-  const profile = selectedStudent ? getStudentProfile(selectedStudent) : null;
+  const profile = selectedProfile;
+  const openStudent = async (student: Student) => {
+    setSelectedStudent(student);
+    setSelectedProfile(null);
+    setProfileError('');
+    try {
+      if (!student.databaseId) throw new Error('Student database ID is missing.');
+      const details = await getStudentDetails(student.databaseId);
+      const mappedStudent = mapStudent(details);
+      setSelectedStudent(mappedStudent);
+      setSelectedProfile(mapStudentProfile(details, mappedStudent));
+    } catch (error) {
+      setProfileError(error instanceof Error ? error.message : 'Unable to load student details.');
+    }
+  };
+  const handleCsvImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.currentTarget.files?.[0];
+    event.currentTarget.value = '';
+    if (!file) return;
+    setIsImporting(true);
+    setImportMessage('');
+    setImportError('');
+    try {
+      const result = await importStudentsCsv(file);
+      await onReloadStudents();
+      setImportMessage(`Imported ${result.total} rows (${result.inserted} new, ${result.updated} updated).`);
+    } catch (error) {
+      setImportError(error instanceof Error ? error.message : 'CSV import failed.');
+    } finally {
+      setIsImporting(false);
+    }
+  };
+  const handleCsvExport = async () => {
+    setIsExporting(true);
+    setExportError('');
+    try {
+      await exportStudentsCsv({ batch, gender, residence, district: 'all', q: query });
+    } catch (error) {
+      setExportError(error instanceof Error ? error.message : 'CSV export failed.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
   const profileSections: [string, [string, string][]][] = selectedStudent && profile ? [
     ['Personal', [['Full Name', selectedStudent.name], ['Register Number', selectedStudent.rollNo], ['Date of Birth', selectedStudent.dob], ['Gender', selectedStudent.gender], ['Blood Group', selectedStudent.bloodGroup], ['Nationality', profile.nationality], ['Religion', profile.religion], ['Community', profile.community], ['Caste', profile.caste], ['Mother Tongue', profile.motherTongue], ['Address', profile.communicationAddress], ['District', selectedStudent.district], ['State', selectedStudent.state], ['PIN Code', profile.pinCode], ['Mobile Number', selectedStudent.phone], ['Email', selectedStudent.email]]],
     ['Admission', [['Residence', selectedStudent.residentialType], ['Batch', selectedStudent.batch], ['Admission Type', profile.admissionType], ['Quota', profile.admissionQuota], ['TNEA Number', 'Not provided'], ['Cut-off', `${selectedStudent.cutoffScore.toFixed(1)} / 200`], ['First Graduate', profile.firstGraduate]]],
@@ -80,10 +141,29 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
   return (
     <>
       <AdminHeaderAction>
-        <button className="admin-primary-button" onClick={() => downloadCsv('kia-students.csv', filtered.map(studentCsvRow))}>
-          <Download size={14} /> Export Student Data
+        <input
+          ref={importInputRef}
+          type="file"
+          accept=".csv,text/csv"
+          className="sr-only"
+          onChange={handleCsvImport}
+        />
+        <button
+          className="admin-secondary-button"
+          onClick={() => importInputRef.current?.click()}
+          disabled={isImporting}
+        >
+          {isImporting ? 'Importing…' : 'Import CSV'}
+        </button>
+        <button className="admin-primary-button" onClick={() => void handleCsvExport()} disabled={isExporting}>
+          <Download size={14} /> {isExporting ? 'Exporting…' : 'Export Student Data'}
         </button>
       </AdminHeaderAction>
+      {(importMessage || importError || exportError) && (
+        <p className={importError || exportError ? 'admin-profile-export-error' : 'admin-empty-state'} role={importError || exportError ? 'alert' : 'status'}>
+          {importError || exportError || importMessage}
+        </p>
+      )}
 
       <div className="admin-filter-panel">
         <label className="admin-search-field">
@@ -118,9 +198,10 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
         <select
           aria-label="Arrear status"
           value={arrear}
+          disabled={!hasArrearData}
           onChange={event => setArrear(event.target.value)}
         >
-          <option value="all">Arrear Status</option>
+          <option value="all">{hasArrearData ? 'Arrear Status' : 'Arrears unavailable'}</option>
           <option value="yes">With Arrears</option>
           <option value="no">No Arrears</option>
         </select>
@@ -159,13 +240,13 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
                 <tr
                   key={student.id}
                   className="admin-profiles-row"
-                  onClick={() => setSelectedStudent(student)}
+                  onClick={() => void openStudent(student)}
                   tabIndex={0}
                   role="button"
                   onKeyDown={event => {
                     if (event.key === 'Enter' || event.key === ' ') {
                       event.preventDefault();
-                      setSelectedStudent(student);
+                      void openStudent(student);
                     }
                   }}
                   title="Click to view full student details"
@@ -246,6 +327,8 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
                 PDF export failed: {pdfExportError}
               </p>
             )}
+            {profileError && <p className="admin-profile-export-error" role="alert">{profileError}</p>}
+            {!profile && !profileError && <p className="admin-empty-state">Loading student details…</p>}
             <div className="admin-student-profile-header">
               <div className="admin-profile-avatar">
                 {selectedStudent.name
@@ -261,21 +344,21 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
                   {selectedStudent.rollNo} · {selectedStudent.degree} · Batch {selectedStudent.academicYear}
                 </p>
                 <div className="admin-profile-tags">
-                  <span className="green">{selectedStudent.status}</span>
+                  <span className="green">{selectedStudent.academicDataAvailable ? selectedStudent.status : 'Academic records unavailable'}</span>
                   <span>{selectedStudent.residentialType}</span>
                   <span>
-                    {selectedStudent.backlogs ? `${selectedStudent.backlogs} Arrears` : 'No Arrears'}
+                    {selectedStudent.arrearsAvailable ? (selectedStudent.backlogs ? `${selectedStudent.backlogs} Arrears` : 'No recorded active arrears') : 'Arrears unavailable'}
                   </span>
                 </div>
               </div>
               <div className="admin-profile-summary">
                 <div>
                   <span>CGPA</span>
-                  <strong>{selectedStudent.cgpa.toFixed(2)}</strong>
+                  <strong>{selectedStudent.cgpaAvailable ? selectedStudent.cgpa.toFixed(2) : 'Unavailable'}</strong>
                 </div>
                 <div>
                   <span>Arrears</span>
-                  <strong>{selectedStudent.backlogs}</strong>
+                  <strong>{selectedStudent.arrearsAvailable ? selectedStudent.backlogs : 'Unavailable'}</strong>
                 </div>
               </div>
             </div>
@@ -322,6 +405,9 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
                         <td>{semester.status}</td>
                       </tr>
                     ))}
+                    {selectedStudent.semesterGrades.length === 0 && (
+                      <tr><td colSpan={4} className="admin-empty-state">Semester grades are unavailable.</td></tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -355,6 +441,9 @@ export function StudentProfilesPage({ students }: { students: Student[] }) {
                         <td>{subject.grade === 'RA' ? 'Fail' : 'Pass'}</td>
                       </tr>
                     ))}
+                    {selectedStudent.recentSubjects.length === 0 && (
+                      <tr><td colSpan={5} className="admin-empty-state">Subject results are unavailable.</td></tr>
+                    )}
                   </tbody>
                 </table>
                 {selectedStudent.recentSubjects.length === 0 && (

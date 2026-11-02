@@ -1,0 +1,93 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# KIA Student Analytics Dashboard – Docker Compose
+# ─────────────────────────────────────────────────────────────────────────────
+# Three services:
+#   db        – PostgreSQL 16 (persistent volume)
+#   backend   – FastAPI + SQLAlchemy (Python 3.11)
+#   frontend  – Vite/React build served by Nginx
+#
+# One-time seed:
+#   docker compose run --rm seed
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── 1. PostgreSQL ────────────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: kia_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB:       ${POSTGRES_DB:?Set POSTGRES_DB in .env}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5433:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER:?Set POSTGRES_USER in .env}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── 2. FastAPI Backend ───────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kia_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:?Set POSTGRES_USER in .env}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/${POSTGRES_DB:?Set POSTGRES_DB in .env}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?Set ADMIN_EMAIL in .env}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-480}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    volumes:
+      # Mount the Excel file into the container (needed only for the seed service)
+      - ./src/assets:/app/src/assets:ro
+
+  # ── 3. Vite/React Frontend (Nginx) ───────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    container_name: kia_frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:80"
+
+  # ── 4. One-time Seed Service ─────────────────────────────────────────────────
+  # Run: docker compose run --rm seed
+  seed:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kia_seed
+    command: ["python", "seed/seed_students.py"]
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:?Set POSTGRES_USER in .env}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/${POSTGRES_DB:?Set POSTGRES_DB in .env}
+    depends_on:
+      backend:
+        condition: service_healthy
+    volumes:
+      - ./src/assets:/app/src/assets:ro
+    restart: "no"
+
+volumes:
+  db_data:

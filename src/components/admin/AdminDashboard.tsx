@@ -13,11 +13,17 @@ import './admin.css';
 export function AdminDashboard({
   onLogout,
   students,
+  onReloadStudents,
+  studentsLoading,
+  studentsError,
   theme,
   onToggleTheme
 }: {
   onLogout: () => void;
   students: Student[];
+  onReloadStudents: () => Promise<void>;
+  studentsLoading: boolean;
+  studentsError: string;
   theme: ThemeMode;
   onToggleTheme: () => void;
 }) {
@@ -68,8 +74,8 @@ export function AdminDashboard({
 
   const pageContent = {
     overview: <OverviewPage students={students} onNavigate={navigate} />,
-    students: <StudentProfilesPage students={students} />,
-    academic: <AcademicPerformancePage students={students} />,
+    students: <StudentProfilesPage students={students} onReloadStudents={onReloadStudents} />,
+    academic: <AcademicPerformancePage students={students} onReloadStudents={onReloadStudents} />,
     analytics: <AnalyticsPage students={students} activeTab={activeAnalyticsTab} />,
     settings: <SettingsPage />
   }[activePage];
@@ -97,7 +103,19 @@ export function AdminDashboard({
           theme={theme}
           onToggleTheme={onToggleTheme}
         />
-        <div className="admin-content-area">{pageContent}</div>
+        <div className="admin-content-area">
+          {students.length > 0 && !students.some(student => student.academicDataAvailable) && (
+            <p className="admin-empty-state" role="note">
+              The admission dataset does not include college grades, attendance, arrears, or placements. Those metrics remain unavailable until actual academic records are imported.
+            </p>
+          )}
+          {(studentsLoading || studentsError) && (
+            <p className={studentsError ? 'admin-profile-export-error' : 'admin-empty-state'} role={studentsError ? 'alert' : 'status'}>
+              {studentsError || 'Loading student records…'}
+            </p>
+          )}
+          {pageContent}
+        </div>
       </main>
     </div>
   );

@@ -2,34 +2,42 @@ export type Gender = 'Male' | 'Female' | 'Other';
 
 export type ThemeMode = 'light' | 'dark';
 
-export type Category = 'General' | 'OBC/BC' | 'MBC' | 'SC/ST' | 'Management/NRI';
+export type Category = string;
 
-export type SchoolType = 'Government' | 'Govt-Aided' | 'Private Matric' | 'CBSE/ICSE';
+export type SchoolType = string;
 
-export type QuotaType = 
-  | 'Merit (Govt Quota)' 
-  | 'First Graduate Quota' 
-  | '7.5% Govt School Quota'
-  | 'Sports Quota' 
-  | 'Management Quota' 
-  | 'Lateral Entry';
+export type QuotaType = string;
 
-export type IncomeCategory = 
-  | '< ₹1 Lakh' 
-  | '₹1L – ₹3L' 
-  | '₹3L – ₹6L' 
-  | '₹6L – ₹10L' 
-  | '> ₹10 Lakh';
+export type IncomeCategory = string;
 
-export type AgricultureBackground = 'Yes' | 'No' | 'Unknown';
+export type AgricultureBackground = string;
 
-export type StudentStatus = 'Active - Regular' | 'Fee Pending' | 'On Leave' | 'Graduated';
+export type StudentStatus = string;
 
 export interface SemesterGrade {
   semester: string;
   gpa: number;
   credits: number;
-  status: 'Passed' | 'Cleared with Distinction' | 'Arrears Cleared';
+  status: 'Passed' | 'Cleared with Distinction' | 'Arrears Cleared' | 'Arrears Pending' | 'Status unavailable';
+}
+
+export interface AttendanceRecord {
+  semester: number;
+  percentage: number;
+}
+
+export interface ArrearRecord {
+  semester: number;
+  courseCode: string;
+  courseName: string;
+  cleared: boolean;
+}
+
+export interface PlacementRecord {
+  company: string;
+  jobTitle: string;
+  status: string;
+  packageLpa: number | null;
 }
 
 export interface SubjectCourse {
@@ -42,6 +50,7 @@ export interface SubjectCourse {
 
 export interface Student {
   id: string; // e.g. "21BCS042"
+  databaseId?: number;
   rollNo: string; // e.g. "7178211CS101"
   name: string;
   avatar?: string;
@@ -54,7 +63,7 @@ export interface Student {
   currentSemester: number;
   degree: string;
   department: string;
-  departmentCode: 'CSE' | 'ECE' | 'AI-DS' | 'MECH' | 'CIVIL' | 'IT';
+  departmentCode: string;
   district: string;
   state: string;
   category: Category;
@@ -71,7 +80,7 @@ export interface Student {
   status: StudentStatus;
   dob: string;
   bloodGroup: string;
-  residentialType: 'Day Scholar' | 'Hosteler (Block A)' | 'Hosteler (Block B)' | 'Hosteler (Block C)';
+  residentialType: string;
   guardianName: string;
   guardianPhone: string;
   guardianRelation: string;
@@ -81,11 +90,19 @@ export interface Student {
   creditsEarned: number;
   totalCredits: number;
   semesterGrades: SemesterGrade[];
+  attendanceRecords: AttendanceRecord[];
+  arrearRecords: ArrearRecord[];
+  placementRecords: PlacementRecord[];
   recentSubjects: SubjectCourse[];
   activities: string[];
   skills: string[];
   placementReadiness: number;
   mentorName: string;
+  academicDataAvailable?: boolean;
+  semesterDataAvailable: boolean;
+  cgpaAvailable: boolean;
+  attendanceAvailable: boolean;
+  arrearsAvailable: boolean;
 }
 
 export type StudentPortalTab = 'profile' | 'academics';
@@ -171,4 +188,3 @@ export interface StudentDocument {
   uploadedAt: string;
   status: 'Verified' | 'Pending review';
 }
-

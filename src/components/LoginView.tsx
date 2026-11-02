@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, AlertCircle, ExternalLink } from 'lucide-react';
 import { UserRole } from '../types';
+import { login } from '../api';
 import kiaLogo from '../assets/kia-logo.png';
 import campusImage from '../assets/DL-ns-62d98d43-d018-4bed-b13e-461ea1f876e8_IMG-20211214-WA0002.jpg.jpeg';
 
 interface LoginViewProps {
-  onLogin: (role: UserRole) => void;
+  onLogin: (role: UserRole) => Promise<void>;
 }
 
 export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
@@ -15,19 +16,19 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
-    const cleanId = identifier.trim().toLowerCase();
-    const cleanPass = password.trim();
-
-    if (cleanId === 'student@kia.edu' && cleanPass === 'Student@123') {
-      onLogin('student');
-    } else if (cleanId === 'admin@kia.edu' && cleanPass === 'Admin@123') {
-      onLogin('admin');
-    } else {
-      setError('Invalid email/username or password. Please try again.');
+    setIsSubmitting(true);
+    try {
+      const role = await login(identifier, password, rememberMe);
+      await onLogin(role);
+    } catch (loginError) {
+      setError(loginError instanceof Error ? loginError.message : 'Unable to sign in.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -172,9 +173,11 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
             <button
               id="kia-login-submit"
               type="submit"
+              disabled={isSubmitting}
+              aria-busy={isSubmitting}
               className="w-full py-3 px-4 bg-[#275a43] hover:bg-[#1e4835] active:bg-[#183a2b] text-white font-bold text-sm tracking-wide rounded-xl shadow-md hover:shadow-lg hover:shadow-[#275a43]/25 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
-              Login
+              {isSubmitting ? 'Signing in…' : 'Login'}
             </button>
 
             {/* Divider */}

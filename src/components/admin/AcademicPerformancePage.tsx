@@ -3,16 +3,23 @@ import { BookOpen, Download, FileUp, Search, Trash2, Users, X } from 'lucide-rea
 import { Student } from '../../types';
 import { AdminBarChart, AdminLineChart } from './AdminChart';
 import { AdminHeaderAction } from './AdminHeaderAction';
-import { batchOptions, mean, studentsForBatch } from './adminData';
+import { batchOptionsFor, mean, studentsForBatch } from './adminData';
 import { CurriculumCourse, curriculumSemesters } from './courseCurriculum';
 import { deleteCourseSyllabus, getCourseSyllabus, listCourseSyllabi, saveCourseSyllabus } from './courseSyllabusStorage';
+import { AcademicCsvKind, exportAcademicCsv, importAcademicCsv } from '../../api';
 
 const chartPalette = ['#1f5f52', '#c28a35', '#527aa5', '#75679a', '#b65d5d'];
 const courseKey = (course: CurriculumCourse) => `${course.semester}:${course.code}:${course.title}`;
 const normalizeCourseValue = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 const errorMessage = (error: unknown) => error instanceof Error ? error.message : 'An unexpected error occurred.';
 
-export function AcademicPerformancePage({ students }: { students: Student[] }) {
+export function AcademicPerformancePage({
+  students,
+  onReloadStudents,
+}: {
+  students: Student[];
+  onReloadStudents: () => Promise<void>;
+}) {
   const [batch, setBatch] = useState('all');
   const [selectedSemester, setSelectedSemester] = useState('I');
   const [selectedCourse, setSelectedCourse] = useState<CurriculumCourse | null>(null);
@@ -22,12 +29,22 @@ export function AcademicPerformancePage({ students }: { students: Student[] }) {
   const [syllabusErrors, setSyllabusErrors] = useState<Record<string, string>>({});
   const [syllabusStorageError, setSyllabusStorageError] = useState('');
   const [syllabusRevision, setSyllabusRevision] = useState(0);
+  const batchOptions = useMemo(() => batchOptionsFor(students), [students]);
   const [loadedSyllabus, setLoadedSyllabus] = useState<Awaited<ReturnType<typeof getCourseSyllabus>>>(null);
   const [syllabusUrl, setSyllabusUrl] = useState('');
   const [syllabusLoading, setSyllabusLoading] = useState(false);
   const syllabusInputRef = useRef<HTMLInputElement>(null);
+  const academicInputRef = useRef<HTMLInputElement>(null);
   const uploadTargetRef = useRef<CurriculumCourse | null>(null);
+  const [academicCsvKind, setAcademicCsvKind] = useState<AcademicCsvKind>('semester');
+  const [academicImporting, setAcademicImporting] = useState(false);
+  const [academicImportMessage, setAcademicImportMessage] = useState('');
+  const [academicImportError, setAcademicImportError] = useState('');
+  const [academicExportError, setAcademicExportError] = useState('');
   const data = useMemo(() => studentsForBatch(students, batch), [students, batch]);
+  const gpaData = useMemo(() => data.filter(student => student.cgpaAvailable), [data]);
+  const attendanceData = useMemo(() => data.filter(student => student.attendanceAvailable), [data]);
+  const arrearData = useMemo(() => data.filter(student => student.arrearsAvailable), [data]);
   const semesterCourses = curriculumSemesters.find(item => item.semester === selectedSemester)?.courses ?? [];
   const filteredSemesterCourses = useMemo(() => {
     const query = courseSearch.trim().toLowerCase();
@@ -36,7 +53,7 @@ export function AcademicPerformancePage({ students }: { students: Student[] }) {
   const arrearStudentsForCourse = (course: CurriculumCourse) => {
     const subjectCode = normalizeCourseValue(course.code);
     const subjectName = normalizeCourseValue(course.title);
-    return data.filter(student => student.recentSubjects.some(subject =>
+    return arrearData.filter(student => student.recentSubjects.some(subject =>
       subject.grade === 'RA' &&
       normalizeCourseValue(subject.code) === subjectCode &&
       normalizeCourseValue(subject.name) === subjectName
@@ -149,26 +166,73 @@ export function AcademicPerformancePage({ students }: { students: Student[] }) {
     }
   };
 
+  const handleAcademicCsvImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.currentTarget.files?.[0];
+    event.currentTarget.value = '';
+    if (!file) return;
+    setAcademicImporting(true);
+    setAcademicImportMessage('');
+    setAcademicImportError('');
+    try {
+      const result = await importAcademicCsv(academicCsvKind, file);
+      await onReloadStudents();
+      setAcademicImportMessage(`Imported ${result.total} records (${result.inserted} new, ${result.updated} updated).`);
+    } catch (error) {
+      setAcademicImportError(errorMessage(error));
+    } finally {
+      setAcademicImporting(false);
+    }
+  };
+
+  const handleAcademicCsvExport = async () => {
+    setAcademicExportError('');
+    try {
+      await exportAcademicCsv(academicCsvKind);
+    } catch (error) {
+      setAcademicExportError(errorMessage(error));
+    }
+  };
+
   const semesterRows = Array.from({ length: 8 }, (_, index) => {
-    const values = data.flatMap(student => student.semesterGrades.filter(grade => grade.semester === `Sem ${index + 1}`).map(grade => grade.gpa));
+    const values = gpaData.flatMap(student => student.semesterGrades.filter(grade => grade.semester === `Sem ${index + 1}`).map(grade => grade.gpa));
     return { label: `Sem ${index + 1}`, average: mean(values), count: values.length };
   }).filter(row => row.count > 0);
   const distribution = [
-    ['Below 6.0', data.filter(student => student.cgpa < 6).length],
-    ['6.0–6.9', data.filter(student => student.cgpa >= 6 && student.cgpa < 7).length],
-    ['7.0–7.9', data.filter(student => student.cgpa >= 7 && student.cgpa < 8).length],
-    ['8.0–8.9', data.filter(student => student.cgpa >= 8 && student.cgpa < 9).length],
-    ['9.0+', data.filter(student => student.cgpa >= 9).length]
+    ['Below 6.0', gpaData.filter(student => student.cgpa < 6).length],
+    ['6.0–6.9', gpaData.filter(student => student.cgpa >= 6 && student.cgpa < 7).length],
+    ['7.0–7.9', gpaData.filter(student => student.cgpa >= 7 && student.cgpa < 8).length],
+    ['8.0–8.9', gpaData.filter(student => student.cgpa >= 8 && student.cgpa < 9).length],
+    ['9.0+', gpaData.filter(student => student.cgpa >= 9).length]
   ];
-  const latestGpas = data.map(student => student.semesterGrades.at(-1)?.gpa ?? 0).filter(Boolean);
-  const passRate = data.length ? ((data.length - data.filter(student => student.backlogs > 0).length) / data.length) * 100 : 0;
-  const hasStudentData = data.length > 0;
-  const cards = [['Average CGPA', hasStudentData ? mean(data.map(student => student.cgpa)).toFixed(2) : '—', 'Current academic average'], ['Average SGPA', latestGpas.length ? mean(latestGpas).toFixed(2) : '—', 'Latest completed semester'], ['Pass Percentage', hasStudentData ? `${passRate.toFixed(1)}%` : '—', 'Students without active arrears'], ['Multiple Arrears', hasStudentData ? data.filter(student => student.backlogs >= 2).length.toString() : '—', 'Students with 2+ arrears']];
+  const latestGpas = gpaData.map(student => student.semesterGrades.at(-1)?.gpa ?? 0).filter(Boolean);
+  const activeArrearCount = arrearData.reduce((sum, student) => sum + student.backlogs, 0);
+  const hasStudentData = gpaData.length > 0 || attendanceData.length > 0 || arrearData.length > 0;
+  const cards = [['Average CGPA', gpaData.length ? mean(gpaData.map(student => student.cgpa)).toFixed(2) : '—', 'From imported semester GPA'], ['Average SGPA', latestGpas.length ? mean(latestGpas).toFixed(2) : '—', 'Latest recorded semester'], ['Average Attendance', attendanceData.length ? `${mean(attendanceData.map(student => student.attendance)).toFixed(1)}%` : '—', 'From imported attendance records'], ['Outstanding Arrears', arrearData.length ? activeArrearCount.toString() : '—', 'In imported arrear records']];
 
   return <>
-    <AdminHeaderAction><select className="admin-large-filter" value={batch} onChange={event => setBatch(event.target.value)} aria-label="Academic batch">{batchOptions.map(option => <option key={option} value={option}>{option === 'all' ? 'All Batches' : option}</option>)}</select></AdminHeaderAction>
+    {data.length > 0 && !hasStudentData && (
+      <p className="admin-empty-state" role="note">
+        Semester grades, attendance, and arrears are unavailable for this batch until real academic records are imported.
+      </p>
+    )}
+    <AdminHeaderAction>
+      <input ref={academicInputRef} className="admin-visually-hidden" type="file" accept=".csv,text/csv" onChange={handleAcademicCsvImport} aria-label={`Import ${academicCsvKind} records CSV`} />
+      <select className="admin-large-filter" value={batch} onChange={event => setBatch(event.target.value)} aria-label="Academic batch">{batchOptions.map(option => <option key={option} value={option}>{option === 'all' ? 'All Batches' : option}</option>)}</select>
+      <label className="admin-large-filter-label">Record type
+        <select className="admin-large-filter" value={academicCsvKind} onChange={event => setAcademicCsvKind(event.target.value as AcademicCsvKind)} aria-label="Academic record type">
+          <option value="semester">Semester results</option><option value="attendance">Attendance</option><option value="arrears">Arrears</option><option value="placements">Placements</option>
+        </select>
+      </label>
+      <button type="button" className="admin-primary-button" onClick={() => academicInputRef.current?.click()} disabled={academicImporting}><FileUp size={14} /> {academicImporting ? 'Importing…' : 'Import records'}</button>
+      <button type="button" className="admin-primary-button" onClick={() => void handleAcademicCsvExport()}><Download size={14} /> Export records</button>
+    </AdminHeaderAction>
+    {(academicImportMessage || academicImportError || academicExportError) && (
+      <p className={academicImportError || academicExportError ? 'admin-profile-export-error' : 'admin-empty-state'} role={academicImportError || academicExportError ? 'alert' : 'status'}>
+        {academicImportError || academicExportError || academicImportMessage}
+      </p>
+    )}
     <div className="admin-metric-grid">{cards.map(([label, value, detail]) => <article className="admin-metric-card" key={label}><span>{label}</span><strong>{value}</strong><small>{detail}</small></article>)}</div>
-    <div className="admin-chart-grid two-columns"><section className="admin-panel"><div className="admin-panel-header"><div><span className="admin-section-label">CGPA DISTRIBUTION</span><h3>Academic Distribution</h3></div></div><div className="admin-chart-box">{hasStudentData ? <AdminBarChart data={{ labels: distribution.map(([label]) => String(label)), datasets: [{ label: 'Students', data: distribution.map(([, value]) => Number(value)), backgroundColor: chartPalette[0], borderRadius: 5, maxBarThickness: 40 }] }} /> : <div className="admin-empty-state">No student records available.</div>}</div></section><section className="admin-panel"><div className="admin-panel-header"><div><span className="admin-section-label">SEMESTER PERFORMANCE</span><h3>Semester-wise Average GPA</h3></div></div><div className="admin-chart-box">{semesterRows.length ? <AdminLineChart data={{ labels: semesterRows.map(row => row.label), datasets: [{ label: 'Average GPA', data: semesterRows.map(row => row.average), borderColor: chartPalette[2], backgroundColor: `${chartPalette[2]}22`, borderWidth: 2, tension: 0.3, fill: true, pointRadius: 3 }] }} /> : <div className="admin-empty-state">No student records available.</div>}</div></section></div>
+    <div className="admin-chart-grid two-columns"><section className="admin-panel"><div className="admin-panel-header"><div><span className="admin-section-label">CGPA DISTRIBUTION</span><h3>Academic Distribution</h3></div></div><div className="admin-chart-box">{gpaData.length ? <AdminBarChart data={{ labels: distribution.map(([label]) => String(label)), datasets: [{ label: 'Students', data: distribution.map(([, value]) => Number(value)), backgroundColor: chartPalette[0], borderRadius: 5, maxBarThickness: 40 }] }} /> : <div className="admin-empty-state">No semester GPA records available.</div>}</div></section><section className="admin-panel"><div className="admin-panel-header"><div><span className="admin-section-label">SEMESTER PERFORMANCE</span><h3>Semester-wise Average GPA</h3></div></div><div className="admin-chart-box">{semesterRows.length ? <AdminLineChart data={{ labels: semesterRows.map(row => row.label), datasets: [{ label: 'Average GPA', data: semesterRows.map(row => row.average), borderColor: chartPalette[2], backgroundColor: `${chartPalette[2]}22`, borderWidth: 2, tension: 0.3, fill: true, pointRadius: 3 }] }} /> : <div className="admin-empty-state">No semester GPA records available.</div>}</div></section></div>
     <section className="admin-curriculum-section">
       <div className="admin-section-title-row admin-course-section-heading"><div className="admin-course-title-search"><div><span className="admin-section-label">COURSE CATALOG</span><h3>Semester-wise Courses</h3></div><label className="admin-course-search"><Search size={16} aria-hidden="true" /><span className="admin-visually-hidden">Search courses by subject name</span><input type="search" value={courseSearch} onChange={event => setCourseSearch(event.target.value)} placeholder="Search subjects" aria-label="Search courses by subject name" /></label></div><span className="admin-curriculum-batch">{batch === 'all' ? 'All batches' : `Batch ${batch}`}</span></div>
       {syllabusStorageError && <p className="admin-course-storage-error" role="alert">Saved syllabus files could not be loaded: {syllabusStorageError}</p>}
@@ -182,7 +246,7 @@ export function AcademicPerformancePage({ students }: { students: Student[] }) {
             <strong className="admin-course-title">{course.title}</strong>
           </button>
           <div className="admin-course-card-actions">
-            <span className="admin-course-arrear-count">{hasStudentData ? `${arrearStudents.length} students with arrears` : 'No student records available'}</span>
+            <span className="admin-course-arrear-count">{arrearData.length ? `${arrearStudents.length} students with recorded arrears` : 'Arrear records unavailable'}</span>
             <button type="button" className="admin-course-action" onClick={() => setSelectedArrearCourse(course)} aria-label={`View ${arrearStudents.length} students with arrears in ${course.title}`}><Users size={14} /> View students</button>
             {syllabusFiles[key] ? (
               <button type="button" className="admin-course-action" onClick={() => setSelectedCourse(course)}><BookOpen size={14} /> View syllabus</button>

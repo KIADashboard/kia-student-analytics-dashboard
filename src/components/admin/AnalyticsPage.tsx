@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Student } from '../../types';
 import { AdminBarChart, AdminDoughnutChart, AdminLineChart } from './AdminChart';
-import { batchOptions, chartDataFromCounts, countsFor, mean, residenceLabel, studentsForBatch } from './adminData';
+import { batchOptionsFor, chartDataFromCounts, countsFor, mean, residenceLabel, studentsForBatch } from './adminData';
 import { BatchProfileReport } from './BatchProfileReport';
 
 const palette = ['#1f5f52', '#c28a35', '#527aa5', '#75679a', '#b65d5d', '#3c8069', '#8a6b45', '#5c8a99'];
@@ -17,17 +17,26 @@ const dimensions: DistributionDimension[] = [
   { key: 'agriculture', label: 'Agricultural Background', select: student => student.agricultureBackground, chart: 'doughnut', color: palette[5] },
   { key: 'school-type', label: 'School Type', select: student => student.schoolType, chart: 'bar', color: palette[0] },
   { key: 'income', label: 'Family Income Category', select: student => student.incomeCategory, chart: 'bar', color: palette[1] },
-  { key: 'department', label: 'Department', select: student => student.departmentCode, chart: 'bar', color: palette[2] },
   { key: 'district', label: 'District', select: student => student.district, chart: 'bar', color: palette[3] },
   { key: 'cgpa', label: 'CGPA Distribution', select: student => student.cgpa < 6 ? 'Below 6.0' : student.cgpa < 7 ? '6.0-6.9' : student.cgpa < 8 ? '7.0-7.9' : student.cgpa < 9 ? '8.0-8.9' : '9.0+', chart: 'bar', color: palette[4] },
   { key: 'attendance', label: 'Attendance Distribution', select: student => student.attendance < 70 ? 'Below 70%' : student.attendance < 80 ? '70-79.9%' : student.attendance < 90 ? '80-89.9%' : '90%+', chart: 'bar', color: palette[5] },
   { key: 'arrears', label: 'Arrear Count', select: student => student.backlogs >= 3 ? '3+' : String(student.backlogs), chart: 'bar', color: palette[4] },
-  { key: 'marks', label: 'Marks Distribution', select: student => student.marksPercentage < 60 ? 'Below 60%' : student.marksPercentage < 70 ? '60-69.9%' : student.marksPercentage < 80 ? '70-79.9%' : student.marksPercentage < 90 ? '80-89.9%' : '90%+', chart: 'bar', color: palette[5] },
   { key: 'credits', label: 'Credits Earned', select: student => student.creditsEarned === 0 ? '0' : student.creditsEarned <= 60 ? '1-60' : student.creditsEarned <= 120 ? '61-120' : student.creditsEarned <= 160 ? '121-160' : '161+', chart: 'bar', color: palette[6] },
-  { key: 'placement', label: 'Placement Readiness', select: student => student.placementReadiness < 50 ? 'Below 50%' : student.placementReadiness < 60 ? '50-59.9%' : student.placementReadiness < 70 ? '60-69.9%' : student.placementReadiness < 80 ? '70-79.9%' : student.placementReadiness < 90 ? '80-89.9%' : '90%+', chart: 'bar', color: palette[7] },
-  { key: 'status', label: 'Student Status', select: student => student.status, chart: 'doughnut', color: palette[0] },
   { key: 'semester', label: 'Current Semester', select: student => `Semester ${student.currentSemester}`, chart: 'bar', color: palette[1] }
 ];
+const academicAvailability: Record<string, keyof Student> = {
+  cgpa: 'cgpaAvailable',
+  attendance: 'attendanceAvailable',
+  arrears: 'arrearsAvailable',
+  credits: 'semesterDataAvailable',
+  semester: 'semesterDataAvailable',
+};
+const academicDimensionKeys = new Set(Object.keys(academicAvailability));
+const academicRows = (students: Student[], key: string) => {
+  const field = academicAvailability[key];
+  if (!field) return students;
+  return students.filter(student => Boolean(student[field]));
+};
 
 const cutoffBands = [
   { label: '100-119.9', min: 100, max: 120 },
@@ -38,7 +47,11 @@ const cutoffBands = [
 ];
 
 function DistributionChart({ students, dimension }: { students: Student[]; dimension: DistributionDimension }) {
-  const distribution = chartDataFromCounts(countsFor(students, dimension.select));
+  const availableStudents = academicRows(students, dimension.key);
+  if (availableStudents.length === 0 && academicDimensionKeys.has(dimension.key)) {
+    return <div className="admin-empty-state">Academic records are unavailable.</div>;
+  }
+  const distribution = chartDataFromCounts(countsFor(availableStudents, dimension.select));
   if (dimension.chart === 'doughnut') {
     return <AdminDoughnutChart data={{ labels: distribution.labels, datasets: [{ data: distribution.values, backgroundColor: distribution.labels.map((_, index) => palette[index % palette.length]), borderWidth: 0, hoverOffset: 4 }] }} />;
   }
@@ -69,15 +82,15 @@ const comparisonColorPairs: [string, string][] = [
 ];
 
 function ComparisonDistributionChart({ first, second, dimension, firstLabel, secondLabel, colorPair = ['#1f5f52', '#c28a35'] }: { first: Student[]; second: Student[]; dimension: DistributionDimension; firstLabel: string; secondLabel: string; colorPair?: [string, string] }) {
-  const firstCounts = countsFor(first, dimension.select);
-  const secondCounts = countsFor(second, dimension.select);
+  const firstCounts = countsFor(academicRows(first, dimension.key), dimension.select);
+  const secondCounts = countsFor(academicRows(second, dimension.key), dimension.select);
   const labels = [...new Set([...Object.keys(firstCounts), ...Object.keys(secondCounts)])].sort((left, right) => (firstCounts[right] ?? 0) + (secondCounts[right] ?? 0) - (firstCounts[left] ?? 0) - (secondCounts[left] ?? 0));
   const visibleLabels = dimension.key === 'district' ? labels.slice(0, 8) : labels;
   return <AdminBarChart horizontal={dimension.key === 'district' || dimension.key === 'quota'} showLegend data={{ labels: visibleLabels, datasets: [{ label: firstLabel, data: visibleLabels.map(label => firstCounts[label] ?? 0), backgroundColor: colorPair[0], borderRadius: 3 }, { label: secondLabel, data: visibleLabels.map(label => secondCounts[label] ?? 0), backgroundColor: colorPair[1], borderRadius: 3 }] }} />;
 }
 
 function TrendDistributionChart({ batches, years, dimension }: { batches: Student[][]; years: string[]; dimension: DistributionDimension }) {
-  const counts = batches.map(batch => countsFor(batch, dimension.select));
+  const counts = batches.map(batch => countsFor(academicRows(batch, dimension.key), dimension.select));
   const totals = counts.reduce<Record<string, number>>((result, yearCounts) => {
     Object.entries(yearCounts).forEach(([label, count]) => { result[label] = (result[label] ?? 0) + count; });
     return result;
@@ -129,45 +142,74 @@ export function AnalyticsPage({
   const [firstBatch, setFirstBatch] = useState('2026');
   const [secondBatch, setSecondBatch] = useState('2025');
   const [metric, setMetric] = useState<'strength' | 'cgpa' | 'attendance' | 'pass' | 'arrears' | 'hostel'>('strength');
-  const availableBatches = batchOptions.slice(1).filter(year => studentsForBatch(students, year).length > 0);
+  const availableBatches = useMemo(
+    () => batchOptionsFor(students).slice(1),
+    [students],
+  );
   useEffect(() => {
-    if (firstBatch === secondBatch) {
-      const replacement = availableBatches.find(year => year !== firstBatch);
-      if (replacement) setSecondBatch(replacement);
+    if (!availableBatches.includes(firstBatch)) setFirstBatch(availableBatches[0] ?? '');
+    if (!availableBatches.includes(secondBatch) || firstBatch === secondBatch) {
+      setSecondBatch(availableBatches.find(year => year !== firstBatch) ?? availableBatches[0] ?? '');
     }
-  }, [firstBatch, secondBatch, students]);
+  }, [availableBatches, firstBatch, secondBatch]);
   const years = [...availableBatches].reverse();
-  const getMetric = (data: Student[]) => {
-    const arrearRate = data.filter(student => student.backlogs > 0).length / Math.max(1, data.length) * 100;
+  const getMetric = (data: Student[]): number | null => {
     if (metric === 'strength') return data.length;
-    if (metric === 'cgpa') return mean(data.map(student => student.cgpa));
-    if (metric === 'attendance') return mean(data.map(student => student.attendance));
-    if (metric === 'pass') return 100 - arrearRate;
     if (metric === 'hostel') return (data.filter(student => student.residentialType !== 'Day Scholar').length / Math.max(1, data.length)) * 100;
-    return arrearRate;
+    if (metric === 'pass') return null;
+    if (metric === 'arrears') {
+      const recorded = data.filter(student => student.arrearsAvailable);
+      return recorded.length ? recorded.reduce((total, student) => total + student.backlogs, 0) : null;
+    }
+    const academic = data.filter(student => metric === 'cgpa' ? student.cgpaAvailable : student.attendanceAvailable);
+    if (academic.length === 0) return null;
+    if (metric === 'cgpa') return mean(academic.map(student => student.cgpa));
+    return mean(academic.map(student => student.attendance));
   };
   const compareFirst = studentsForBatch(students, firstBatch);
   const compareSecond = studentsForBatch(students, secondBatch);
   const trendBatches = years.map(year => studentsForBatch(students, year));
   const trendMetric = years.map(year => getMetric(studentsForBatch(students, year)));
-  const comparePassRate = (data: Student[]) => 100 - data.filter(student => student.backlogs > 0).length / Math.max(1, data.length) * 100;
-  const compareArrearRate = (data: Student[]) => data.filter(student => student.backlogs > 0).length / Math.max(1, data.length) * 100;
-  const metricLabels = { strength: 'Student Strength', cgpa: 'Average CGPA', attendance: 'Attendance', pass: 'Pass Percentage', arrears: 'Arrear Percentage', hostel: 'Hostel Residents' };
+  const compareAcademicMetric = (data: Student[], metricType: 'cgpa' | 'attendance' | 'pass' | 'arrears') => {
+    if (metricType === 'pass') return null;
+    if (metricType === 'arrears') {
+      const recorded = data.filter(student => student.arrearsAvailable);
+      return recorded.length ? recorded.reduce((total, student) => total + student.backlogs, 0) : null;
+    }
+    const academic = data.filter(student => metricType === 'cgpa' ? student.cgpaAvailable : student.attendanceAvailable);
+    if (!academic.length) return null;
+    if (metricType === 'cgpa') return mean(academic.map(student => student.cgpa));
+    const withAttendance = academic.filter(student => student.attendanceAvailable);
+    return withAttendance.length ? mean(withAttendance.map(student => student.attendance)) : null;
+  };
+  const comparePassRate = (data: Student[]) => compareAcademicMetric(data, 'pass');
+  const compareArrearRate = (data: Student[]) => compareAcademicMetric(data, 'arrears');
+  const firstAcademic = compareFirst.filter(student => student.cgpaAvailable || student.attendanceAvailable || student.arrearsAvailable);
+  const secondAcademic = compareSecond.filter(student => student.cgpaAvailable || student.attendanceAvailable || student.arrearsAvailable);
+  const academicLabel = (value: number | null, digits = 1, suffix = '') =>
+    value == null ? 'Unavailable' : value.toFixed(digits) + suffix;
+  const metricLabels = { strength: 'Student Strength', cgpa: 'Average CGPA', attendance: 'Attendance', pass: 'Pass Percentage', arrears: 'Recorded Active Arrears', hostel: 'Hostel Residents' };
 
   if (students.length === 0 && activeTab !== 'profile') {
     return <div className="admin-empty-state">No student records available.</div>;
   }
 
   return <>
-    {activeTab === 'profile' && <BatchProfileReport />}
+    {activeTab === 'profile' && <BatchProfileReport students={students} />}
     {activeTab === 'compare' && <>
     <div className="admin-comparison-controls"><label>First Batch<select value={firstBatch} onChange={event => setFirstBatch(event.target.value)}>{availableBatches.map(year => <option key={year} value={year}>{year}</option>)}</select></label><span className="admin-versus">VS</span><label>Second Batch<select value={secondBatch} onChange={event => setSecondBatch(event.target.value)}>{availableBatches.filter(year => year !== firstBatch).map(year => <option key={year} value={year}>{year}</option>)}</select></label></div>
-    <div className="admin-comparison-grid">{[['Student Strength', compareFirst.length, compareSecond.length], ['Average CGPA', mean(compareFirst.map(student => student.cgpa)).toFixed(2), mean(compareSecond.map(student => student.cgpa)).toFixed(2)], ['Attendance', `${mean(compareFirst.map(student => student.attendance)).toFixed(1)}%`, `${mean(compareSecond.map(student => student.attendance)).toFixed(1)}%`], ['Pass Percentage', `${comparePassRate(compareFirst).toFixed(1)}%`, `${comparePassRate(compareSecond).toFixed(1)}%`]].map(([label, left, right]) => <article className="admin-comparison-card" key={String(label)}><span>{label}</span><div><strong>{left}</strong><strong>{right}</strong></div></article>)}</div>
+    <div className="admin-comparison-grid">{[
+      ['Student Strength', compareFirst.length, compareSecond.length],
+      ['Average CGPA', academicLabel(compareAcademicMetric(compareFirst, 'cgpa'), 2), academicLabel(compareAcademicMetric(compareSecond, 'cgpa'), 2)],
+      ['Attendance', academicLabel(compareAcademicMetric(compareFirst, 'attendance'), 1, '%'), academicLabel(compareAcademicMetric(compareSecond, 'attendance'), 1, '%')],
+      ['Pass Percentage', 'Unavailable', 'Unavailable'],
+      ['Recorded Active Arrears', academicLabel(compareArrearRate(compareFirst), 0, ''), academicLabel(compareArrearRate(compareSecond), 0, '')],
+    ].map(([label, left, right]) => <article className="admin-comparison-card" key={String(label)}><span>{label}</span><div><strong>{left}</strong><strong>{right}</strong></div></article>)}</div>
     <div className="admin-section-title-row"><div><span className="admin-section-label">BATCH COMPARISON</span><h3>Academic and Student Profile Comparisons</h3></div></div>
-    <div className="admin-analytics-chart-grid">{dimensions.map((dimension, index) => <ChartPanel key={dimension.key} eyebrow="BATCH COMPARISON" title={dimension.label}><ComparisonDistributionChart first={compareFirst} second={compareSecond} dimension={dimension} firstLabel={firstBatch} secondLabel={secondBatch} colorPair={comparisonColorPairs[index % comparisonColorPairs.length]} /></ChartPanel>)}<ChartPanel eyebrow="ADMISSION PERFORMANCE" title="Cut-off Score Comparison"><CutoffComparisonChart first={compareFirst} second={compareSecond} firstLabel={firstBatch} secondLabel={secondBatch} colorPair={['#3e4a2e', '#d8bc88']} /></ChartPanel><ChartPanel eyebrow="ACADEMIC PERFORMANCE" title="Academic Indicators"><AdminBarChart showLegend data={{ labels: ['Average CGPA (x10)', 'Attendance %', 'Pass %', 'Arrear %'], datasets: [{ label: firstBatch, data: [mean(compareFirst.map(student => student.cgpa)) * 10, mean(compareFirst.map(student => student.attendance)), comparePassRate(compareFirst), compareArrearRate(compareFirst)], backgroundColor: '#5a738e', borderRadius: 4 }, { label: secondBatch, data: [mean(compareSecond.map(student => student.cgpa)) * 10, mean(compareSecond.map(student => student.attendance)), comparePassRate(compareSecond), compareArrearRate(compareSecond)], backgroundColor: '#d8bc88', borderRadius: 4 }] }} /></ChartPanel></div>
+    <div className="admin-analytics-chart-grid">{dimensions.map((dimension, index) => <ChartPanel key={dimension.key} eyebrow="BATCH COMPARISON" title={dimension.label}><ComparisonDistributionChart first={compareFirst} second={compareSecond} dimension={dimension} firstLabel={firstBatch} secondLabel={secondBatch} colorPair={comparisonColorPairs[index % comparisonColorPairs.length]} /></ChartPanel>)}<ChartPanel eyebrow="ADMISSION PERFORMANCE" title="Cut-off Score Comparison"><CutoffComparisonChart first={compareFirst} second={compareSecond} firstLabel={firstBatch} secondLabel={secondBatch} colorPair={['#3e4a2e', '#d8bc88']} /></ChartPanel><ChartPanel eyebrow="ACADEMIC PERFORMANCE" title="Academic Indicators">{firstAcademic.length || secondAcademic.length ? <AdminBarChart showLegend data={{ labels: ['Average CGPA (x10)', 'Attendance %', 'Pass % (unavailable)', 'Recorded Active Arrears'], datasets: [{ label: firstBatch, data: [compareAcademicMetric(compareFirst, 'cgpa') == null ? null : compareAcademicMetric(compareFirst, 'cgpa')! * 10, compareAcademicMetric(compareFirst, 'attendance'), comparePassRate(compareFirst), compareArrearRate(compareFirst)], backgroundColor: '#5a738e', borderRadius: 4 }, { label: secondBatch, data: [compareAcademicMetric(compareSecond, 'cgpa') == null ? null : compareAcademicMetric(compareSecond, 'cgpa')! * 10, compareAcademicMetric(compareSecond, 'attendance'), comparePassRate(compareSecond), compareArrearRate(compareSecond)], backgroundColor: '#d8bc88', borderRadius: 4 }] }} /> : <div className="admin-empty-state">Academic records are unavailable.</div>}</ChartPanel></div>
     </>}
     {activeTab === 'trend' && <>
-    <div className="admin-trend-header"><div><span className="admin-section-label">{years[0]} – {years[years.length - 1]}</span><h3>Six-Year Institutional Trend</h3></div><select aria-label="Trend metric" value={metric} onChange={event => setMetric(event.target.value as typeof metric)}><option value="strength">Student Strength</option><option value="cgpa">Average CGPA</option><option value="pass">Pass Percentage</option><option value="attendance">Attendance</option><option value="arrears">Arrear Percentage</option><option value="hostel">Hostel Residents</option></select></div>
+    <div className="admin-trend-header"><div><span className="admin-section-label">{years[0]} – {years[years.length - 1]}</span><h3>Six-Year Institutional Trend</h3></div><select aria-label="Trend metric" value={metric} onChange={event => setMetric(event.target.value as typeof metric)}><option value="strength">Student Strength</option><option value="cgpa">Average CGPA</option><option value="pass">Pass Percentage (unavailable)</option><option value="attendance">Attendance</option><option value="arrears">Recorded Active Arrears</option><option value="hostel">Hostel Residents</option></select></div>
     <ChartPanel eyebrow="INSTITUTIONAL TREND" title={metricLabels[metric]} size="huge"><AdminLineChart data={{ labels: years, datasets: [{ label: metricLabels[metric], data: trendMetric, borderColor: palette[0], backgroundColor: `${palette[0]}20`, borderWidth: 2, fill: true, tension: 0.32, pointRadius: 3 }] }} /></ChartPanel>
     <div className="admin-section-title-row"><div><span className="admin-section-label">PROFILE TRENDS</span><h3>Distributions Across Available Batches</h3></div></div>
     <div className="admin-analytics-chart-grid">{dimensions.map(dimension => <ChartPanel key={dimension.key} eyebrow="BATCH TREND" title={dimension.label}><TrendDistributionChart batches={trendBatches} years={years} dimension={dimension} /></ChartPanel>)}<ChartPanel eyebrow="ADMISSION PERFORMANCE" title="Cut-off Score Trend"><CutoffTrendChart batches={trendBatches} years={years} /></ChartPanel></div>
