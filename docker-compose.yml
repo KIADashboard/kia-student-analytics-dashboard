@@ -26,7 +26,7 @@ services:
     ports:
       - "127.0.0.1:5433:5432"
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER:?Set POSTGRES_USER in .env}"]
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER:?Set POSTGRES_USER in .env}", "-d", "${POSTGRES_DB:?Set POSTGRES_DB in .env}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -74,7 +74,9 @@ services:
 
   # ── 4. One-time Seed Service ─────────────────────────────────────────────────
   # Run: docker compose run --rm seed
+  # In a profile so `docker compose up` does not re-run it and overwrite UI edits.
   seed:
+    profiles: ["seed"]
     build:
       context: ./backend
       dockerfile: Dockerfile
